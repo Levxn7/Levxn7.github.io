@@ -321,6 +321,9 @@
 <li>采用增量标记进行效率优化</li>
 </ul>
 <p><strong>新老对比</strong><br>新生代区域垃圾回收使用空间换时间, 使用复制和整理算法<br>老生代区域垃圾回收不适合复制算法, 使用标记清除, 标记整理, 标记增量</p>
+<h5 id="v8引擎工作流程"><a href="#v8引擎工作流程" class="headerlink" title="v8引擎工作流程"></a>v8引擎工作流程</h5><p>扫描器 解析器<br>预解析优点<br>·跳过未被使用的代码<br>·不生成AST, 创建无变量引用和声明的scopes·依据规范抛出特定错误<br>解析速度更快</p>
+<p>全量解析<br>·解析被使用的代码·生成AST<br>·构建具体scopes信息,变量引用、声明等·抛出所有语法错误</p>
+<p>lgnition是V8提供的一个解释器<br>TurboFan是V8提供的编译器模块</p>
 <h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><ul>
 <li>V8是一款主流的 JavaScript 执行引擎</li>
 <li>V8内存设置上限（用户感知不到）</li>
@@ -328,15 +331,11 @@
 <li>V8内存分为新生代和老生代</li>
 </ul>
 <h4 id="performance介绍"><a href="#performance介绍" class="headerlink" title="performance介绍"></a>performance介绍</h4><p>我们为什么使用 Performance?<br>GC的目的是为了实现内存空间的良性循环, 良性循环的基石是合理使用, 时刻关注才能确定是否合理.<br>Performance为我们提供多种监控方式, 通过Performance可以时刻监控内存</p>
-<p><strong>内存问题的体现</strong><br>内存问题的外在表现<br>·页面出现延迟加载或经常性暂停<br>·页面持续性出现糟糕的性能<br>·页面的性能随时间延长越来越差</p>
-<p>界定内存问题的标准<br>·内存泄露:内存使用持续升高<br>·内存膨胀:在多数设备上都存在性能问题<br>·频繁垃圾回收:通过内存变化图进行分析</p>
-<p>监控内存的几种方式<br>·浏览器任务管理器<br>· Timeline时序图记录<br>·堆快照查找分离DOM<br>·判断是否存在频繁的垃圾回收</p>
-<p>任务管理器监控内存变化（Shift+esc）<br>timeline（在性能里）<br>堆快照查找分离dom</p>
-<p>判断是否频繁gc<br>为什么确定频繁垃圾回收<br>·GC工作时应用程序是停止的<br>频繁且过长的GC会导致应用假死<br>·用户使用中感知应用卡顿</p>
-<p>performence总结</p>
-<h5 id="v8引擎工作流程"><a href="#v8引擎工作流程" class="headerlink" title="v8引擎工作流程"></a>v8引擎工作流程</h5><p>扫描器 解析器<br>预解析优点<br>·跳过未被使用的代码<br>·不生成AST, 创建无变量引用和声明的scopes·依据规范抛出特定错误<br>解析速度更快</p>
-<p>全量解析<br>·解析被使用的代码·生成AST<br>·构建具体scopes信息,变量引用、声明等·抛出所有语法错误</p>
-<p>lgnition是V8提供的一个解释器<br>TurboFan是V8提供的编译器模块</p>
+<p><strong>内存问题的体现</strong><br>1.页面出现延迟加载或经常性暂停<br>2.页面持续性出现糟糕的性能<br>3.页面的性能随时间延长越来越差</p>
+<p><strong>界定内存问题的标准</strong><br>1.内存泄露: 内存使用持续升高<br>2.内存膨胀: 在多数设备上都存在性能问题<br>3.频繁垃圾回收: 通过内存变化图进行分析</p>
+<p><strong>监控内存的几种方式</strong><br>浏览器任务管理器<br>Timeline时序图记录<br>堆快照查找分离DOM<br>判断是否存在频繁的垃圾回收</p>
+<p><strong>任务管理器监控内存变化</strong>（Shift+esc）<br>timeline（在性能里）<br>堆快照查找分离dom</p>
+<p><strong>判断是否频繁gc</strong><br>为什么确定频繁垃圾回收<br>GC工作时应用程序是停止的<br>频繁且过长的GC会导致应用假死<br>用户使用中感知应用卡顿</p>
 <h4 id="堆栈内存操作"><a href="#堆栈内存操作" class="headerlink" title="堆栈内存操作"></a>堆栈内存操作</h4><p><strong>堆栈准备</strong></p>
 <ul>
 <li>JS执行环境</li>
@@ -352,8 +351,9 @@
 <p>函数执行</p>
 <ul>
 <li>函数执行时会形成一个全新私有上下文，它里面有一个AO 用于管理这个上下文当中的变量</li>
-<li>步骤：<br>01 作用域链 &lt;当前执行上下文， 上级作用域所在的执行上下文&gt;<br>02 确定 this<br>03 初始化 arguments （对象）<br>04 形参赋值：它就相当于是变量声明，然后将声明的变量放置于 AO<br>05 变量提升<br>06 代码执行<br>这里由函数内存处理可以引出闭包</li>
+<li>步骤：<br>01 作用域链 &lt;当前执行上下文， 上级作用域所在的执行上下文&gt;<br>02 确定 this<br>03 初始化 arguments （对象）<br>04 形参赋值：它就相当于是变量声明，然后将声明的变量放置于 AO<br>05 变量提升<br>06 代码执行</li>
 </ul>
+<p>这里由函数内存处理可以引出闭包</p>
 <p><strong>闭包堆栈处理</strong><br>函数调用形成了一个全新的私有上下文，在函数调用之后当前上下文不被释放就形成了闭包（临时不被释放）<br>闭包是一种机制<br> 保护：当前上下文当中的变量与其它的上下文中变量互不干扰<br> 保存：当前上下文中的数据（堆内存）被当前上下文以外的上下文中的变量所引用，这个数据就保存下来了</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> b = <span class="number">2</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">c</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(c + b++)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> f = foo()</span><br><span class="line">f(<span class="number">5</span>)</span><br><span class="line">f(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
 
@@ -367,7 +367,7 @@
 <p><strong>减少访问层级</strong></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// var obj = &#123;</span></span><br><span class="line"><span class="comment">//   age: 18, </span></span><br><span class="line"><span class="comment">//   methods: &#123;</span></span><br><span class="line"><span class="comment">//     m1: &#123;</span></span><br><span class="line"><span class="comment">//       name: &#x27;&#x27;, </span></span><br><span class="line"><span class="comment">//       time: 100</span></span><br><span class="line"><span class="comment">//     &#125;,</span></span><br><span class="line"><span class="comment">//     m2: &#123;</span></span><br><span class="line"><span class="comment">//       name: &#x27;&#x27;,</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//     &#125;</span></span><br><span class="line"><span class="comment">//   &#125;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"><span class="comment">//以上代码层级过多, 运行速度会慢</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.name = <span class="string">&#x27;zce&#x27;</span></span><br><span class="line">  <span class="built_in">this</span>.age = <span class="number">40</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> p1 = <span class="keyword">new</span> Person()</span><br><span class="line"><span class="built_in">console</span>.log(p1.age)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.name = <span class="string">&#x27;zce&#x27;</span></span><br><span class="line">  <span class="built_in">this</span>.age = <span class="number">40</span></span><br><span class="line">  <span class="built_in">this</span>.getAge = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.age</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> p1 = <span class="keyword">new</span> Person()</span><br><span class="line"><span class="built_in">console</span>.log(p1.getAge())</span><br></pre></td></tr></table></figure>
 
-<p><strong>防抖与节流</strong><br>这部分知识我单独写了一篇文章, 摸下这里可以跳过去查看</p>
+<p><strong>防抖与节流</strong><br>这部分知识我单独写了一篇文章, <a href="https://levxn7.github.io/2021/06/03/fdjl/">摸下这里可以跳过去查看</a></p>
 <p><strong>减少判断层级</strong><br>应当提前return无用的条件<br>如果有很多else if建议使用swich case</p>
 <p><strong>减少循环体活动</strong></p>
 <p><strong>字面量与构造式</strong></p>
