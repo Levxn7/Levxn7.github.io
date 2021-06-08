@@ -1151,12 +1151,13 @@ git push -->
 <blockquote>
 <p>注意<br>虽然长得一样, 但导出的不是字面量, 导入的不是解构<br>导出的是引用关系, 不是值<br>导入的成员是只读, 不能更改</p>
 </blockquote>
-<p><strong>import用法</strong><br>引入不能省略后面的扩展名<br>相对路径以./开头, 绝对路径以/开头, 或者使用完整的url<br>{}为空时就只加载那个模块, 不需要引用进来</p>
-<ul>
-<li>as mod引入所有成员<br>不能from变量, 只能写在最上面<br>动态加载模块<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span>(<span class="string">&#x27;./module.js&#x27;</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params"><span class="built_in">module</span></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">module</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-提取默认成员<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; name, age, <span class="keyword">default</span> <span class="keyword">as</span> title &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br><span class="line"><span class="keyword">import</span> abc, &#123; name, age &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br></pre></td></tr></table></figure>
-直接导出导入的成员<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> &#123; foo, bar &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
+<p><strong>import用法</strong><br>引入不能省略后面的扩展名<br>相对路径以./开头, 绝对路径以/开头, 或者使用完整的url<br>{}为空时就只加载那个模块, 不需要引用进来<br>* as mod引入所有成员<br>不能from变量, 只能写在最上面<br>动态加载模块</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span>(<span class="string">&#x27;./module.js&#x27;</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params"><span class="built_in">module</span></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">module</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>提取默认成员</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; name, age, <span class="keyword">default</span> <span class="keyword">as</span> title &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br><span class="line"><span class="keyword">import</span> abc, &#123; name, age &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>直接导出导入的成员</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> &#123; foo, bar &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <p><strong>polyfill</strong><br>IE不能兼容ES Modules, 就只能引入unpkg的js地址<br>nomodule属性只在不支持ES Modules环境中运行, 所以可以拿nomodule来引入unpkg, 否则就会在能兼容ES Modules的环境里执行两次</p>
 <p><strong>node中使用ES Modules的实验</strong><br>node版本&gt;8.5就可以使用ES Modules, 需要把文件后缀的.js换成.mjs<br>使用命令&gt;node –experimental-modules index.mjs 来执行</p>
 <p><strong>ES Modules与CommonJS</strong><br>ES Modules中可以导入CommonJS模块, 但CommonJS中不能导入ES Modules模块, CommonJS 始终只会导出一个默认成员</p>
