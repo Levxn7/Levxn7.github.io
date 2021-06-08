@@ -74,7 +74,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">2.5k</span>
+            <span class="post-count">2.9k</span>
         </span>
     </span>
 
@@ -83,7 +83,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">11 分钟</span>
+            <span class="post-count">13 分钟</span>
         </span>
     </span>
 </div>
@@ -184,19 +184,44 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> build = series(clean, parallel(series(compile, useref), extra, image, font))</span><br></pre></td></tr></table></figure>
 
 <h5 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h5><p>构建任务完成后, 需要好好写导出, 让人理解<br>需要放在package.json的scripts里<br>需要在.gitignore中忽略temp dist文件</p>
-<h4 id="封装gulp"><a href="#封装gulp" class="headerlink" title="封装gulp"></a>封装gulp</h4><p>提取一个可复用的自动化构建工作流, 就是创建一个模块, 发布到仓库, 再使用就可以了<br>yarn global add zce-cli<br>zce init nm zce-pages<br>cd zce-pages<br>创建一个git仓库<br>新建一个文件（可以使用脚手架）<br>git init<br>git remote add origin <a target="_blank" rel="noopener" href="https://xxxx.git/">https://xxxx.git</a><br>git push</p>
+<h4 id="封装gulp"><a href="#封装gulp" class="headerlink" title="封装gulp"></a>封装gulp</h4><p>提取一个可复用的自动化构建工作流, 就是创建一个模块, 发布到仓库, 再使用就可以了</p>
+<!-- yarn global add zce-cli
+zce init nm zce-pages
+cd zce-pages
+创建一个git仓库
+新建一个文件（可以使用脚手架）
+git init
+git remote add origin https://xxxx.git
+git push -->
+
 <p>这里就使用我们刚刚建立的简单的gulp</p>
-<p>提取gulp<br>code . -a(扩展一下）<br>将上面项目的gulpfile复制给index.js入口文件<br>将依赖复制过来 yarn（这个是install）<br><img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p100" alt="ddbaf6879c37372bb6e44d312b02a252.png"></p>
-<p>回到原项目 gulpfile清空 删除node-modules package中的devDepandencies<br>这时他就是一个安静的项目<br> yarn link模块<br> yarn link “zce-pages”<br> <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p102" alt="4cea2bcf4b362d9a6585ac4b76f4bac8.png"><br> gulpfile<br> <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p101" alt="039a1335eafd5cd8057a2854d52ef954.png"><br> yarn (安装生产依赖）<br> 启动 yarn build<br> 开始排错<br> 如果报错就安装gulp-cli gulp</p>
-<p> 提取index中的data<br> 模块中新建pages.config.js来抽象不该被集成的东西<br> 数据放在这里面<br> 模块中修改<br> <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p103" alt="baf9488fcf0a312585011e2bf900efc1.png"><br> <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p104" alt="bc1c8e3ad1832b2b9bd62362a5626223.png"></p>
-<p> 找不到依赖时<br> <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p105" alt="eb5a69a618088cf133c4c4bc0d531e42.png"><br>  yarn build成功</p>
-<p>  抽象路径配置<br>  <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p106" alt="e292d872e4351d4e2fdfccbfbe036406.png"><br>  下面的路径全都修改<br>  <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p108" alt="e53716cee756abd25102578f1d5aee85.png"><br>  然后把build复制到配置文件<br>  <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p107" alt="253d6c44f52f3bc6c157bd06aa40897d.png"></p>
-<p> 包装gulp cli<br> 可以删除gulpfile</p>
-<p> 为了模拟<br> <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p111" alt="39916ad7cb7d68b072423c44761bb7cf.png"><br> <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p112" alt="4d3f2aa9644591537ec585ae57e279c5.png"><br> <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p113" alt="e6fbc8eff56f0869317433dde30789e0.png"></p>
-<p> 模块中创建cli入口<br> <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p110" alt="765427e72234f7226dee8f56ded4b7ef.png"><br> <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p109" alt="64907df17f5a1ce42404e6eca02425ee.png"></p>
-<p> 发布并使用模块<br> 添加bin<br> <img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p115" alt="b56c83a7530f70cd2649b7ca431acd9b.png"><br> git提交先</p>
-<p> yarn publish<br> 淘宝镜像源是只读的所以publish不上去, 可以使用原镜像<br> yarn publish –registry<a target="_blank" rel="noopener" href="https://registry.yarnpkg.com/">https://registry.yarnpkg.com</a></p>
-<p>新建项目<br>yarn add zce-pages –dev<br>** 官方镜像同步到淘宝镜像是有时间差的<br>yarn zce-pages build<br><img src="evernotecid://38071DE7-0F0A-4982-BF0B-FF6E637A7686/appyinxiangcom/28018712/ENResource/p114" alt="7619c55c7c66e622b953b20940844a05.png"></p>
+<p>新建一个项目/仓库<br>提取gulp<br>code . -a(扩展一下）<br>将上面项目的gulpfile中的内容复制给index.js入口文件<br>将原项目中一大串依赖复制过来package.json中的dependencies中, 然后执行 yarn（这个是install）</p>
+<p>回到原项目中把gulpfile清空, 删除node-modules 和 package中的devDepandencies, 这时他就是一个干净的项目了<br>执行 yarn link 和 yarn link “你的模块名字”, 在 gulpfile 中写入导入文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="built_in">require</span>(<span class="string">&#x27;你的模块名字&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>执行 yarn (安装生产依赖）, 安装gulp-cli gulp, 并启动 yarn build, 开始排错</p>
+<p><strong>提取index中的data</strong><br>模块中新建pages.config.js来抽象一些不该被集成的东西, 如原项目中的data, 把数据放在这里面这个文件中<br>模块中修改</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> config = &#123;</span><br><span class="line">  <span class="comment">// default config</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> loadConfig = <span class="built_in">require</span>(<span class="string">`<span class="subst">$&#123;cwd&#125;</span>/pages.config.js`</span>)</span><br><span class="line">  config = <span class="built_in">Object</span>.assign(&#123;&#125;, config, loadConfig)</span><br><span class="line">&#125; <span class="keyword">catch</span> (e) &#123;&#125;</span><br><span class="line">    <span class="comment">//使用data的地方也要修改</span></span><br><span class="line">    .pipe(plugins.swig(&#123; <span class="attr">data</span>: config.data, <span class="attr">defaults</span>: &#123; <span class="attr">cache</span>: <span class="literal">false</span> &#125; &#125;))</span><br><span class="line">    <span class="comment">//找不到依赖时也可以这样引入</span></span><br><span class="line">    .pipe(plugins.babel(&#123; <span class="attr">presets</span>: [<span class="built_in">require</span>(<span class="string">&#x27;@babel/preset-env&#x27;</span>)] &#125;))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>yarn build可以成功, 基本完成</p>
+<p><strong>抽象路径配置</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> config = &#123;</span><br><span class="line">  <span class="comment">// default config</span></span><br><span class="line">  <span class="comment">//这个build也要复制到配置文件pages.config.js一份</span></span><br><span class="line">  <span class="attr">build</span>: &#123;</span><br><span class="line">    <span class="attr">src</span>: <span class="string">&#x27;src&#x27;</span>,</span><br><span class="line">    <span class="attr">dist</span>: <span class="string">&#x27;dist&#x27;</span>,</span><br><span class="line">    <span class="attr">temp</span>: <span class="string">&#x27;temp&#x27;</span>,</span><br><span class="line">    <span class="attr">public</span>: <span class="string">&#x27;public&#x27;</span>,</span><br><span class="line">    <span class="attr">paths</span>: &#123;</span><br><span class="line">      <span class="attr">styles</span>: <span class="string">&#x27;assets/styles/*.scss&#x27;</span>,</span><br><span class="line">      <span class="attr">scripts</span>: <span class="string">&#x27;assets/scripts/*.js&#x27;</span>,</span><br><span class="line">      <span class="attr">pages</span>: <span class="string">&#x27;*.html&#x27;</span>,</span><br><span class="line">      <span class="attr">images</span>: <span class="string">&#x27;assets/images/**&#x27;</span>,</span><br><span class="line">      <span class="attr">fonts</span>: <span class="string">&#x27;assets/fonts/**&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">    <span class="comment">//下面的路径全都修改为这种</span></span><br><span class="line">    .pipe(dest(config.build.temp))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>包装gulp cli, 就可以删除gulpfile了</p>
+<p>在bin下的js中写入这些是为了提取命令行中的很长的重复部分, 这样提取之后就可以直接使用 ‘你的cli名’ build来启动了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env node</span></span><br><span class="line"></span><br><span class="line">process.argv.push(<span class="string">&#x27;--cwd&#x27;</span>)</span><br><span class="line">process.argv.push(process.cwd())</span><br><span class="line">process.argv.push(<span class="string">&#x27;--gulpfile&#x27;</span>)</span><br><span class="line">process.argv.push(<span class="built_in">require</span>.resolve(<span class="string">&#x27;..&#x27;</span>))</span><br><span class="line"></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;gulp/bin/gulp&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>要在packsge.json中记得引入这个文件作为cli的入口文件: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;bin&quot;</span>: <span class="string">&quot;bin/你的文件名.js&quot;</span>,</span><br><span class="line"><span class="string">&quot;files&quot;</span>: [</span><br><span class="line">  <span class="string">&quot;lib&quot;</span>,</span><br><span class="line">  <span class="string">&quot;bin&quot;</span></span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+<p><strong>发布并使用模块</strong><br>发布<br>首先使用git提交代码,<br>执行yarn publish 时, 淘宝镜像源是只读的所以publish不上去, 可以使用原镜像</p>
+<blockquote>
+<p>yarn publish –registry<a target="_blank" rel="noopener" href="https://registry.yarnpkg.com/">https://registry.yarnpkg.com</a></p>
+</blockquote>
+<p>使用<br>先新建一个空项目<br>yarn add zce-pages –dev</p>
+<p>yarn zce-pages build, 可以看到package中已有这些cli</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">  <span class="string">&quot;clean&quot;</span>: <span class="string">&quot;zce-pages clean&quot;</span>,</span><br><span class="line">  <span class="string">&quot;build&quot;</span>: <span class="string">&quot;zce-pages build&quot;</span>,</span><br><span class="line">  <span class="string">&quot;develop&quot;</span>: <span class="string">&quot;zce-pages develop&quot;</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注: 官方镜像同步到淘宝镜像是有时间差的, 不要publish完马上就去下载, 可以先去官网查看版本</p>
+</blockquote>
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
  
       <!-- reward -->
@@ -274,6 +299,15 @@
 
    
   <nav class="article-nav">
+    
+      <a href="/2021/06/08/modules/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            modules
+          
+        </div>
+      </a>
     
     
       <a href="/2021/06/07/qdgch/" class="article-nav-link">
