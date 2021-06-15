@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>modules |  就花荫</title>
+      <title>eslint |  就花荫</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -44,7 +44,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-modules"
+  id="post-eslint"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -55,7 +55,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  modules
+  eslint
 </h1>
  
 
@@ -63,8 +63,8 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/06/08/modules/" class="article-date">
-  <time datetime="2021-06-08T04:01:47.000Z" itemprop="datePublished">2021-06-08</time>
+      <a href="/2021/06/15/eslint/" class="article-date">
+  <time datetime="2021-06-15T04:14:11.000Z" itemprop="datePublished">2021-06-15</time>
 </a> 
   <div class="article-category">
     <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
@@ -75,7 +75,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">977</span>
+            <span class="post-count">580</span>
         </span>
     </span>
 
@@ -84,7 +84,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">3 分钟</span>
+            <span class="post-count">2 分钟</span>
         </span>
     </span>
 </div>
@@ -99,47 +99,42 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h4 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h4><p>内容概要<br>·模块化演变过程<br>·模块化规范<br>·常用的模块化打包工具<br>·基于模块化工具构建现代Web应用</p>
-<h5 id="演变过程"><a href="#演变过程" class="headerlink" title="演变过程"></a>演变过程</h5><p>1: 文件划分方式<br>没有私人空间<br>污染全局作用域<br>命名冲突问题<br>无法管理模块依赖关系</p>
-<p>2: 命名空间方式<br>包裹全局对象中<br>私有变量不安全</p>
-<p>3: lIFE<br>闭包 私有变量安全</p>
-<p>以上是在早期没有工具和规范的情况下, 对模块化的落地方式</p>
-<p><strong>模块化规范的出现</strong><br>模块化标准＋模块加载器</p>
-<p>commonjs规范: CommonJS是以同步模式加载模块<br>·一个文件就是一个模块<br>·每个模块都有单独的作用域<br>·通过module.exports导出成员<br>·通过require函数载入模块</p>
-<p>AMD (Asynchronous Module Definition) 异步模块定义规范<br>.AMD使用起来相对复杂<br>·模块JS文件请求频繁</p>
-<p>require.js: 使用define定义模块, 使用require加载模块, 我理解为它和早期的angularjs很像</p>
-<p>Sea.is + CMD 后被require兼容了</p>
-<h5 id="模块化标准规范"><a href="#模块化标准规范" class="headerlink" title="模块化标准规范"></a>模块化标准规范</h5><p>浏览器使用ES Modules标准规范, nodejs使用commonJs标准来规范<br>ES Modules是当下最主流的规范了</p>
-<p>ES Modules基本特性<br>自动采用严格模式，忽略’use strict’, 每个ES Modules模块都是单独的私有作用域, ES Modules是通过CORS去请求外部JS模块的, ES Modules的 script标签会延迟执行脚本</p>
-<p><strong>导入导出</strong><br>使用export导出, 使用import导入, 使用as输出重命名, 如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> &#123;</span><br><span class="line">    hello <span class="keyword">as</span> fooHello</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+  <h4 id="规范化"><a href="#规范化" class="headerlink" title="规范化"></a>规范化</h4><p>为什么要有规范化标准<br>·软件开发需要多人协同<br>·不同开发者具有不同的编码习惯和喜好。<br>·不同的喜好增加项目维护成本<br>·每个项目或者团队需要明确统一的标准</p>
+<h4 id="eslint介绍"><a href="#eslint介绍" class="headerlink" title="eslint介绍"></a>eslint介绍</h4><p>最为主流的JavaScript Lint工具监测JS代码质量<br>ESLint很容易统一开发者的编码风格<br>ESLint可以帮助开发者提升编码能力<br>是基于node开发的npm模块<br>初始化一个package</p>
 <blockquote>
-<p>注意<br>虽然长得一样, 但导出的不是字面量, 导入的不是解构<br>导出的是引用关系, 不是值<br>导入的成员是只读, 不能更改</p>
+<p>npm install eslint –save-dev //有cli命令<br>npx eslint –version</p>
 </blockquote>
-<p><strong>import用法</strong><br>引入不能省略后面的扩展名<br>相对路径以./开头, 绝对路径以/开头, 或者使用完整的url<br>{}为空时就只加载那个模块, 不需要引用进来<br>* as mod引入所有成员<br>不能from变量, 只能写在最上面<br>动态加载模块</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(<span class="string">&#x27;./module.js&#x27;</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params"><span class="built_in">module</span></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">module</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>提取默认成员</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; name, age, <span class="keyword">default</span> <span class="keyword">as</span> title &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br><span class="line"><span class="keyword">import</span> abc, &#123; name, age &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br></pre></td></tr></table></figure>
-<p>直接导出导入的成员</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> &#123; foo, bar &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><strong>快速上手</strong></p>
+<blockquote>
+<p>npx eslint –init一个配置文件<br>npx eslint 路径 –fix</p>
+</blockquote>
+<p> 配置文件</p>
+ <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="attr">env</span>: &#123;</span><br><span class="line">        <span class="attr">browser</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">es6</span>: <span class="literal">false</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">extends</span>: [</span><br><span class="line">        <span class="string">&#x27;standard&#x27;</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">parserOptions</span>: &#123;</span><br><span class="line">        <span class="attr">ecmaVersion</span>: <span class="number">2015</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rules</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;no-alert&#x27;</span>: <span class="string">&quot;error&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">globals</span>: &#123;</span><br><span class="line">        <span class="string">&quot;jQuery&quot;</span>: <span class="string">&quot;readonly&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p><strong>polyfill</strong><br>IE不能兼容ES Modules, 就只能引入unpkg的js地址<br>nomodule属性只在不支持ES Modules环境中运行, 所以可以拿nomodule来引入unpkg, 否则就会在能兼容ES Modules的环境里执行两次</p>
-<p><strong>node中使用ES Modules的实验</strong><br>node版本&gt;8.5就可以使用ES Modules, 需要把文件后缀的.js换成.mjs<br>使用命令&gt;node –experimental-modules index.mjs 来执行</p>
-<p><strong>ES Modules与CommonJS</strong><br>ES Modules中可以导入CommonJS模块, 但CommonJS中不能导入ES Modules模块, CommonJS 始终只会导出一个默认成员</p>
-<p>ES Modules与CommonJS差异</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//因ES Modules没有直接获取路径的方法, 所以用以下方法获取路径</span></span><br><span class="line"><span class="keyword">import</span> &#123; fileURLToPath &#125; <span class="keyword">from</span> <span class="string">&#x27;url&#x27;</span><span class="keyword">import</span> &#123; dirname &#125; <span class="keyword">from</span> <span class="string">&#x27;path&#x27;</span></span><br><span class="line"><span class="keyword">const</span> _filename = fileURLToPath( <span class="keyword">import</span>.meta.url)<span class="built_in">console</span>.log(__filename)</span><br><span class="line"><span class="keyword">const</span> _dirname = dirname(__filename)<span class="built_in">console</span>.log(_dirname)</span><br></pre></td></tr></table></figure>
+<p><strong>配置注释</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> str1 = <span class="string">&quot;$&#123;name&#125; is a coder&quot;</span> <span class="comment">// eslint-disable-line no-template-curly-in-string</span></span><br></pre></td></tr></table></figure>
+<p>注释规则 <a target="_blank" rel="noopener" href="http://eslint.cn/docs/user-guide/configuring#configuring-rules">http://eslint.cn/docs/user-guide/configuring#configuring-rules</a></p>
+<p>结合自动化 gulp<br>集成之后，ESLint 一定会工作<br>·与项目统一，管理更加方便</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.pipe(plugins.eslint())</span><br><span class="line">.pipe(plugins.eslint.format())</span><br><span class="line">.pipe(plugins.eslint.failAfterErrorO)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>如果我们在package.json中写入type: ‘modules’ 就可以不用mjs的扩展名了, 修改回.js扩展名<br>不过这样的话, ES Modules中的CommonJS需要后缀名修改为.cjs才能运行</p>
-<p>早期的node可以使用babel支持ES Modules</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;yarn add ababel/node ababel/core ababel/preset-env --dev</span><br><span class="line">&gt;yarn babel-node</span><br><span class="line">&gt;yarn babel-node index.js --presets=ababel/preset-env</span><br></pre></td></tr></table></figure>
-<p>或在.babelrc 中写入</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&quot; presets&quot;</span> : [<span class="string">&quot;@babel/preset-env&quot;</span> ]&#125;</span><br></pre></td></tr></table></figure>
-<p>就可以&gt;yarn babel-node index.js执行了</p>
-<p>还可以单独安装插件, 然后在 .babelrc 中引入</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">&quot;plugins&quot;</span>:[</span><br><span class="line">    <span class="string">&quot;@babel/plugin-transform-modules-commonjs&quot;</span><span class="number">1</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后&gt;yarn babel-node index.js 就可以直接执行上面那一长串命令了</p>
-<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
+
+<p><strong>结合webpack</strong><br>前置工作<br> <a target="_blank" rel="noopener" href="https://github.com/zce/zce-react-app.git">https://github.com/zce/zce-react-app.git</a><br>·安装对应模块<br>·安装eslint模块<br>·安装eslint-loader模块·初始化.eslintrc.js配置文件</p>
+<p>关于react引入却没使用的问题 npm install eslint-plugin-react</p>
+<p>现代化项目集成eslint<br>会让人更专注于开发</p>
+<p>eslint如何检查ts<br>npx eslint –init 问答时ts选yes</p>
+<p>stylelint的认识<br>使用方法基本可以参考eslint 二者几乎是一样的<br>npm install stylelint -D<br>.stylelintsrc.js<br>需在文件中继承standard 需要安装 npm install stylelint-config-standard</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports =&#123;</span><br><span class="line">    <span class="attr">extends</span>: <span class="string">&quot;stylelint-config-standard&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>npx stylelint ./index.css</p>
+<p>检查sass需要安装 npm install stylelint-config-sass-guidelines -D<br>然后继承</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports =&#123;</span><br><span class="line">    <span class="attr">extends</span>: [</span><br><span class="line">        <span class="string">&quot;stylelint-config-standard&quot;</span></span><br><span class="line">        <span class="string">&quot;stylelint-config-sass-guidelines&quot;</span></span><br><span class="line">        ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>prettier的使用</strong><br>安装npm install prettier -D<br>npx prettier . –write<br>不要弯曲依赖工具来格式化, 自己要写出良好的代码</p>
+<p><strong>git hooks</strong><br>工作机制就是个钩子</p>
+<p>eslint 结合git hooks<br>使用hushy模块来实现<br>安装 npm intsall hushy -D<br>在package添加对象</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;husky&quot;</span> : &#123;<span class="string">&quot; hooks&quot;</span> :&#123;</span><br><span class="line">    pre-commit<span class="string">&quot; : &quot;</span>npm run test<span class="string">&quot;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>安装 npm intsall lint-staged -D</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;scripts&quot;</span> :&#123;</span><br><span class="line">    <span class="string">&quot;test&quot;</span> : <span class="string">&quot;eslint ./index.js&quot;</span>,</span><br><span class="line">    <span class="string">&quot;precommit&quot;</span> :<span class="string">&quot;lint-staged&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="string">&quot;lint-staged&quot;</span> : &#123;</span><br><span class="line">    <span class="string">&quot;*.js&quot;</span>:[</span><br><span class="line">        <span class="string">&quot;eslint&quot;</span>,</span><br><span class="line">        <span class="string">&quot;git add&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
  
       <!-- reward -->
       
@@ -210,12 +205,12 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://levxn7.github.io/2021/06/08/modules/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://levxn7.github.io/2021/06/15/eslint/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/modules/" rel="tag">modules</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/eslint/" rel="tag">eslint</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%A7%84%E8%8C%83%E5%8C%96/" rel="tag">规范化</a></li></ul>
 
     </footer>
   </div>
@@ -223,19 +218,19 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/06/15/mkh/" class="article-nav-link">
+      <a href="/2021/06/15/wbp/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            模块化
+            webpack
           
         </div>
       </a>
     
     
-      <a href="/2021/06/07/gulp/" class="article-nav-link">
+      <a href="/2021/06/15/mkh/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">实现一个gulp模块并封装成cli</div>
+        <div class="article-nav-title">模块化</div>
       </a>
     
   </nav>
