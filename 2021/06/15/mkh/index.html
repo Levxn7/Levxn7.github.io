@@ -108,30 +108,30 @@
 </ul>
 <h4 id="webpack"><a href="#webpack" class="headerlink" title="webpack"></a>webpack</h4><p><strong>webpack的基本使用</strong><br>webpack比较先进, 非常受欢迎</p>
 <blockquote>
-<p>yarn init –yes<br>yarn add webpack webpack-cli –dev<br>yarn webpack –version<br>yarn webpack (会从index.js开始打包</p>
+<p>yarn init --yes<br>yarn add webpack webpack-cli --dev<br>yarn webpack --version<br>yarn webpack (会从index.js开始打包</p>
 </blockquote>
 <p><strong>配置文件</strong><br>支持0配置<br>一般来说会将 src/index.js 作为打包入口, 将结果存入 dist/main.js 中, 但是也可以自己在 webpack.config.js 中设置</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>)</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="attr">mode</span>: <span class="string">&#x27;none&#x27;</span>,</span><br><span class="line">    <span class="attr">entry</span>: <span class="string">&#x27;./src/main.js&#x27;</span>, <span class="comment">//设置输入</span></span><br><span class="line">    <span class="attr">output</span>: &#123; <span class="comment">//设置输出</span></span><br><span class="line">        <span class="attr">filename</span>: <span class="string">&#x27;bundle.js&#x27;</span>,</span><br><span class="line">        <span class="attr">path</span>: path.join(__dirname, <span class="string">&#x27;output&#x27;</span>) <span class="comment">//必须是绝对路径</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>打包模式</strong><br>使用cli设置打包模式 </p>
 <blockquote>
-<p>yarn webpack –mode development //优化速度模式<br>yarn webpack –mode none //普通模式</p>
+<p>yarn webpack --mode development //优化速度模式<br>yarn webpack --mode none //普通模式</p>
 </blockquote>
 <p><strong>资源模块加载</strong><br>webpack内部默认只会打包js文件, 如果打包css需要安装loader来操作, webpack可将任何资源模块导入js一起打包</p>
 <blockquote>
-<p>yarn add css-loader –dev //来打包<br>yarn add style-loader –dev //来调用</p>
+<p>yarn add css-loader --dev //来打包<br>yarn add style-loader --dev //来调用</p>
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line"><span class="attr">rules</span>: [ <span class="comment">//加载规则</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">test</span>: <span class="regexp">/.css$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">            <span class="string">&#x27;style-loader&#x27;</span>, <span class="comment">//会从后往前执行</span></span><br><span class="line">            <span class="string">&#x27;css-loader&#x27;</span></span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>文件资源加载器</strong></p>
 <blockquote>
-<p>yarn add file-loader –dev //文件操作</p>
+<p>yarn add file-loader --dev //文件操作</p>
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">publicPath: <span class="string">&#x27;dist/&#x27;</span> <span class="comment">//output</span></span><br><span class="line"></span><br><span class="line">&#123; <span class="comment">//rules</span></span><br><span class="line">    <span class="attr">test</span>: <span class="regexp">/.png$/</span>,</span><br><span class="line">    use: <span class="string">&#x27;file-loader&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>data url</strong></p>
 <blockquote>
-<p>yarn add url-loader –dev //路径操作</p>
+<p>yarn add url-loader --dev //路径操作</p>
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123; <span class="comment">//rules</span></span><br><span class="line">    <span class="attr">test</span>: <span class="regexp">/.png$/</span>,</span><br><span class="line">    use: &#123;</span><br><span class="line">        <span class="attr">loader</span>: <span class="string">&#x27;url-loader&#x27;</span>,</span><br><span class="line">        <span class="attr">options</span>: &#123;</span><br><span class="line">            <span class="attr">limit</span>: <span class="number">10</span> * <span class="number">1024</span> <span class="comment">// 10 KB</span></span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>小文件可以使用 Data URLs，可以减少请求次数, 大文件尽量单独提取存放, 可以提高加载速度</p>
@@ -140,7 +140,7 @@
 </blockquote>
 <p><strong>处理es6</strong><br>因为模块打包需要，所以处理 import 和 export</p>
 <blockquote>
-<p>yarn add babel-loader @babel/core @babel/preset-env –dev</p>
+<p>yarn add babel-loader @babel/core @babel/preset-env --dev</p>
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123; <span class="comment">//rules</span></span><br><span class="line">    <span class="attr">test</span>: <span class="regexp">/.js$/</span>,</span><br><span class="line">    use: &#123;</span><br><span class="line">        <span class="attr">loader</span>: <span class="string">&#x27;babel-loader&#x27;</span>,</span><br><span class="line">        <span class="attr">options</span>: &#123;</span><br><span class="line">            <span class="attr">presets</span>: [<span class="string">&#x27;@babel/preset-env&#x27;</span>]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
 <p>Webpack只是打包工具, 加载器可以用来编译转换代码</p>
@@ -150,11 +150,11 @@
 
 <p><strong>Webpack模块加载方式</strong><br>·遵循ES Modules标准的import声明<br>·遵循CommonJS标准的require函数<br>·遵循AMD标准的define函数和require函数<br>·样式代码中的@import指令和url函数。<br>·HTML代码中图片标签的src属性</p>
 <p><strong>核心工作原理</strong><br>根据打包入口, 分析模块, 递归依赖树, 解析模块, 把结果放入bundle.js<br>Loader的机制是Webpack的核心</p>
-<h5 id="Loader"><a href="#Loader" class="headerlink" title="Loader"></a>Loader</h5><p><strong>Loader工作原理</strong><br>例如我们可以自己编写一个markdown文件的Loader<br>创建markdown-loader.js<br>export 一个函数, 返回结果必须是js代码<br>rules引用<br>安装marked模块解析<br>yarn add marked –dev<br>可以自己处理成js返回<br>或html-loader来处理</p>
+<h5 id="Loader"><a href="#Loader" class="headerlink" title="Loader"></a>Loader</h5><p><strong>Loader工作原理</strong><br>例如我们可以自己编写一个markdown文件的Loader<br>创建markdown-loader.js<br>export 一个函数, 返回结果必须是js代码<br>rules引用<br>安装marked模块解析<br>yarn add marked --dev<br>可以自己处理成js返回<br>或html-loader来处理</p>
 <p>Loader负责资源文件从输入到输出的转换, 它其实是一个管道的概念, 可以拼接使用</p>
 <p><strong>插件机制</strong><br>plugin来解决除资源加载外, 其他自动化工作, 如清除, 拷贝, 压缩</p>
 <blockquote>
-<p>yarn add clean-webpack-plugin –dev //清理<br>yarn add html-webpack-plugin –dev //生成html<br>yarn add copy-webpack-plugin –dev //不编译直接复制过去</p>
+<p>yarn add clean-webpack-plugin --dev //清理<br>yarn add html-webpack-plugin --dev //生成html<br>yarn add copy-webpack-plugin --dev //不编译直接复制过去</p>
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注意删除publicpath</span></span><br><span class="line"><span class="keyword">const</span> &#123; CleanWebpackPlugin &#125; = <span class="built_in">require</span>(<span class="string">&#x27;clean-webpack-plugin&#x27;</span>) <span class="comment">//解构</span></span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">&#x27;html-webpack-plugin&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> CopyWebpackPlugin = <span class="built_in">require</span>(<span class="string">&#x27;copy-webpack-plugin&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="attr">plugins</span>: [</span><br><span class="line">    <span class="keyword">new</span> webpack.ProgressPlugin(),</span><br><span class="line">    <span class="keyword">new</span> CleanWebpackPlugin(),</span><br><span class="line">    <span class="comment">//用于生成index.html</span></span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">        title</span><br><span class="line">        meta</span><br><span class="line">        template</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">//用于生成iabout.html</span></span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">        <span class="attr">filename</span>: <span class="string">&#x27;about.html&#x27;</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> CopyWebpackPlugin([</span><br><span class="line">        <span class="comment">// &#x27;public/**&#x27; 路径 通配符</span></span><br><span class="line">        <span class="string">&#x27;public&#x27;</span></span><br><span class="line">    ])</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
@@ -164,7 +164,7 @@
 <p>plugins中调用 new MyPlugin()<br>插件是通过在生命周期的钩子中挂载函数实现扩展</p>
 <p><strong>如何增强webpack开发体验</strong></p>
 <blockquote>
-<p>yarn webpack –watch //实现自动编译 – watch监听<br>自动刷新浏览器, 如果用browersync启动再监听, 会比较麻烦, 所以用 webpack-dev-server, 需注意该命令没有自动打包<br>yarn add webpack-dev-server –dev //是个cli<br>yarn webpack-dev-server –open //自动打开浏览器<br>注意: webpack-dev-server 访问静态资源需另外配置devServer</p>
+<p>yarn webpack --watch //实现自动编译 -- watch监听<br>自动刷新浏览器, 如果用browersync启动再监听, 会比较麻烦, 所以用 webpack-dev-server, 需注意该命令没有自动打包<br>yarn add webpack-dev-server --dev //是个cli<br>yarn webpack-dev-server --open //自动打开浏览器<br>注意: webpack-dev-server 访问静态资源需另外配置devServer</p>
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">devServer: &#123;</span><br><span class="line">    <span class="attr">contentBase</span>: <span class="string">&#x27;./public&#x27;</span>,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
 <p>webpack-dev-server 支持代理配置</p>
@@ -177,7 +177,7 @@
 <p><strong>开启hmr热更新</strong><br>自动刷新导致的页面状态丢失<br>HMR 热更新体验非常友好<br>HMR是Webpack中最强大的功能之一<br>极大程度的提高了开发者的工作效率</p>
 <p>hmr已经集成在 webpack-dev-server中 不需要安装</p>
 <blockquote>
-<p>yarn webpack-dev-server –hot //使用命令行或通过配置开启</p>
+<p>yarn webpack-dev-server --hot //使用命令行或通过配置开启</p>
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">&#x27;webpack&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="attr">devServer</span>: &#123;</span><br><span class="line">    <span class="attr">hot</span>: <span class="literal">true</span></span><br><span class="line">    <span class="comment">// hotOnly: true // 只使用 HMR，不会 fallback 到 live reloading</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="attr">plugins</span>: [</span><br><span class="line">    <span class="keyword">new</span> webpack.HotModuleReplacementPlugin()</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 <p>这样只能自动更新样式, 而样式是因为style-loader来操作的, hmr没有通用的js替换方案<br>hmr注意事项</p>
@@ -201,32 +201,32 @@
 
 <p><strong>提取css到单个文件</strong><br>超过150kb才会考虑单独提取</p>
 <blockquote>
-<p>yarn add mini-css-extract-plugin –dev<br>yarn add optimize-css-assets-webpack-plugin –dev</p>
+<p>yarn add mini-css-extract-plugin --dev<br>yarn add optimize-css-assets-webpack-plugin --dev</p>
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MiniCssExtractPlugin = <span class="built_in">require</span>(<span class="string">&#x27;mini-css-extract-plugin&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> OptimizeCssAssetsWebpackPlugin = <span class="built_in">require</span>(<span class="string">&#x27;optimize-css-assets-webpack-plugin&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> TerserWebpackPlugin = <span class="built_in">require</span>(<span class="string">&#x27;terser-webpack-plugin&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="attr">optimization</span>: &#123;</span><br><span class="line">    <span class="attr">minimizer</span>: [</span><br><span class="line">        <span class="keyword">new</span> TerserWebpackPlugin(),</span><br><span class="line">        <span class="keyword">new</span> OptimizeCssAssetsWebpackPlugin()</span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line"><span class="attr">module</span>: &#123;</span><br><span class="line">    <span class="attr">rules</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">        <span class="attr">test</span>: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">            <span class="comment">// &#x27;style-loader&#x27;, // 将样式通过 style 标签注入</span></span><br><span class="line">            MiniCssExtractPlugin.loader,</span><br><span class="line">            <span class="string">&#x27;css-loader&#x27;</span></span><br><span class="line">        ]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line"><span class="attr">plugins</span>: [</span><br><span class="line">    <span class="keyword">new</span> MiniCssExtractPlugin()</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
 <p><strong>输出文件名hash</strong><br>[hash] //整体hash<br>[chunkhash] //文件hash<br>[contenthash:8] //hash位数</p>
 <h4 id="rollup"><a href="#rollup" class="headerlink" title="rollup"></a>rollup</h4><p>rollup 也是 ES Modules 的打包器, 但仅仅是ES Modules打包器. 与webpack非常类似, 但小巧的多, 它不支持hmr这种高级功能, 会默认开启树摇</p>
 <blockquote>
-<p>yarn add rollup –dev  //可以提供一个cli<br>yarn rollup ./src/index.js –format iife(自调用函数） –file dist/bundle.js</p>
+<p>yarn add rollup --dev  //可以提供一个cli<br>yarn rollup ./src/index.js --format iife(自调用函数） --file dist/bundle.js</p>
 </blockquote>
 <p><strong>配置文件</strong><br>rollup.config.js , 导出的是一个对象</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="attr">input</span>: <span class="string">&#x27;src/index.js&#x27;</span>,</span><br><span class="line">    <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="attr">file</span>: <span class="string">&#x27;dist/bundle.js&#x27;</span>,</span><br><span class="line">        <span class="attr">format</span>: <span class="string">&#x27;iife&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>yarn rollup –config //启动打包</p>
+<p>yarn rollup --config //启动打包</p>
 <p><strong>扩展途径</strong><br>插件是 Rollup唯一扩展途径</p>
 <blockquote>
-<p>yarn add rollup-plugin-json –dev</p>
+<p>yarn add rollup-plugin-json --dev</p>
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json <span class="keyword">from</span> <span class="string">&#x27;rollup-plugin-json&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="attr">plugins</span>: [</span><br><span class="line">        json() <span class="comment">//放入的是调用结果</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>加载npm模块</strong></p>
 <blockquote>
-<p>yarn add rollup-plugin-node-resolve –dev</p>
+<p>yarn add rollup-plugin-node-resolve --dev</p>
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> resolve <span class="keyword">from</span> <span class="string">&#x27;rollup-plugin-node-resolve&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="attr">plugins</span>: [</span><br><span class="line">        resolve()</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>加载common.js</strong></p>
 <blockquote>
-<p>yarn add rollup-plugin-commonjs –dev</p>
+<p>yarn add rollup-plugin-commonjs --dev</p>
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> commonjs <span class="keyword">from</span> <span class="string">&#x27;rollup-plugin-node-resolve&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="attr">plugins</span>: [     </span><br><span class="line">        commonjs()</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -244,7 +244,7 @@
 <p>Webpack 大而全，Rollup 小而美<br>应用开发使用建议 Webpack<br>库/框架开发使用建议 Rollup</p>
 <h4 id="parcel"><a href="#parcel" class="headerlink" title="parcel"></a>parcel</h4><p>parcel 是零配置前端应用打包器, 官方建议使用html作为打包的入口文件</p>
 <blockquote>
-<p>yarn add parcel-bundler –dev<br>yarn parcel src/index.html<br>yarn parcel build src/index.html</p>
+<p>yarn add parcel-bundler --dev<br>yarn parcel src/index.html<br>yarn parcel build src/index.html</p>
 </blockquote>
 <p>优点:<br>打包同时会启动服务器<br>支持热特换<br>支持自动安装依赖<br>支持动态导入<br>构建速度非常快（多进程）</p>
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
@@ -323,7 +323,7 @@
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/parcel/" rel="tag">parcel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rollup/" rel="tag">rollup</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/" rel="tag">webpack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li></ul>
 
     </footer>
   </div>
