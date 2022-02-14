@@ -6,7 +6,7 @@
   <link href="https://levxn7.github.io/atom.xml" rel="self"/>
   
   <link href="https://levxn7.github.io/"/>
-  <updated>2022-02-14T02:23:48.825Z</updated>
+  <updated>2022-02-14T02:58:04.085Z</updated>
   <id>https://levxn7.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>关于8月13日Github改版,hexo受到影响的总结</title>
+    <link href="https://levxn7.github.io/2021/08/20/813problem/"/>
+    <id>https://levxn7.github.io/2021/08/20/813problem/</id>
+    <published>2021-08-20T02:31:18.000Z</published>
+    <updated>2022-02-14T02:58:04.085Z</updated>
+    
+    <content type="html"><![CDATA[<p>关于8月13日Github改版,hexo受到影响的总结</p><p>众所周知,2021年8月13日Github的改版影响了不少项目,Github以密码不安全为由建议用户改用秘钥.</p><p>当时的提交报错为:</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">remote: Support <span class="keyword">for</span> password authentication was removed on August <span class="number">13</span>, <span class="number">2021.</span> Please use a personal access token instead.</span><br></pre></td></tr></table></figure><p>这个问题其实很好解决,网上有很多人分享了解决过程,解决完上述报错,一般还会引起一系列报错,国内网络上都有很多人分享解决办法,这里不多赘述.</p><p>但是修改之后hexo编译后也是犹豫8.13的问题同步不到github.io上面去,怎么办呢</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com<span class="comment">//验证key 如果验证失败执行下列命令</span></span><br><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;xxx@qq.com&quot;</span><span class="comment">//一路回车即可</span></span><br><span class="line">ssh -v git@github.com</span><br><span class="line"><span class="comment">//　　最后两句会出现：</span></span><br><span class="line"><span class="comment">//　　No more authentication methods to try.</span></span><br><span class="line"><span class="comment">//　　Permission denied (publickey).</span></span><br><span class="line"><span class="comment">//　　这时候再输入</span></span><br><span class="line">ssh-agent -s</span><br><span class="line"><span class="comment">/*然后会提示类似的信息：　　</span></span><br><span class="line"><span class="comment">SSH_AUTH_SOCK=/tmp/ssh-GTpABX1a05qH/agent.404; export SSH_AUTH_SOCK;  　　SSH_AGENT_PID=13144; export SSH_AGENT_PID;  　　echo Agent pid 13144;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">ssh-add ~<span class="regexp">/.ssh/i</span>d_rsa</span><br><span class="line"><span class="comment">/*这时候应该会提示：　　Identity added: ...（这里是一些ssh key文件路径的信息）　　（注意）如果出现错误提示：　　Could not open a connection to your authentication agent.　　请执行命令：eval `ssh-agent -s`后继续执行命令 ssh-add ~/.ssh/id_rsa，这时候一般没问题啦。</span></span><br><span class="line"><span class="comment">将里面的内容复制，进入你的github账号，在settings下，SSH and GPG keys下new SSH key，title随便取一个名字，然后将id_rsa.pub里的内容复制到Key中，完成后Add SSH Key。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">ssh -T git@github.com</span><br><span class="line"><span class="comment">/*提示：Hi xxx! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span></span><br><span class="line"><span class="comment">　　这时候你的问题就解决啦</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;关于8月13日Github改版,hexo受到影响的总结&lt;/p&gt;
+&lt;p&gt;众所周知,2021年8月13日Github的改版影响了不少项目,Github以密码不安全为由建议用户改用秘钥.&lt;/p&gt;
+&lt;p&gt;当时的提交报错为:&lt;/p&gt;
+&lt;figure class=&quot;highlight </summary>
+      
+    
+    
+    
+    <category term="前端进阶笔记" scheme="https://levxn7.github.io/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/"/>
+    
+    
+    <category term="其他" scheme="https://levxn7.github.io/tags/%E5%85%B6%E4%BB%96/"/>
+    
+  </entry>
   
   <entry>
     <title>浏览器性能优化</title>
