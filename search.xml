@@ -1019,7 +1019,7 @@ git push -->
   </entry>
   <entry>
     <title>自动化构建</title>
-    <url>/2021/06/07/qdgch/</url>
+    <url>/2021/10/07/qdgch/</url>
     <content><![CDATA[<h4 id="自动化构建"><a href="#自动化构建" class="headerlink" title="自动化构建"></a>自动化构建</h4><p>自动化就是指机器代替手工去完成工作，构建可以理解为转换，自动化构建呢就是把源代码转换成生产环境中可以运行的代码或程序。这样的转换过程就叫做自动化构建工作流<br>作用就是脱离运行环境兼容带来的问题，在开发阶段使用提高效率的语法、规范和标准</p>
 <p>典型的应用场景: 一些不被浏览器直接支持的用法如esNext sass 模板引擎，这时自动化构建工具就派上用场了</p>
 <p>常用的自动化构建工具<br>grunt: 最早的前端构建系统，插件生态非常完善，几乎可以完成任何事，速度慢，磁盘读写操作多<br>gulp: 基于内存实现，速度较快，可以同时执行多个任务，插件系统也很完善，最流行<br>FIS: 百度团队推出，捆绑套餐，大而全, 易上手</p>
@@ -1257,7 +1257,7 @@ git push -->
   </entry>
   <entry>
     <title>响应式原理</title>
-    <url>/2021/06/29/xysyl/</url>
+    <url>/2021/09/19/xysyl/</url>
     <content><![CDATA[<h4 id="响应式原理"><a href="#响应式原理" class="headerlink" title="响应式原理"></a>响应式原理</h4><p>·数据响应式<br>·数据模型仅仅是普通的JavaScript 对象，而当我们修改数据时，视图会进行更新，避免了繁琐的DOM操作，提高开发效率<br>·双向绑定<br>·数据改变，视图改变;视图改变，数据也随之改变·我们可以使用v-model在表单元素上创建双向数据绑定·数据驱动是Vue最独特的特性之一<br>·开发过程中仅需要关注数据本身，不需要关心数据是如何渲染到视图</p>
 <p><strong>深入响应式原理</strong><br>vue2.x中的响应式原理是基于defineProperty 来实现的, ie8以下不支持<br>数据劫持：当访问或者设置 vm 中的成员的时候，做一些干预操作<br>其中有三个参数</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> data = &#123;</span><br><span class="line">    <span class="attr">msg</span>: <span class="string">&#x27;hello&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟 Vue 的实例</span></span><br><span class="line"><span class="keyword">let</span> vm = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 数据劫持：当访问或者设置 vm 中的成员的时候，做一些干预操作</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(vm, <span class="string">&#x27;msg&#x27;</span>, &#123;</span><br><span class="line">    <span class="comment">// 可枚举（可遍历）</span></span><br><span class="line">    <span class="attr">enumerable</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="comment">// 可配置（可以使用 delete 删除，可以通过 defineProperty 重新定义）</span></span><br><span class="line">    <span class="attr">configurable</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="comment">// 当获取值的时候执行</span></span><br><span class="line">    get () &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;get: &#x27;</span>, data.msg)</span><br><span class="line">        <span class="keyword">return</span> data.msg</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 当设置值的时候执行</span></span><br><span class="line">    set (newValue) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;set: &#x27;</span>, newValue)</span><br><span class="line">        <span class="keyword">if</span> (newValue === data.msg) &#123;</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">        data.msg = newValue</span><br><span class="line">        <span class="comment">// 数据更改，更新 DOM 的值</span></span><br><span class="line">        <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#app&#x27;</span>).textContent = data.msg</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
@@ -1275,7 +1275,7 @@ git push -->
 
 <p>观察者模式 没有事件中心  发布者知道订阅者的存在</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 发布者-目标</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">    <span class="title">constructor</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 记录所有的订阅者</span></span><br><span class="line">    <span class="built_in">this</span>.subs = []</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 添加订阅者</span></span><br><span class="line">    addSub (sub) &#123;</span><br><span class="line">    <span class="keyword">if</span> (sub &amp;&amp; sub.update) &#123;</span><br><span class="line">        <span class="built_in">this</span>.subs.push(sub)</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 发布通知</span></span><br><span class="line">    notify () &#123;</span><br><span class="line">    <span class="built_in">this</span>.subs.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">        sub.update()</span><br><span class="line">    &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 订阅者-观察者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</span><br><span class="line">    update () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;update&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试</span></span><br><span class="line"><span class="keyword">let</span> dep = <span class="keyword">new</span> Dep()</span><br><span class="line"><span class="keyword">let</span> watcher = <span class="keyword">new</span> Watcher()</span><br><span class="line"></span><br><span class="line">dep.addSub(watcher)</span><br><span class="line"></span><br><span class="line">dep.notify()</span><br></pre></td></tr></table></figure>
-<p>总结<br>.观察者模式是由具体目标调度，比如当事件触发，Dep 就会去调用观察者的方法，所以观察者模式的订阅者与发布者<br>之间是存在依赖的。<br>.发布/订阅模式由统-调度中心调用，因此发布者和订阅者不需要知道对方的存在。<br><img src="/2021/06/29/xysyl/QQ20210625-163604@2x.png" alt="观察者模式和发布订阅模式"></p>
+<p>总结<br>.观察者模式是由具体目标调度，比如当事件触发，Dep 就会去调用观察者的方法，所以观察者模式的订阅者与发布者<br>之间是存在依赖的。<br>.发布/订阅模式由统-调度中心调用，因此发布者和订阅者不需要知道对方的存在。<br><img src="/2021/09/19/xysyl/QQ20210625-163604@2x.png" alt="观察者模式和发布订阅模式"></p>
 <h4 id="响应式部分代码实现"><a href="#响应式部分代码实现" class="headerlink" title="响应式部分代码实现"></a>响应式部分代码实现</h4><p>部分解释写在注释中,代码下载地址<a href="https://github.com/Levxn7/lagouhomework/tree/master/part3/fed-e-task-03-01/second">https://github.com/Levxn7/lagouhomework/tree/master/part3/fed-e-task-03-01/second</a></p>
 <blockquote>
 <p>html</p>
@@ -1314,7 +1314,7 @@ git push -->
   </entry>
   <entry>
     <title>JS的性能优化</title>
-    <url>/2021/06/03/xnyh/</url>
+    <url>/2021/04/13/xnyh/</url>
     <content><![CDATA[<h4 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h4><p>对于JavaScript来说, 会在创建变量（对象, 字符串等）时分配内存, 并且在不再使用它们时“自动”释放内存, 这个自动释放内存的过程称为垃圾回收。因为自动垃圾回收机制的存在, 让大多Javascript开发者感觉他们可以不关心内存管理, 所以会在一些情况下导致内存泄漏。</p>
 <p>内容概要：</p>
 <ul>

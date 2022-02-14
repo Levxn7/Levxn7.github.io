@@ -63,8 +63,8 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/06/29/xysyl/" class="article-date">
-  <time datetime="2021-06-29T07:37:19.000Z" itemprop="datePublished">2021-06-29</time>
+      <a href="/2021/09/19/xysyl/" class="article-date">
+  <time datetime="2021-09-19T07:37:19.000Z" itemprop="datePublished">2021-09-19</time>
 </a> 
   <div class="article-category">
     <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
@@ -116,7 +116,7 @@
 
 <p>观察者模式 没有事件中心  发布者知道订阅者的存在</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 发布者-目标</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">    <span class="title">constructor</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 记录所有的订阅者</span></span><br><span class="line">    <span class="built_in">this</span>.subs = []</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 添加订阅者</span></span><br><span class="line">    addSub (sub) &#123;</span><br><span class="line">    <span class="keyword">if</span> (sub &amp;&amp; sub.update) &#123;</span><br><span class="line">        <span class="built_in">this</span>.subs.push(sub)</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 发布通知</span></span><br><span class="line">    notify () &#123;</span><br><span class="line">    <span class="built_in">this</span>.subs.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">        sub.update()</span><br><span class="line">    &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 订阅者-观察者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</span><br><span class="line">    update () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;update&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试</span></span><br><span class="line"><span class="keyword">let</span> dep = <span class="keyword">new</span> Dep()</span><br><span class="line"><span class="keyword">let</span> watcher = <span class="keyword">new</span> Watcher()</span><br><span class="line"></span><br><span class="line">dep.addSub(watcher)</span><br><span class="line"></span><br><span class="line">dep.notify()</span><br></pre></td></tr></table></figure>
-<p>总结<br>.观察者模式是由具体目标调度，比如当事件触发，Dep 就会去调用观察者的方法，所以观察者模式的订阅者与发布者<br>之间是存在依赖的。<br>.发布/订阅模式由统-调度中心调用，因此发布者和订阅者不需要知道对方的存在。<br><img src="/2021/06/29/xysyl/QQ20210625-163604@2x.png" alt="观察者模式和发布订阅模式"></p>
+<p>总结<br>.观察者模式是由具体目标调度，比如当事件触发，Dep 就会去调用观察者的方法，所以观察者模式的订阅者与发布者<br>之间是存在依赖的。<br>.发布/订阅模式由统-调度中心调用，因此发布者和订阅者不需要知道对方的存在。<br><img src="/2021/09/19/xysyl/QQ20210625-163604@2x.png" alt="观察者模式和发布订阅模式"></p>
 <h4 id="响应式部分代码实现"><a href="#响应式部分代码实现" class="headerlink" title="响应式部分代码实现"></a>响应式部分代码实现</h4><p>部分解释写在注释中,代码下载地址<a target="_blank" rel="noopener" href="https://github.com/Levxn7/lagouhomework/tree/master/part3/fed-e-task-03-01/second">https://github.com/Levxn7/lagouhomework/tree/master/part3/fed-e-task-03-01/second</a></p>
 <blockquote>
 <p>html</p>
@@ -215,7 +215,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://levxn7.github.io/2021/06/29/xysyl/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://levxn7.github.io/2021/09/19/xysyl/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -228,19 +228,19 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/07/12/vuecode/" class="article-nav-link">
+      <a href="/2021/10/07/qdgch/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            vue源码琐碎知识点
+            自动化构建
           
         </div>
       </a>
     
     
-      <a href="/2021/06/25/vuejc/" class="article-nav-link">
+      <a href="/2021/09/03/fdjl/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">vue基础</div>
+        <div class="article-nav-title">实现防抖和节流的函数</div>
       </a>
     
   </nav>
