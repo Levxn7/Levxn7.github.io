@@ -8,7 +8,7 @@ tags:
 ---
 
 #### 一些零碎的知识
-flow是js的静态类型检查器，但vue3以后是用ts检查的aaaaaaa
+flow是js的静态类型检查器，但vue3以后是用ts检查的
 
 vue的打包工具是rollup，rollup更适合库打包
 
