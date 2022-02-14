@@ -399,7 +399,7 @@
   </entry>
   <entry>
     <title>eslint</title>
-    <url>/2021/06/15/eslint/</url>
+    <url>/2022/01/26/eslint/</url>
     <content><![CDATA[<h4 id="规范化"><a href="#规范化" class="headerlink" title="规范化"></a>规范化</h4><p>为什么要有规范化标准<br>·软件开发需要多人协同<br>·不同开发者具有不同的编码习惯和喜好。<br>·不同的喜好增加项目维护成本<br>·每个项目或者团队需要明确统一的标准</p>
 <h4 id="eslint介绍"><a href="#eslint介绍" class="headerlink" title="eslint介绍"></a>eslint介绍</h4><p>Lint 是检验代码格式工具的一个统称，具体的工具有 Jslint 、 Eslint 等, 最为主流的 Jslint 工具监测JS代码质量<br>ESLint很容易统一开发者的编码风格, 可以帮助开发者提升编码能力, 是基于node开发的npm模块, 现代化项目集成eslint, 会让人不拘泥于格式错误, 更专注于开发<br>首先我们初始化一个package</p>
 <blockquote>

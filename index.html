@@ -140,6 +140,112 @@
     
     
     <article
+  id="post-eslint"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/26/eslint/"
+    >eslint</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/26/eslint/" class="article-date">
+  <time datetime="2022-01-26T04:14:11.000Z" itemprop="datePublished">2022-01-26</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="规范化"><a href="#规范化" class="headerlink" title="规范化"></a>规范化</h4><p>为什么要有规范化标准<br>·软件开发需要多人协同<br>·不同开发者具有不同的编码习惯和喜好。<br>·不同的喜好增加项目维护成本<br>·每个项目或者团队需要明确统一的标准</p>
+<h4 id="eslint介绍"><a href="#eslint介绍" class="headerlink" title="eslint介绍"></a>eslint介绍</h4><p>Lint 是检验代码格式工具的一个统称，具体的工具有 Jslint 、 Eslint 等, 最为主流的 Jslint 工具监测JS代码质量<br>ESLint很容易统一开发者的编码风格, 可以帮助开发者提升编码能力, 是基于node开发的npm模块, 现代化项目集成eslint, 会让人不拘泥于格式错误, 更专注于开发<br>首先我们初始化一个package</p>
+<blockquote>
+<p>npm install eslint –save-dev //带有cli命令<br>npx eslint –version //运行</p>
+</blockquote>
+<p>–save-dev 会把 eslint 安装到 package.json 文件中的 devDependencies 属性中，意思是只是开发阶段用到这个包，上线时就不需要这个包了。</p>
+<p><strong>快速上手</strong></p>
+<blockquote>
+<p>npx eslint –init //初始化一个配置文件, 如果要检查ts文件, 需要再问答时选择yes<br>npx eslint 路径 –fix //–fix会自动修复错误</p>
+</blockquote>
+<p>一个简单的配置文件.eslintrc.js, 该文件导出一个对象，对象包含属性 env、extends、parserOptions、globals、rules 五个属性, 在根目录下创建 src/index.js 文件, 引入 const lint = ‘eslint’ 来检验代码是否符合规范</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="attr">env</span>: &#123;</span><br><span class="line">        <span class="attr">browser</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">es6</span>: <span class="literal">false</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">extends</span>: [</span><br><span class="line">        <span class="string">&#x27;standard&#x27;</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">parserOptions</span>: &#123;</span><br><span class="line">        <span class="attr">ecmaVersion</span>: <span class="number">2015</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rules</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;no-alert&#x27;</span>: <span class="string">&quot;error&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">globals</span>: &#123;</span><br><span class="line">        <span class="string">&quot;jQuery&quot;</span>: <span class="string">&quot;readonly&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>env、parserOptions、plugins<br>我的程序里要用到 ES6 、React 、JSX 语法，这几个属性就是让 Eslint 能够检验到这些语法的</p>
+<p>extends<br>值为 “eslint:recommended” 的 extends 属性启用一系列核心规则，这些规则是经过前人验证的最佳实践（所谓最佳实践，就是大家伙都觉得应该遵循的编码规范），想知道最佳实践具体有哪些编码规范，可以在 eslint规则表 中查看被标记为 √ 的规则项。<br>关于 “airbnb” 编码规范说两句，在接触到大多数开源项目中，大多数的作者都会使用 “airbnb” 编码规范而不是 官方的 “extends”: “eslint:recommended” 编码规范。<br>如果我们觉得 eslint-config-airbnb 规则配置中个别规则并不符合当前项目的要求，可以直接在 .eslintrc.js 配置 rules 属性，优先级高于共享规则 airbnb</p>
+<p>ESLint 附带有大量的规则，修改规则应遵循如下要求：<br>“off” 或 0 - 关闭规则<br>“warn” 或 1 - 开启规则，使用警告级别的错误：warn (不会导致程序退出)<br>“error” 或 2 - 开启规则，使用错误级别的错误：error (当被触发的时候，程序会退出)<br>有的规则没有属性，只需控制是开启还是关闭，像这样：”eqeqeq”: “off”，有的规则有自己的属性，使用起来像这样：”quotes”: [“error”, “double”]，具体有没有自带属性，可查看 eslint规则表。</p>
+<p>几个常用的规则</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;quotes&quot;</span>: [<span class="number">1</span>, <span class="string">&quot;single&quot;</span>],            # 单引号</span><br><span class="line"><span class="string">&quot;quote-props&quot;</span>:[<span class="number">2</span>, <span class="string">&quot;as-needed&quot;</span>],     # 双引号自动变单引号</span><br><span class="line"><span class="string">&quot;semi&quot;</span>: [<span class="number">2</span>, <span class="string">&quot;never&quot;</span>],               # 一行结尾不要写分号</span><br><span class="line"><span class="string">&quot;comma-dangle&quot;</span>: [<span class="number">1</span>,<span class="string">&quot;always-multiline&quot;</span>]  # 对象或数组多行写法时，最后一个值加逗号</span><br></pre></td></tr></table></figure>
+
+<p><strong>配置注释</strong><br>注释规则参考: <a target="_blank" rel="noopener" href="http://eslint.cn/docs/user-guide/configuring#configuring-rules">http://eslint.cn/docs/user-guide/configuring#configuring-rules</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> str1 = <span class="string">&quot;$&#123;name&#125; is a coder&quot;</span> <span class="comment">// eslint-disable-line no-template-curly-in-string</span></span><br></pre></td></tr></table></figure>
+<p><strong>结合自动化gulp</strong><br>集成之后，ESLint 一定会工作,  这样做会与项目统一，管理更加方便</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.pipe(plugins.eslint())</span><br><span class="line">.pipe(plugins.eslint.format())</span><br><span class="line">.pipe(plugins.eslint.failAfterErrorO)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>结合webpack</strong><br>前置工作<br>·安装对应模块<br>·安装eslint模块<br>·安装eslint-loader模块<br>·初始化.eslintrc.js配置文件</p>
+<p>关于react引入却没使用的问题 npm install eslint-plugin-react</p>
+<p><strong>stylelint的认识</strong><br>使用方法基本可以参考eslint, 二者几乎是一样的</p>
+<blockquote>
+<p>npm install stylelint -D //安装<br>npx stylelint ./index.css //运行</p>
+</blockquote>
+<p>配置文件为.stylelintsrc.js, 需在文件中继承 standard (安装 npm install stylelint-config-standard)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports =&#123;</span><br><span class="line">    <span class="attr">extends</span>: <span class="string">&quot;stylelint-config-standard&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>检查sass需要安装 npm install stylelint-config-sass-guidelines -D, 然后继承</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports =&#123;</span><br><span class="line">    <span class="attr">extends</span>: [</span><br><span class="line">        <span class="string">&quot;stylelint-config-standard&quot;</span></span><br><span class="line">        <span class="string">&quot;stylelint-config-sass-guidelines&quot;</span></span><br><span class="line">        ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>prettier的使用</strong></p>
+<blockquote>
+<p>npm install prettier -D //安装<br>npx prettier . –write</p>
+</blockquote>
+<p>不要完全依赖工具来格式化, 自己要写出良好的代码</p>
+<p><strong>git hooks</strong><br>它的工作机制就是个钩子</p>
+<p>eslint 结合git hooks, 使用hushy模块来实现</p>
+<blockquote>
+<p>npm intsall hushy -D //安装</p>
+</blockquote>
+<p>在package中添加一个husky对象</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;husky&quot;</span> : &#123;<span class="string">&quot; hooks&quot;</span> :&#123;</span><br><span class="line">    pre-commit<span class="string">&quot; : &quot;</span>npm run test<span class="string">&quot;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>安装 npm intsall lint-staged -D</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;scripts&quot;</span> :&#123;</span><br><span class="line">    <span class="string">&quot;test&quot;</span> : <span class="string">&quot;eslint ./index.js&quot;</span>,</span><br><span class="line">    <span class="string">&quot;precommit&quot;</span> :<span class="string">&quot;lint-staged&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="string">&quot;lint-staged&quot;</span> : &#123;</span><br><span class="line">    <span class="string">&quot;*.js&quot;</span>:[</span><br><span class="line">        <span class="string">&quot;eslint&quot;</span>,</span><br><span class="line">        <span class="string">&quot;git add&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>其中部分内容参考简书: <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ad1e46faaea2">https://www.jianshu.com/p/ad1e46faaea2</a></p>
+<p>原创博文, 如有错误, 敬请指导!</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/eslint/" rel="tag">eslint</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%A7%84%E8%8C%83%E5%8C%96/" rel="tag">规范化</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-mkh"
   class="article article-type-post"
   itemscope
@@ -1344,65 +1450,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag">内存管理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-813problem"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/08/20/813problem/"
-    >关于8月13日Github改版,hexo受到影响的总结</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/08/20/813problem/" class="article-date">
-  <time datetime="2021-08-20T02:31:18.000Z" itemprop="datePublished">2021-08-20</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>关于8月13日Github改版,hexo受到影响的总结</p>
-<p>众所周知,2021年8月13日Github的改版影响了不少项目,Github以密码不安全为由建议用户改用秘钥.</p>
-<p>当时的提交报错为:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">remote: Support <span class="keyword">for</span> password authentication was removed on August <span class="number">13</span>, <span class="number">2021.</span> Please use a personal access token instead.</span><br></pre></td></tr></table></figure>
-<p>这个问题其实很好解决,网上有很多人分享了解决过程,解决完上述报错,一般还会引起一系列报错,国内网络上都有很多人分享解决办法,这里不多赘述.<br>参考<a target="_blank" rel="noopener" href="https://www.codepeople.cn/2021/09/02/github-problem/">https://www.codepeople.cn/2021/09/02/github-problem/</a></p>
-<p>但是修改之后hexo编译后也是犹豫8.13的问题同步不到github.io上面去,怎么办呢</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com<span class="comment">//验证key 如果验证失败执行下列命令</span></span><br><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;xxx@qq.com&quot;</span><span class="comment">//一路回车即可</span></span><br><span class="line">ssh -v git@github.com</span><br><span class="line"><span class="comment">//　　最后两句会出现：</span></span><br><span class="line"><span class="comment">//　　No more authentication methods to try.</span></span><br><span class="line"><span class="comment">//　　Permission denied (publickey).</span></span><br><span class="line"><span class="comment">//　　这时候再输入</span></span><br><span class="line">ssh-agent -s</span><br><span class="line"><span class="comment">/*然后会提示类似的信息：　　</span></span><br><span class="line"><span class="comment">SSH_AUTH_SOCK=/tmp/ssh-GTpABX1a05qH/agent.404; export SSH_AUTH_SOCK;  　　</span></span><br><span class="line"><span class="comment">SSH_AGENT_PID=13144; export SSH_AGENT_PID;  　　</span></span><br><span class="line"><span class="comment">echo Agent pid 13144;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">ssh-add ~<span class="regexp">/.ssh/i</span>d_rsa</span><br><span class="line"><span class="comment">/*这时候应该会提示：　　Identity added: ...（这里是一些ssh key文件路径的信息）　　</span></span><br><span class="line"><span class="comment">（注意）如果出现错误提示：　　Could not open a connection to your authentication agent.　　</span></span><br><span class="line"><span class="comment">请执行命令：eval `ssh-agent -s`后继续执行命令 ssh-add ~/.ssh/id_rsa，这时候一般没问题啦。</span></span><br><span class="line"><span class="comment">将里面的内容复制，进入你的github账号，在settings下，SSH and GPG keys下new SSH key，</span></span><br><span class="line"><span class="comment">title随便取一个名字，然后将id_rsa.pub里的内容复制到Key中，完成后Add SSH Key。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">ssh -T git@github.com</span><br><span class="line"><span class="comment">/*提示：Hi xxx! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span></span><br><span class="line"><span class="comment">　　这时候你的问题就解决啦</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure> 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%85%B6%E4%BB%96/" rel="tag">其他</a></li></ul>
 
     </footer>
   </div>
