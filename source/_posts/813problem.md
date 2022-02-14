@@ -16,6 +16,7 @@ tags:
 remote: Support for password authentication was removed on August 13, 2021. Please use a personal access token instead.
 ```
 这个问题其实很好解决,网上有很多人分享了解决过程,解决完上述报错,一般还会引起一系列报错,国内网络上都有很多人分享解决办法,这里不多赘述.
+参考[!https://www.codepeople.cn/2021/09/02/github-problem/]
 
 但是修改之后hexo编译后也是犹豫8.13的问题同步不到github.io上面去,怎么办呢
 
