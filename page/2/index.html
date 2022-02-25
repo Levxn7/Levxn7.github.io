@@ -140,6 +140,129 @@
     
     
     <article
+  id="post-csjsj"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/10/16/csjsj/"
+    >前端工程化和实现一个脚手架</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/10/16/csjsj/" class="article-date">
+  <time datetime="2021-10-16T02:31:18.000Z" itemprop="datePublished">2021-10-16</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="前端工程化"><a href="#前端工程化" class="headerlink" title="前端工程化"></a>前端工程化</h4><p>node是前端的工业革命<br>前端工程化是指遵循一定的标准和规范, 通过工具去提高效率降低成本的一种手段,<br>一切以提高效率、降低成本、质量保证为目的的手段都属于[工程化], 一切重复的工作都应该被自动化<br>工程化不等于某个工具, 工程化的核心应该是对项目整体的一种规划或者架构, 工具只是实现其的一种手段</p>
+<blockquote>
+<p>使用工程化的原因</p>
+</blockquote>
+<p>想要使用ES6+新特性, 但是兼容有问题<br>想要使用 Less / Sass/ PostCSS增强 CSS的编程性, 但是运行环境不能直接支持<br>想要使用模块化的方式提高项目的可维护性, 但运行环境不能直接支持<br>部署上线前需要手动压缩代码及资源文件, 部署过程需要手动上传代码到服务器<br>多人协作开发, 无法硬性统一大家的代码风格, 从仓库中pull回来的代码质量无法保证<br>部分功能开发时需要等待后端服务接口提前完成</p>
+<blockquote>
+<p>工程化可以解决的问题</p>
+</blockquote>
+<p>传统语言或语法的弊端<br>无法使用模块化/组件化<br>重复的机械式工作<br>代码风格统一、质量保证<br>依赖后端服务接口支持<br>整体依赖后端项目</p>
+<blockquote>
+<p>一些成熟的工程化集成</p>
+</blockquote>
+<p>create-react-app<br>vue-cli<br>angular-cli<br>gatsby-cli</p>
+<h4 id="脚手架工具"><a href="#脚手架工具" class="headerlink" title="脚手架工具"></a>脚手架工具</h4><p>脚手架工具是帮我们自动创建基础文件的工具<br>脚手架的本质作用就是创建项目基础结构、提供项目规范和约定, 相同的组织结构, 相同的开发范式, 相同的模块依赖, 相同的工具配置, 相同的基础代码都应该被自动化创建</p>
+<p><strong>内容概要:</strong></p>
+<ul>
+<li>脚手架的作用</li>
+<li>常用的脚手架工具</li>
+<li>通用脚手架工具剖析</li>
+<li>开发一款脚手架</li>
+</ul>
+<p><strong>常用的脚手架工具</strong><br>根据信息创建对应的项目基础结构有create-react-app, vue-cli, angular-cli等<br>例如创建一个组件/模块所需要的文件就可以用到plop</p>
+<h5 id="Yeoman"><a href="#Yeoman" class="headerlink" title="Yeoman"></a>Yeoman</h5><p>The web’s scaffolding tool for modern webapps<br>可以搭配不同的generator去创建任何类型项目, 可以使用其搭建自己的脚手架<br>缺点是过于通用, 不够专注</p>
+<p><strong>基本使用</strong><br>先安装基础模块: node, npm 或 yarn, 以下举例中我们使用yarn</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yarn <span class="built_in">global</span> add yo <span class="comment">//全局安装Yeoman</span></span><br><span class="line">yarn <span class="built_in">global</span> add generator-node <span class="comment">// 一个node模块</span></span><br><span class="line">mkdir my-<span class="built_in">module</span></span><br><span class="line">cd my-<span class="built_in">module</span></span><br><span class="line">yo node <span class="comment">//input something...</span></span><br></pre></td></tr></table></figure>
+<p>执行yo node后的命令行如下(做个例子)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">localhost:my-<span class="built_in">module</span> zxl$ yo node</span><br><span class="line">? ==========================================================================</span><br><span class="line">We<span class="string">&#x27;re constantly looking for ways to make yo better! </span></span><br><span class="line"><span class="string">May we anonymously report usage statistics to improve the tool over time? </span></span><br><span class="line"><span class="string">More info: https://github.com/yeoman/insight &amp; http://yeoman.io</span></span><br><span class="line"><span class="string">? Module Name my-module</span></span><br><span class="line"><span class="string">(node:77281) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated</span></span><br><span class="line"><span class="string">(Use `node --trace-deprecation ...` to show where the warning was created)</span></span><br><span class="line"><span class="string">? The name above already exists on npm, choose another? No</span></span><br><span class="line"><span class="string">? Description a test project</span></span><br><span class="line"><span class="string">? Project homepage url https://github.com/Levxn7/yoNodeTest</span></span><br><span class="line"><span class="string">? Author&#x27;</span>s Name zxl</span><br><span class="line">? Author<span class="string">&#x27;s Email levxn7@qq.com</span></span><br><span class="line"><span class="string">? Author&#x27;</span>s Homepage https:<span class="comment">//levxn7.github.io/</span></span><br><span class="line">? Package keywords (comma to split) <span class="built_in">module</span>,node</span><br><span class="line">? Send coverage reports to coveralls No</span><br><span class="line">? Enter Node versions (comma separated) </span><br><span class="line">? GitHub username or organization Levxn7</span><br><span class="line">? Which license <span class="keyword">do</span> you want to use? Apache <span class="number">2.0</span></span><br></pre></td></tr></table></figure>
+
+
+<p><strong>sub generator</strong><br>不是所有generator都有子集生成器</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yo node:cli <span class="comment">//cli应用</span></span><br><span class="line">yarn link <span class="comment">//建立通道</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>yeoman常规使用步骤</strong><br>1.明确你的需求;<br>2.找到合适的 Generator;<br>3.全局范围安装找到的 Generator;<br>4.通过Yo运行对应的Generator;<br>5.通过命令行交互填写选项;<br>6.生成你所需要的项目结构;</p>
+<h5 id="基于Yeoman搭建自己的脚手架"><a href="#基于Yeoman搭建自己的脚手架" class="headerlink" title="基于Yeoman搭建自己的脚手架"></a>基于Yeoman搭建自己的脚手架</h5><p><strong>1.创建一个Generator模块</strong><br>名称必须是generator-<name>格式</name></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir generator-sample</span><br><span class="line">cd generator-sample</span><br><span class="line">yarn init <span class="comment">//创建package.json</span></span><br><span class="line">yarn add yeoman-generator <span class="comment">// 这个模块提供了生成器的一个基类, 这个基类当中提供了一些工具函数 让我们在使用时更加便捷</span></span><br></pre></td></tr></table></figure>
+<p>使用vscode打开项目, 创建generators/app/index.js, 此文件作为Generator的核心入口, 需要导出一个继承自Yeoman Generator的类型<br>Yeoman Generator 在工作时会自动调用我们在此类型中定义的一些生命周期方法, 我们在这些方法中可以通过调用父类提供的一些工具方法实现一些功能, 例如文件写入</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Generator = <span class="built_in">require</span>(<span class="string">&#x27;yeoman-generator&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">Generator</span> </span>&#123;</span><br><span class="line">  writing () &#123;</span><br><span class="line">    <span class="comment">// Yeoman 自动在生成文件阶段调用此方法</span></span><br><span class="line">    <span class="comment">// 我们这里尝试往项目目录中写入文件</span></span><br><span class="line">    <span class="built_in">this</span>.fs.write(</span><br><span class="line">      <span class="built_in">this</span>.destinationPath(<span class="string">&#x27;temp.txt&#x27;</span>),</span><br><span class="line">      <span class="built_in">Math</span>.random().toString()</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>yarn link发布</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">localhost:generator-sample zxl$ yarn link</span><br><span class="line">yarn link v1<span class="number">.22</span><span class="number">.10</span></span><br><span class="line">success Registered <span class="string">&quot;generator-sample&quot;</span>.</span><br><span class="line">info You can now run <span class="string">`yarn link &quot;generator-sample&quot;`</span> <span class="keyword">in</span> the projects where you want to use <span class="built_in">this</span> package and it will be used instead.</span><br><span class="line">✨  Done <span class="keyword">in</span> <span class="number">0.</span>03s.</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>2.新建一个项目</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir my-pro</span><br><span class="line">cd my-pro</span><br><span class="line">yo sample</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">localhost:my-pro zxl$ yo sample</span><br><span class="line">   create temp.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/10/16/csjsj/QQ20210604-114517@2x.png"><br>这就创建好了, 可以看到我们使用yo sample为新文件夹创建了一个txt文件并写入了一个随机数, 这就是最基本的yeoman的开发过程,<br>下面我们再给他加上一点东西</p>
+<p><strong>3.根据模板创建文件</strong><br>相对于手动创建每一个文件, 模板的方式大大提高了效率<br>在app文件夹下新建templates/foo.txt</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Generator = <span class="built_in">require</span>(<span class="string">&#x27;yeoman-generator&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">Generator</span> </span>&#123;</span><br><span class="line">  writing () &#123;</span><br><span class="line">    <span class="comment">// Yeoman 自动在生成文件阶段调用此方法</span></span><br><span class="line">    <span class="comment">// 通过模板方式写入文件到目标目录</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 模板文件路径</span></span><br><span class="line">    <span class="keyword">const</span> tmpl = <span class="built_in">this</span>.templatePath(<span class="string">&#x27;foo.txt&#x27;</span>)</span><br><span class="line">    <span class="comment">// 输出目标路径</span></span><br><span class="line">    <span class="keyword">const</span> output = <span class="built_in">this</span>.destinationPath(<span class="string">&#x27;foo.txt&#x27;</span>)</span><br><span class="line">    <span class="comment">// 模板数据上下文</span></span><br><span class="line">    <span class="keyword">const</span> context = &#123; <span class="attr">title</span>: <span class="string">&#x27;Hello zce~&#x27;</span>, <span class="attr">success</span>: <span class="literal">false</span> &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">this</span>.fs.copyTpl(tmpl, output, context)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在foo中使用&lt;%= title %&gt;模式来替换关键字, yo sample结果生成foo.txt 其中内容也被替换了context中的内容<br><img src="/2021/10/16/csjsj/QQ20210604-115410@2x.png"></p>
+<p>下面我们使用prompting方法接受用户输入数据, 然后把获取的结果传入context</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Generator = <span class="built_in">require</span>(<span class="string">&#x27;yeoman-generator&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">Generator</span> </span>&#123;</span><br><span class="line">  prompting () &#123;</span><br><span class="line">    <span class="comment">// Yeoman 在询问用户环节会自动调用此方法</span></span><br><span class="line">    <span class="comment">// 在此方法中可以调用父类的 prompt() 方法发出对用户的命令行询问</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.prompt([</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&#x27;input&#x27;</span>, <span class="comment">//用户输入方式</span></span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;name&#x27;</span>,  <span class="comment">//对应返回值的键</span></span><br><span class="line">        <span class="attr">message</span>: <span class="string">&#x27;Your project name&#x27;</span>, <span class="comment">//给用户的提示</span></span><br><span class="line">        <span class="attr">default</span>: <span class="built_in">this</span>.appname <span class="comment">// appname 为项目生成目录名称</span></span><br><span class="line">      &#125;</span><br><span class="line">    ])</span><br><span class="line">    .then(<span class="function"><span class="params">answers</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// answers =&gt; &#123; name: &#x27;user input value&#x27; &#125;</span></span><br><span class="line">      <span class="built_in">this</span>.answers = answers</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  writing () &#123;</span><br><span class="line">    <span class="comment">// // 通过模板方式写入文件到目标目录</span></span><br><span class="line">    <span class="comment">// 模板文件路径</span></span><br><span class="line">    <span class="keyword">const</span> tmpl = <span class="built_in">this</span>.templatePath(<span class="string">&#x27;foo.txt&#x27;</span>)</span><br><span class="line">    <span class="comment">// 输出目标路径</span></span><br><span class="line">    <span class="keyword">const</span> output = <span class="built_in">this</span>.destinationPath(<span class="string">&#x27;foo.txt&#x27;</span>)</span><br><span class="line">    <span class="comment">// 模板数据上下文</span></span><br><span class="line">    <span class="keyword">const</span> context = <span class="built_in">this</span>.answers <span class="comment">// 这里为用户输入结果</span></span><br><span class="line">    <span class="built_in">this</span>.fs.copyTpl(tmpl, output, context)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我在foo中只写了一句&lt;%= name %&gt;, yo sample 后产生结果如下<br><img src="/2021/10/16/csjsj/QQ20210604-120142@2x.png"></p>
+<h5 id="vue-generator案例"><a href="#vue-generator案例" class="headerlink" title="vue generator案例"></a>vue generator案例</h5><p>具体操作步骤其实上面已经说完了, 先创建一个yeoman, 把项目目录粘贴到templates中, 替换标签值（name等）, 把文件名全放到writing中做循环, 然后运行yarn link, 就可以创建了, 参考代码如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Generator = <span class="built_in">require</span>(<span class="string">&#x27;yeoman-generator&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">Generator</span> </span>&#123;</span><br><span class="line">  prompting () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.prompt([</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&#x27;input&#x27;</span>,</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;name&#x27;</span>,</span><br><span class="line">        <span class="attr">message</span>: <span class="string">&#x27;Your project name&#x27;</span>,</span><br><span class="line">        <span class="attr">default</span>: <span class="built_in">this</span>.appname</span><br><span class="line">      &#125;</span><br><span class="line">    ])</span><br><span class="line">    .then(<span class="function"><span class="params">answers</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">this</span>.answers = answers</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  writing () &#123;</span><br><span class="line">    <span class="comment">// 把每一个文件都通过模板转换到目标路径</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> templates = [</span><br><span class="line">      <span class="string">&#x27;.browserslistrc&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;.editorconfig&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;.env.development&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;.env.production&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;.eslintrc.js&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;.gitignore&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;babel.config.js&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;package.json&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;postcss.config.js&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;README.md&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;public/favicon.ico&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;public/index.html&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/App.vue&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/main.js&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/router.js&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/assets/logo.png&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/components/HelloWorld.vue&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/store/actions.js&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/store/getters.js&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/store/index.js&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/store/mutations.js&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/store/state.js&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/utils/request.js&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/views/About.vue&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;src/views/Home.vue&#x27;</span></span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    templates.forEach(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// item =&gt; 每个文件路径</span></span><br><span class="line">      <span class="built_in">this</span>.fs.copyTpl(</span><br><span class="line">        <span class="built_in">this</span>.templatePath(item),</span><br><span class="line">        <span class="built_in">this</span>.destinationPath(item),</span><br><span class="line">        <span class="built_in">this</span>.answers</span><br><span class="line">      )</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="发布generator"><a href="#发布generator" class="headerlink" title="发布generator"></a>发布generator</h5><p>将代码托管到git（.gitignore忽略node_modules） 对git命令行不熟悉的同学可以先学习一下git</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git status</span><br><span class="line">git add</span><br><span class="line">git commit</span><br><span class="line">create一个github地址</span><br><span class="line">git remote add origin https:<span class="comment">//xxxx.git</span></span><br><span class="line">git push -u origin master</span><br><span class="line">yarn publish</span><br><span class="line">如果镜像有问题就yarn publish --registry=https:<span class="comment">//registry.yarnpkg.com</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="plop"><a href="#plop" class="headerlink" title="plop"></a>plop</h5><p>一个小而美的脚手架工具</p>
+<p><strong>基本使用</strong></p>
+<ul>
+<li>将plop模块作为项目开发依赖安装  (yarn add plop –dev)</li>
+<li>在项目根目录下创建一个plopfile.js文件</li>
+<li>在plopfile.js文件中定义脚手架任务</li>
+<li>编写用于生成特定类型文件的模板  (创建hbs模板)</li>
+<li>通过Plop提供的CLI运行脚手架任务  (yarn plop component)</li>
+</ul>
+<h4 id="脚手架的工作原理"><a href="#脚手架的工作原理" class="headerlink" title="脚手架的工作原理"></a>脚手架的工作原理</h4><p>脚手架就是一个node-cli应用<br>通过 yarn init 创建一个package.json文件, 在里面添加一个bin字段,用来指定一下这个cli应用的入口文件cli.js, 这个入口文件必须要写一个特定的文件头 #!/usr/bin/env node , 如果是 Linux 或者 macOS 系统下还需要修改此文件的读写权限为 755, 具体就是通过 chmod 755 cli.js 实现修改</p>
+<p>与用户交互需要安装 inquire 模块,  yarn add inquire//对用户发起命令行交互询问<br>然后引入模块</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env node</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Node CLI 应用入口文件必须要有这样的文件头</span></span><br><span class="line"><span class="comment">// 如果是 Linux 或者 macOS 系统下还需要修改此文件的读写权限为 755</span></span><br><span class="line"><span class="comment">// 具体就是通过 chmod 755 cli.js 实现修改</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 脚手架的工作过程：</span></span><br><span class="line"><span class="comment">// 1. 通过命令行交互询问用户问题</span></span><br><span class="line"><span class="comment">// 2. 根据用户回答的结果生成文件</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> inquirer = <span class="built_in">require</span>(<span class="string">&#x27;inquirer&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> ejs = <span class="built_in">require</span>(<span class="string">&#x27;ejs&#x27;</span>)</span><br><span class="line"></span><br><span class="line">inquirer.prompt([ <span class="comment">//这个方法可以发起用户询问</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&#x27;input&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;name&#x27;</span>,</span><br><span class="line">    <span class="attr">message</span>: <span class="string">&#x27;Project name?&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">])</span><br><span class="line">.then(<span class="function"><span class="params">anwsers</span> =&gt;</span> &#123;  <span class="comment">//这个方法获取用户回答</span></span><br><span class="line">  <span class="comment">// console.log(anwsers)</span></span><br><span class="line">  <span class="comment">// 根据用户回答的结果生成文件</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">//新建一个templates模板, 通过 &lt;%= name %&gt; 模式获取用户输入的值</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 模板目录</span></span><br><span class="line">  <span class="keyword">const</span> tmplDir = path.join(__dirname, <span class="string">&#x27;templates&#x27;</span>)</span><br><span class="line">  <span class="comment">// 目标目录 使用node方法拿到执行命令行的目录</span></span><br><span class="line">  <span class="keyword">const</span> destDir = process.cwd()</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将模板下的文件全部转换到目标目录 这个方法自动扫描路径下的所有文件</span></span><br><span class="line">  fs.readdir(tmplDir, <span class="function">(<span class="params">err, files</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</span><br><span class="line">    files.forEach(<span class="function"><span class="params">file</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">//拿到的file是相对路径</span></span><br><span class="line">      <span class="comment">// 通过模板引擎渲染文件 安装一个ejs的模板引擎 通过ejs.renderFile去渲染这个目录对应的文件</span></span><br><span class="line">      ejs.renderFile(path.join(tmplDir, file), anwsers, <span class="function">(<span class="params">err, result</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将结果写入目标文件路径</span></span><br><span class="line">        fs.writeFileSync(path.join(destDir, file), result)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>脚手架的原理虽然并不复杂, 但是他的意义是很大的, 他在项目创建环节大大提高了效率</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Yeoman/" rel="tag">Yeoman</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">前端工程化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%84%9A%E6%89%8B%E6%9E%B6/" rel="tag">脚手架</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-qdgch"
   class="article article-type-post"
   itemscope
@@ -267,6 +390,8 @@
     
     <footer class="article-footer">
        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FIS/" rel="tag">FIS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grunt/" rel="tag">grunt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gulp/" rel="tag">gulp</a></li></ul>
+
     </footer>
   </div>
 
@@ -364,7 +489,7 @@
     
     <footer class="article-footer">
        
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F/" rel="tag">发布订阅模式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/" rel="tag">响应式原理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="tag">观察者模式</a></li></ul>
 
     </footer>
   </div>
@@ -760,100 +885,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-modules"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/06/08/modules/"
-    >modules</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/06/08/modules/" class="article-date">
-  <time datetime="2021-06-08T04:01:47.000Z" itemprop="datePublished">2021-06-08</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h4><p>内容概要<br>·模块化演变过程<br>·模块化规范<br>·常用的模块化打包工具<br>·基于模块化工具构建现代Web应用</p>
-<h5 id="演变过程"><a href="#演变过程" class="headerlink" title="演变过程"></a>演变过程</h5><p>1: 文件划分方式<br>没有私人空间<br>污染全局作用域<br>命名冲突问题<br>无法管理模块依赖关系</p>
-<p>2: 命名空间方式<br>包裹全局对象中<br>私有变量不安全</p>
-<p>3: lIFE<br>闭包 私有变量安全</p>
-<p>以上是在早期没有工具和规范的情况下, 对模块化的落地方式</p>
-<p><strong>模块化规范的出现</strong><br>模块化标准＋模块加载器</p>
-<p>commonjs规范: CommonJS是以同步模式加载模块<br>·一个文件就是一个模块<br>·每个模块都有单独的作用域<br>·通过module.exports导出成员<br>·通过require函数载入模块</p>
-<p>AMD (Asynchronous Module Definition) 异步模块定义规范<br>.AMD使用起来相对复杂<br>·模块JS文件请求频繁</p>
-<p>require.js: 使用define定义模块, 使用require加载模块, 我理解为它和早期的angularjs很像</p>
-<p>Sea.is + CMD 后被require兼容了</p>
-<h5 id="模块化标准规范"><a href="#模块化标准规范" class="headerlink" title="模块化标准规范"></a>模块化标准规范</h5><p>浏览器使用ES Modules标准规范, nodejs使用commonJs标准来规范<br>ES Modules是当下最主流的规范了</p>
-<p>ES Modules基本特性<br>自动采用严格模式，忽略’use strict’, 每个ES Modules模块都是单独的私有作用域, ES Modules是通过CORS去请求外部JS模块的, ES Modules的 script标签会延迟执行脚本</p>
-<p><strong>导入导出</strong><br>使用export导出, 使用import导入, 使用as输出重命名, 如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> &#123;</span><br><span class="line">    hello <span class="keyword">as</span> fooHello</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意<br>虽然长得一样, 但导出的不是字面量, 导入的不是解构<br>导出的是引用关系, 不是值<br>导入的成员是只读, 不能更改</p>
-</blockquote>
-<p><strong>import用法</strong><br>引入不能省略后面的扩展名<br>相对路径以./开头, 绝对路径以/开头, 或者使用完整的url<br>{}为空时就只加载那个模块, 不需要引用进来<br>* as mod引入所有成员<br>不能from变量, 只能写在最上面<br>动态加载模块</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(<span class="string">&#x27;./module.js&#x27;</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params"><span class="built_in">module</span></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">module</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>提取默认成员</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; name, age, <span class="keyword">default</span> <span class="keyword">as</span> title &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br><span class="line"><span class="keyword">import</span> abc, &#123; name, age &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br></pre></td></tr></table></figure>
-<p>直接导出导入的成员</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> &#123; foo, bar &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>polyfill</strong><br>IE不能兼容ES Modules, 就只能引入unpkg的js地址<br>nomodule属性只在不支持ES Modules环境中运行, 所以可以拿nomodule来引入unpkg, 否则就会在能兼容ES Modules的环境里执行两次</p>
-<p><strong>node中使用ES Modules的实验</strong><br>node版本&gt;8.5就可以使用ES Modules, 需要把文件后缀的.js换成.mjs<br>使用命令&gt;node –experimental-modules index.mjs 来执行</p>
-<p><strong>ES Modules与CommonJS</strong><br>ES Modules中可以导入CommonJS模块, 但CommonJS中不能导入ES Modules模块, CommonJS 始终只会导出一个默认成员</p>
-<p>ES Modules与CommonJS差异</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//因ES Modules没有直接获取路径的方法, 所以用以下方法获取路径</span></span><br><span class="line"><span class="keyword">import</span> &#123; fileURLToPath &#125; <span class="keyword">from</span> <span class="string">&#x27;url&#x27;</span><span class="keyword">import</span> &#123; dirname &#125; <span class="keyword">from</span> <span class="string">&#x27;path&#x27;</span></span><br><span class="line"><span class="keyword">const</span> _filename = fileURLToPath( <span class="keyword">import</span>.meta.url)<span class="built_in">console</span>.log(__filename)</span><br><span class="line"><span class="keyword">const</span> _dirname = dirname(__filename)<span class="built_in">console</span>.log(_dirname)</span><br></pre></td></tr></table></figure>
-
-<p>如果我们在package.json中写入type: ‘modules’ 就可以不用mjs的扩展名了, 修改回.js扩展名<br>不过这样的话, ES Modules中的CommonJS需要后缀名修改为.cjs才能运行</p>
-<p>早期的node可以使用babel支持ES Modules</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;yarn add ababel/node ababel/core ababel/preset-env --dev</span><br><span class="line">&gt;yarn babel-node</span><br><span class="line">&gt;yarn babel-node index.js --presets=ababel/preset-env</span><br></pre></td></tr></table></figure>
-<p>或在.babelrc 中写入</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&quot; presets&quot;</span> : [<span class="string">&quot;@babel/preset-env&quot;</span> ]&#125;</span><br></pre></td></tr></table></figure>
-<p>就可以&gt;yarn babel-node index.js执行了</p>
-<p>还可以单独安装插件, 然后在 .babelrc 中引入</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">&quot;plugins&quot;</span>:[</span><br><span class="line">    <span class="string">&quot;@babel/plugin-transform-modules-commonjs&quot;</span><span class="number">1</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后&gt;yarn babel-node index.js 就可以直接执行上面那一长串命令了</p>
-<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/modules/" rel="tag">modules</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li></ul>
 
     </footer>
   </div>

@@ -280,6 +280,7 @@
       <tags>
         <tag>前端工程化</tag>
         <tag>脚手架</tag>
+        <tag>Yeoman</tag>
       </tags>
   </entry>
   <entry>
@@ -576,9 +577,9 @@
         <category>前端进阶笔记</category>
       </categories>
       <tags>
-        <tag>函数</tag>
-        <tag>函子</tag>
         <tag>lodash</tag>
+        <tag>高阶函数</tag>
+        <tag>柯里化</tag>
       </tags>
   </entry>
   <entry>
@@ -737,7 +738,7 @@ git push -->
       </tags>
   </entry>
   <entry>
-    <title>模块化</title>
+    <title>模块化工具</title>
     <url>/2022/01/15/mkh/</url>
     <content><![CDATA[<h4 id="模块打包工具由来"><a href="#模块打包工具由来" class="headerlink" title="模块打包工具由来"></a>模块打包工具由来</h4><p>由于 ES Modules 存在环境兼容问题, 又模块文件较多, 网络请求比较频繁, 前端资源都需要模块化<br>新特性代码编译, 编译就是把es6编译成es5, 然后打包, 模块化JavaScript打包, 支持不同类型的资源模块</p>
 <p>打包工具：解决的不只是js的模块化，而是前端整体的模块化</p>
@@ -900,8 +901,8 @@ git push -->
       </tags>
   </entry>
   <entry>
-    <title>modules</title>
-    <url>/2021/06/08/modules/</url>
+    <title>模块化</title>
+    <url>/2022/01/11/modules/</url>
     <content><![CDATA[<h4 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h4><p>内容概要<br>·模块化演变过程<br>·模块化规范<br>·常用的模块化打包工具<br>·基于模块化工具构建现代Web应用</p>
 <h5 id="演变过程"><a href="#演变过程" class="headerlink" title="演变过程"></a>演变过程</h5><p>1: 文件划分方式<br>没有私人空间<br>污染全局作用域<br>命名冲突问题<br>无法管理模块依赖关系</p>
 <p>2: 命名空间方式<br>包裹全局对象中<br>私有变量不安全</p>
@@ -949,7 +950,8 @@ git push -->
       </categories>
       <tags>
         <tag>模块化</tag>
-        <tag>modules</tag>
+        <tag>CommonJS</tag>
+        <tag>ES Modules</tag>
       </tags>
   </entry>
   <entry>
@@ -1111,6 +1113,11 @@ git push -->
 <p>编译与压缩<br>yarn global add fis-parser-node-sass</p>
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
+      <tags>
+        <tag>gulp</tag>
+        <tag>grunt</tag>
+        <tag>FIS</tag>
+      </tags>
   </entry>
   <entry>
     <title>snabbdom</title>
@@ -1310,6 +1317,9 @@ git push -->
       </categories>
       <tags>
         <tag>vue</tag>
+        <tag>响应式原理</tag>
+        <tag>发布订阅模式</tag>
+        <tag>观察者模式</tag>
       </tags>
   </entry>
   <entry>
@@ -1609,6 +1619,7 @@ git push -->
       </categories>
       <tags>
         <tag>Promise</tag>
+        <tag>异步编程</tag>
       </tags>
   </entry>
   <entry>
