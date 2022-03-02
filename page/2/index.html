@@ -140,6 +140,318 @@
     
     
     <article
+  id="post-eventloop"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/04/eventloop/"
+    >事件循环</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/04/eventloop/" class="article-date">
+  <time datetime="2021-12-04T04:14:11.000Z" itemprop="datePublished">2021-12-04</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="一、主题"><a href="#一、主题" class="headerlink" title="一、主题"></a>一、主题</h4><p>JS执行中的堆栈（浏览器平台下）<br>系统的梳理一些底层的知识</p>
+<h4 id="二、XXX"><a href="#二、XXX" class="headerlink" title="二、XXX"></a>二、XXX</h4><p>基于代码的执行结果我们有必要对这些“简单代码的执行过程” 有一个深刻的理解。</p>
+<ol>
+<li>哪些平台可以执行 JS 代码：</li>
+</ol>
+<ul>
+<li>浏览器平台 </li>
+<li>NodejS </li>
+<li>webview </li>
+</ul>
+<ol start="2">
+<li>无论 JS 代码在哪些个平台上执行，最终都需要有一个执行的地方</li>
+</ol>
+<ul>
+<li>代码最终都是运行在内存当中的</li>
+<li>在 JS 执行过的过程中我们认为浏览器加载界面的时候就会向计算机的内存申请一片空间，用于执行 JS 代码</li>
+<li>这个空间我们称之为叫 执行环境栈（ ECS execution context stack ）</li>
+</ul>
+<ol start="3">
+<li>常见的名词 </li>
+</ol>
+<ul>
+<li><p>执行环境栈：本质就是一个内存空间</p>
+</li>
+<li><p>执行上下文：( EC(execution context) )</p>
+<ul>
+<li>一段JS 代码里肯定会有很多内容：变量的声明、函数的定义、对象、块作用域</li>
+<li>上述这些区域内都有自己的代码，默认情况下他们里面的内容可能会出现重名</li>
+<li>所以代码将来在执行时候不可能直接放在一个“环境”下去运行，我们需要将它们隔离开</li>
+<li>JS当中就有了执行上下文的概念，专门用于将不同区域的代码 “分开” 【  】</li>
+<li>它也是一个内存空间，我们无须将它具像化。在它里面存放了当前区域代码运行时所需要的数据</li>
+</ul>
+</li>
+<li><p>进栈执行</p>
+<ul>
+<li>执行环境栈具有先进后出的特点（）</li>
+<li>每当“一段”代码要运行的时候，就会生成一个新的执行上下文，然后在这个上下文当中将执行时需要的内容准备好，之后就开始进栈执行 </li>
+</ul>
+</li>
+<li><p>EC(G) （execution context global）</p>
+<ul>
+<li>全局执行上下文， 浏览器加载界面的时候就默认创建的一个环境 [这个上下文和我们代码执行与否没关系]</li>
+<li>当前这个上下文如果想要出栈必然是界面关闭【 垃圾回收 】</li>
+</ul>
+</li>
+<li><p>VO(G) variable object global） </p>
+<ul>
+<li>全局变量对象（ 全局执行上下文当中的变量需要有一个地方来存放，因此就有了这个对象 ）</li>
+<li>每一段代码中都有声明和定义，他们放在哪？</li>
+<li>针对全局执行上下文来说，它里面的声明和定义放在了一个对象当中，这个对象我们叫 VO(G)</li>
+</ul>
+</li>
+<li><p>GO( global object ) </p>
+<ul>
+<li>全局对象， 它和 VO(G) 不是同一个东西 【 window 】</li>
+<li>它也是浏览器加载界面时就会创建的一个对象，在它内部存放了许多JS默认就可以调用的属性和方法（ setTimeout setInterval JSON eval….. ）</li>
+</ul>
+</li>
+<li><p>声明和定义 </p>
+<ul>
+<li>声明： var obj; </li>
+<li>定义： obj = XXXX </li>
+</ul>
+</li>
+</ul>
+<h4 id="三、堆栈中的基本值"><a href="#三、堆栈中的基本值" class="headerlink" title="三、堆栈中的基本值"></a>三、堆栈中的基本值</h4><ul>
+<li>在EC(G) 当中有 VO(G) 用来存储当前执行上下文里的变量声明和定义 </li>
+<li>代码执行之前会有提升操作：对于 var 操作来说只声明不定义【重要】</li>
+<li>基本数据类型值是直接存放在栈区当中的 </li>
+<li>VO(G) 当中默认就有一个window 它存放的是一个内存地址，指向 GO 对象所在内存 </li>
+</ul>
+<h4 id="四、堆栈中的引用类型"><a href="#四、堆栈中的引用类型" class="headerlink" title="四、堆栈中的引用类型"></a>四、堆栈中的引用类型</h4><ol>
+<li>引用类型在 JS 中会单独开辟一个空间进行存储（堆区）</li>
+<li>堆区本质上也是一个内存，因此会有一个16进制的地址 </li>
+<li>在栈区当中存放的是这个内存的16进制地址</li>
+</ol>
+<h4 id="五、函数在堆栈中的存储"><a href="#五、函数在堆栈中的存储" class="headerlink" title="五、函数在堆栈中的存储"></a>五、函数在堆栈中的存储</h4><ul>
+<li>函数的创建<ul>
+<li>创建函数和声明变量类似，可以将函数名看做是变量名</li>
+<li>函数的提升与变量不同，它是既声明又定义（ 函数可以在定义之前调用 ）</li>
+<li>函数创建时就会确认自己的作用域（就是当前所在执行上下文）</li>
+</ul>
+</li>
+<li>函数执行  <ul>
+<li>执行目的就是为了将函数创建时所保存的那些字符串形式的代码运行起来</li>
+<li>代码运行时为了和其它上下文做隔离，因此每个函数执行时都会创建一个全新的私有上下文</li>
+<li>在这个私有上下文当中有一个 AO(xxx) 用来存储函数上下文里的变量声明和定义 </li>
+<li>执行步骤<ul>
+<li>确定作用域链＜当前执行上下文，函数作用域＞</li>
+<li>确定this 指向</li>
+<li>初始化 arguments</li>
+<li>形参赋值： 这里定义的变量都是当前函数上下文私有的</li>
+<li>变量提升 </li>
+<li>代码执行  </li>
+</ul>
+</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<h4 id="六、闭包"><a href="#六、闭包" class="headerlink" title="六、闭包"></a>六、闭包</h4><p>闭包是一种机制，代码是具体表现，例如我们常见 大函数套小函数然后再返回小函数  </p>
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/eventloop/" rel="tag">eventloop</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-es6NewFeatures"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/11/28/es6NewFeatures/"
+    >ECMAScript新特性</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/11/28/es6NewFeatures/" class="article-date">
+  <time datetime="2021-11-28T03:58:46.000Z" itemprop="datePublished">2021-11-28</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="ECMAScript与JavaScript"><a href="#ECMAScript与JavaScript" class="headerlink" title="ECMAScript与JavaScript"></a>ECMAScript与JavaScript</h4><h5 id="ES概述"><a href="#ES概述" class="headerlink" title="ES概述"></a>ES概述</h5><p>ECMAScript 6（简称ES6）是于2015年6月正式发布的JavaScript语言的标准，正式名为ECMAScript 2015（ES2015）。它的目标是使得JavaScript语言可以用来编写复杂的大型应用程序，成为企业级开发语言。<br>另外，一些情况下ES6也泛指ES2015及之后的新增特性，虽然之后的版本应当称为ES7、ES8等。</p>
+<p>JavaScript是ECMAScript的扩展语言, JS的语言本身就是ES, ES只提供最基本的语法, ES6更新的内容很多, 需要我们一点点的去了解.</p>
+<p>比如新增let块级作用域, const 常量声明, es6以后 尽量不适用var声明变量.</p>
+<h4 id="es的一些新特性的简单介绍"><a href="#es的一些新特性的简单介绍" class="headerlink" title="es的一些新特性的简单介绍"></a>es的一些新特性的简单介绍</h4><h5 id="解构"><a href="#解构" class="headerlink" title="解构"></a>解构</h5><p>ES6的解构说白了就是能够让我们一次性取到多个值</p>
+<p><strong>数组的解构</strong></p>
+<p>普通的一维数组解构如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> object = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>]</span><br><span class="line"><span class="keyword">let</span> [aa, bb] = object</span><br></pre></td></tr></table></figure>
+<p>可以跳着元素解构</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [,,three] = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line"><span class="comment">// three=3</span></span><br></pre></td></tr></table></figure>
+<p>可以使用…来获取后面所有的值</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [one,...three] = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line"><span class="comment">// three=[2,3];</span></span><br></pre></td></tr></table></figure>
+<p>当访问空数组或则越界的时候会得到undefined；</p>
+<p><strong>对象的解构</strong></p>
+<p>对象解构使用{}，首先指定要解构的属性名，然后指定绑定的变量</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> &#123;<span class="attr">name</span>:nameA,<span class="attr">age</span>:ageA&#125;=&#123;<span class="attr">name</span>:<span class="string">&quot;Jhon&quot;</span>,<span class="attr">age</span>:<span class="number">23</span>&#125;;</span><br><span class="line"><span class="comment">// nameA=&quot;Jhon&quot;,ageA=23</span></span><br></pre></td></tr></table></figure>
+<p>如果属性名和变量名一致时，可以缩写</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> object = &#123;</span><br><span class="line">    <span class="attr">a</span>: <span class="string">&#x27;aaa&#x27;</span>,</span><br><span class="line">    <span class="attr">b</span>: <span class="string">&#x27;bbb&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;a, b&#125; = object</span><br></pre></td></tr></table></figure>
+<p>如果在花括号里的变量名与所要对应的对象里的属性名不相同，则该变量的返回值是undefined。如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> object = &#123;</span><br><span class="line">    <span class="attr">a</span>: <span class="string">&#x27;aaa&#x27;</span>,</span><br><span class="line">    <span class="attr">b</span>: <span class="string">&#x27;bbb&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;a, c&#125; = object  <span class="comment">//c变量的返回值为undefined</span></span><br></pre></td></tr></table></figure>
+
+
+<h5 id="模板字符串"><a href="#模板字符串" class="headerlink" title="模板字符串"></a>模板字符串</h5><p>模板字符串在使用时应用反引号包裹字符串, 模板字符串简化了字符串的拼接并支持直接/n换行,  支持插值表达式如:${name}, 模板字符串会自动执行js表达式的结果,并拼接到最终生成的普通字符串中.<br>需要定义标签函数: 在字符串前可以加一个标签，标签实际就是一个函数，添加标签即为调用这个函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> result = myTagFunc<span class="string">`hey, <span class="subst">$&#123;name&#125;</span> is a <span class="subst">$&#123;gender&#125;</span>.`</span></span><br><span class="line"><span class="built_in">console</span>.log(result)</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="字符串的扩展方法"><a href="#字符串的扩展方法" class="headerlink" title="字符串的扩展方法"></a>字符串的扩展方法</h5><p>在ES6中还提供了三个处理字符串的新方法，分别是includes(),startsWith(),endsWith()，见名知意</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> message = <span class="string">&#x27;Error: foo is not defined.&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(</span><br><span class="line">  message.startsWith(<span class="string">&#x27;Error&#x27;</span>)   <span class="comment">//是否以xx开头</span></span><br><span class="line">  message.endsWith(<span class="string">&#x27;.&#x27;</span>)    <span class="comment">//是否以xx结尾</span></span><br><span class="line">  message.includes(<span class="string">&#x27;foo&#x27;</span>)  <span class="comment">//是否包含xx</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h5 id="参数默认值"><a href="#参数默认值" class="headerlink" title="参数默认值"></a>参数默认值</h5><p>短路运算很多情况下是不适合判断默认参数的，例如 0 ‘’ false null</p>
+<p>所以如果有多个形参, 参数默认值要放在最后</p>
+<h5 id="剩余参数"><a href="#剩余参数" class="headerlink" title="剩余参数"></a>剩余参数</h5><p>…args, 只能放在最后一位, 并且只能使用一次</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span> (<span class="params">first, ...args</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(args)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">foo(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)  <span class="comment">//[2, 3, 4]</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="展开数组"><a href="#展开数组" class="headerlink" title="展开数组"></a>展开数组</h5><p>往常我们展开数组是使用apply函数, es6新特性出来后, 我们使用…方法展开数组, </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="string">&#x27;foo&#x27;</span>, <span class="string">&#x27;bar&#x27;</span>, <span class="string">&#x27;baz&#x27;</span>]</span><br><span class="line"><span class="keyword">const</span> arr1 = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// console.log.apply(console, arr)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(arr.push(...arr))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>…arr会展开数组按照次序传入</p>
+<h5 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h5><p>箭头函数用 =&gt; 符号来定义。</p>
+<p>箭头函数相当于匿名函数，所以采用函数表达式的写法。</p>
+<p>左边是传入函数的参数，右边是函数中执行的语句。</p>
+<p>如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> sum = <span class="function">(<span class="params">x, y</span>) =&gt;</span> x + y</span><br></pre></td></tr></table></figure>
+
+<p>箭头函数的好处是:</p>
+<ul>
+<li>更简短易读</li>
+<li>没有this的机制，不会改变this的指向</li>
+<li>可以避免函数内_this的出现</li>
+</ul>
+<p>此处推荐firecode插件, 可以使 ‘===’ 或 ‘=&gt;’ 等符号显示的更易读</p>
+<h5 id="对象字面量"><a href="#对象字面量" class="headerlink" title="对象字面量"></a>对象字面量</h5><p>变量属性名一样的情况下，变量可以省略<br>给对象添加方法，可以省略function，可以直接方法名（）：{ }<br>可以使用[表达式的返回值]作为对象的属性名</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="attr">foo</span>: <span class="number">123</span>,</span><br><span class="line">  <span class="comment">// bar: bar</span></span><br><span class="line">  <span class="comment">// 属性名与变量名相同，可以省略 : bar</span></span><br><span class="line">  bar,</span><br><span class="line">  <span class="comment">// method1: function () &#123;</span></span><br><span class="line">  <span class="comment">//   console.log(&#x27;method111&#x27;)</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line">  <span class="comment">// 方法可以省略 : function</span></span><br><span class="line">  method1 () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;method111&#x27;</span>)</span><br><span class="line">    <span class="comment">// 这种方法就是普通的函数，同样影响 this 指向。</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// Math.random(): 123 // 不允许</span></span><br><span class="line">  <span class="comment">// 通过 [] 让表达式的结果作为属性名</span></span><br><span class="line">  [bar]: <span class="number">123</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>内部的this会指向当前对象</p>
+<h5 id="对象扩展方法"><a href="#对象扩展方法" class="headerlink" title="对象扩展方法"></a>对象扩展方法</h5><p>assign方法<br>object.assign(target, source)<br>将多个源对象(source)中的属性复制到一个目标对象(target)，（如果有就覆盖，没有就添加）<br>用途：Object.assign({}, obj)  (变成新对象就可以修改了)<br>如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">func</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// obj.name = &#x27;func obj&#x27;</span></span><br><span class="line">  <span class="comment">// console.log(obj)</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> funcObj = <span class="built_in">Object</span>.assign(&#123;&#125;, obj)</span><br><span class="line">  funcObj.name = <span class="string">&#x27;func obj&#x27;</span></span><br><span class="line">  <span class="built_in">console</span>.log(funcObj)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123; <span class="attr">name</span>: <span class="string">&#x27;global obj&#x27;</span> &#125;</span><br><span class="line"></span><br><span class="line">func(obj)</span><br><span class="line"><span class="built_in">console</span>.log(obj)</span><br></pre></td></tr></table></figure>
+
+<h5 id="is方法"><a href="#is方法" class="headerlink" title="is方法"></a>is方法</h5><p>三等号不能判断 +0 和 -0<br>NaN不三等NaN<br>但使用object.is判断上面俩个例子可以是true </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(</span><br><span class="line">  <span class="comment">// 0 == false              // =&gt; true</span></span><br><span class="line">  <span class="comment">// 0 === false             // =&gt; false</span></span><br><span class="line">  <span class="comment">// +0 === -0               // =&gt; true</span></span><br><span class="line">  <span class="comment">// NaN === NaN             // =&gt; false</span></span><br><span class="line">  <span class="comment">// Object.is(+0, -0)       // =&gt; false</span></span><br><span class="line">  <span class="comment">// Object.is(NaN, NaN)     // =&gt; true</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h5 id="proxy代理"><a href="#proxy代理" class="headerlink" title="proxy代理"></a>proxy代理</h5><p>//Object.defineProperty只能监视读写</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> personProxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>( person【代理对象】，&#123;</span><br><span class="line">set<span class="comment">//设置对象</span></span><br><span class="line">get<span class="comment">//监视访问【返回值是外部访问这个属性得到的结果】</span></span><br><span class="line">&#125;<span class="comment">//【代理处理对象】</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2021/11/28/es6NewFeatures/1622190711615.jpg"></p>
+<p>对数组更好的监视<br>Proxy是以非侵入的方式监管了对象的读写</p>
+<h5 id="Reflect-13个方法"><a href="#Reflect-13个方法" class="headerlink" title="Reflect 13个方法"></a>Reflect 13个方法</h5><p>搭配proxy的13个方法使用<br>统一提供一套用于操作对象的API<br>了解13个方法以及取代的用法</p>
+<h5 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h5><p>promise是一种更优的异步编程解决方案<br>解决了传统异步编程中回调函数嵌套过深的问题<br>其他博文有写, 这里不过多说明</p>
+<h5 id="class类"><a href="#class类" class="headerlink" title="class类"></a>class类</h5><p>一个简单的类</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">  <span class="title">constructor</span> (<span class="params">name</span>) &#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  say () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`hi, my name is <span class="subst">$&#123;<span class="built_in">this</span>.name&#125;</span>`</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> Person(<span class="string">&#x27;tom&#x27;</span>)</span><br><span class="line">p.say()</span><br></pre></td></tr></table></figure>
+<p>理解实例方法vs静态方法</p>
+<h5 id="类的继承"><a href="#类的继承" class="headerlink" title="类的继承"></a>类的继承</h5><p>extends<br>super始终指向父类，调用super（）就是调用了父类的构造函数<br>接上面类一部分的例子</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">extends</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">  <span class="title">constructor</span> (<span class="params">name, number</span>) &#123;</span><br><span class="line">    <span class="built_in">super</span>(name) <span class="comment">// 父类构造函数</span></span><br><span class="line">    <span class="built_in">this</span>.number = number</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  hello () &#123;</span><br><span class="line">    <span class="built_in">super</span>.say() <span class="comment">// 调用父类成员</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`my school number is <span class="subst">$&#123;<span class="built_in">this</span>.number&#125;</span>`</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> s = <span class="keyword">new</span> Student(<span class="string">&#x27;jack&#x27;</span>, <span class="string">&#x27;100&#x27;</span>)</span><br><span class="line">s.hello()</span><br></pre></td></tr></table></figure>
+
+<h5 id="set数据结构"><a href="#set数据结构" class="headerlink" title="set数据结构"></a>set数据结构</h5><p>set数据结构类似数组, 常用方法有:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//内部成员不可重复</span></span><br><span class="line"><span class="keyword">const</span> s = <span class="keyword">new</span> <span class="built_in">Set</span>()</span><br><span class="line">s.add(<span class="number">1</span>).add(<span class="number">2</span>)</span><br><span class="line">s.forEach()</span><br><span class="line">s.size</span><br><span class="line">s.has(<span class="number">100</span>)</span><br><span class="line">s.delete(<span class="number">3</span>)</span><br><span class="line">s.clear()</span><br><span class="line"></span><br><span class="line"><span class="comment">//常见的是数组去重</span></span><br><span class="line"><span class="keyword">const</span> result = <span class="built_in">Array</span> .from(<span class="keyword">new</span> <span class="built_in">Set</span>(arr)）</span><br><span class="line"><span class="keyword">const</span> result = [...new <span class="built_in">Set</span>(arr)]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 弱引用版本是 WeakSet</span></span><br><span class="line"><span class="comment">// 差异就是 Set 中会对所使用到的数据产生引用</span></span><br><span class="line"><span class="comment">// 即便这个数据在外面被消耗，但是由于 Set 引用了这个数据，所以依然不会回收</span></span><br><span class="line"><span class="comment">// 而 WeakSet 的特点就是不会产生引用，</span></span><br><span class="line"><span class="comment">// 一旦数据销毁，就可以被回收，所以不会产生内存泄漏问题。</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="map数据结构"><a href="#map数据结构" class="headerlink" title="map数据结构"></a>map数据结构</h5><p>map数据结构类似对象, 但对象的键只能是字符串, map可以是任意两个数据的映射<br>常用方法有:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">map.has(<span class="number">100</span>)</span><br><span class="line">map.delete(<span class="number">3</span>)</span><br><span class="line">map.clear()</span><br><span class="line">map.forEach()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 弱引用版本 WeakMap</span></span><br><span class="line"><span class="comment">// 差异就是 Map 中会对所使用到的数据产生引用</span></span><br><span class="line"><span class="comment">// 即便这个数据在外面被消耗，但是由于 Map 引用了这个数据，所以依然不会回收</span></span><br><span class="line"><span class="comment">// 而 WeakMap 的特点就是不会产生引用，</span></span><br><span class="line"><span class="comment">// 一旦数据销毁，就可以被回收，所以不会产生内存泄漏问题。</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="symbol"><a href="#symbol" class="headerlink" title="symbol"></a>symbol</h5><p>symbol是一种全新的原始数据类型, 最主要的作用就是为对象添加独一无二的属性名</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> s = <span class="built_in">Symbol</span>()</span><br><span class="line"><span class="built_in">Symbol</span>() === <span class="built_in">Symbol</span>()是<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>对象的键可以是symbol, 因为symbol的唯一性, for in 和keys拿不到, 特别作为适合私有属性名<br>(object.getOwnPropertySymbols(obj)可以拿到但只能拿到symbol()类型<br>6种基本数据类型+symbol就是7种类型+下一版本的bugInt就是8种数据类型</p>
+<h5 id="for-of"><a href="#for-of" class="headerlink" title="for of"></a>for of</h5><p>for of可以遍历任何一种数据结构<br>普通对象因为没有迭代接口所以不能被直接 for…of 遍历<br>for of可以使用break终止循环, 而foreach不能终止</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">100</span>, <span class="number">200</span>, <span class="number">300</span>, <span class="number">400</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> arr) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(item)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="可迭代接口-iterable"><a href="#可迭代接口-iterable" class="headerlink" title="可迭代接口 iterable"></a>可迭代接口 iterable</h5><p>数据实现iterable接口才能使用for of来循环<br>实现一个可迭代接口:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="attr">store</span>: [<span class="string">&#x27;foo&#x27;</span>, <span class="string">&#x27;bar&#x27;</span>, <span class="string">&#x27;baz&#x27;</span>],</span><br><span class="line"></span><br><span class="line">  [<span class="built_in">Symbol</span>.iterator]: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">const</span> self = <span class="built_in">this</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">next</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> result = &#123;</span><br><span class="line">          <span class="attr">value</span>: self.store[index],</span><br><span class="line">          <span class="attr">done</span>: index &gt;= self.store.length</span><br><span class="line">        &#125;</span><br><span class="line">        index++</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;循环体&#x27;</span>, item)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>迭代器适用于任何数据类型</p>
+<h5 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h5><p>生成器可以减少异步回调嵌套过深产生的问题<br>定义生成器, 就是在函数名前面加个*:  function * foo(){}<br>会返回一个生成器对象Object[Generator]{}(也有迭代器接口), 调用next才会让函数体开始执行, 执行到yield暂停, yield的值作为生成器的结果(value)返回, 再yield再开始, .next()会返回格式类似{value:100, done: true}的返回值, 特点是惰性执行, 抽一下动一下, 可应用于发号器等功能</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> * <span class="title">foo</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;1111&#x27;</span>)</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">100</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;2222&#x27;</span>)</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">200</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;3333&#x27;</span>)</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">300</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> generator = foo()</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(generator.next()) <span class="comment">// 第一次调用，函数体开始执行，遇到第一个 yield 暂停</span></span><br><span class="line"><span class="built_in">console</span>.log(generator.next()) <span class="comment">// 第二次调用，从暂停位置继续，直到遇到下一个 yield 再次暂停</span></span><br><span class="line"><span class="built_in">console</span>.log(generator.next()) <span class="comment">// 。。。</span></span><br><span class="line"><span class="built_in">console</span>.log(generator.next()) <span class="comment">// 第四次调用，已经没有需要执行的内容了，所以直接得到 undefined</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="ES-Modules"><a href="#ES-Modules" class="headerlink" title="ES Modules"></a>ES Modules</h5><p>ES Module把一个文件当作一个模块，每个模块有自己的独立作用域，那如何把每个模块联系起来呢？核心点就是模块的导入（import）与导出（export）。<br>在模块A中定义了一些变量与方法，然后将其导出。如果导入的多个文件中，变量名字相同，即会产生命名冲突的问题，为了解决该问题，ES6为提供了重命名的方法，当你在导入名称时可以使用as来重命名.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; name <span class="keyword">as</span> name1 &#125; <span class="keyword">from</span> <span class="string">&quot;xxx.js&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="es2016新功能概述"><a href="#es2016新功能概述" class="headerlink" title="es2016新功能概述"></a>es2016新功能概述</h5><p>仅包含两个小功能</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr.includes(indexOf不能查找<span class="literal">NaN</span>)</span><br></pre></td></tr></table></figure>
+<p>指数运算符</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span> ** <span class="number">10</span> (=<span class="built_in">Math</span>.pow(<span class="number">2</span>,<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
+
+<h5 id="es2017新功能概述"><a href="#es2017新功能概述" class="headerlink" title="es2017新功能概述"></a>es2017新功能概述</h5><p>Object对象的三个方法</p>
+<ul>
+<li>obj.values(返回所有值的数组,相对于obj.keys())</li>
+<li>obj.entries(以数组的形式返回所有的键值对) </li>
+<li>obj.getOwnPropertyDescriptors<br>字符串对齐方法</li>
+<li>String.prototype.padStart (16, ‘-‘)</li>
+<li>String.prototype.padEnd(3. ‘0’)<br>在函数参数中添加尾逗号(很小的变化但很方便)<br>async/await语法</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es6/" rel="tag">es6</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-ybbc"
   class="article article-type-post"
   itemscope
@@ -986,273 +1298,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-vuejc"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/06/25/vuejc/"
-    >vue基础</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/06/25/vuejc/" class="article-date">
-  <time datetime="2021-06-25T04:58:56.000Z" itemprop="datePublished">2021-06-25</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h4><h5 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h5><p>每个 Vue 实例在被创建时都要经过一系列的初始化过程——例如，需要设置数据监听、编译模板、将实例挂载到 DOM 并在数据变化时更新 DOM 等。同时在这个过程中也会运行一些叫做生命周期钩子的函数，这给了用户在不同阶段添加自己的代码的机会。比如说created ,mounted ,updated等钩子函数。<br><img src="/2021/06/25/vuejc/1408390-20190502182244199-1878074396.png" alt="vue生命周期"></p>
-<h5 id="内置指令"><a href="#内置指令" class="headerlink" title="内置指令"></a>内置指令</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">1.v-bind:响应并更新DOM特性; 例如：v-bind:href v-bind:class v-bind:title 等等; 主要用法是绑定属性，动态更新HTML元素上的属性；</span></span><br><span class="line"><span class="comment">2.v-on:用于监听DOM事件; 例如:v-on:click v-on:keyup </span></span><br><span class="line"><span class="comment">3.v-model:数据双向绑定;用于表单输入等;例如:&lt; input v-model= &quot;message&quot;&gt;</span></span><br><span class="line"><span class="comment">4.v-show:条件渲染指令,为DOM设置css的style属性</span></span><br><span class="line"><span class="comment">5.v-if:条件渲染指令,动态在DOM内添加或删除DOM元素</span></span><br><span class="line"><span class="comment">6、v-else：条件渲染指令，必须跟v-if成对使用</span></span><br><span class="line"><span class="comment">7、v-else-if：判断多层条件，必须跟v-if成对使用；</span></span><br><span class="line"><span class="comment">8、v-text：更新元素的textContent；例如：&lt; span v-text=&quot;msg&quot;&gt;&lt;/ span&gt;等同于 &lt; span&gt;&#123;&#123;msg&#125;&#125; &lt;/ span&gt;；</span></span><br><span class="line"><span class="comment">9、v-html：更新元素的innerHTML；会把标签名也带上。</span></span><br><span class="line"><span class="comment">10、v-for：循环指令；</span></span><br><span class="line"><span class="comment">11、v-cloak：不需要表达式，这个指令保持在元素上直到关联实例结束编译； v-cloak 是一个解决初始化慢导致页面闪动的最佳实践 ；</span></span><br><span class="line"><span class="comment">12、v-once：也是一个不需要表达式的指令，作用是定义它的元素或组件只渲染一次，包括元素或组件的所有子节点。首次渲染后，不再随数据的变化重新渲染，将被视为静态内容； v-once 在业务中也很少使用，当你需要进一步优化性能时，可能会用到。 </span></span><br><span class="line"><span class="comment">13、v-pre：不需要表达式，跳过这个元素以及子元素的编译过程，以此来加快整个项目的编译速度；例如： &lt; span v-pre&gt;&#123;&#123; this will not be /compiled &#125;&#125; &lt;/ span&gt;；</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-<p>具体使用可参考: <a target="_blank" rel="noopener" href="https://my.oschina.net/u/3970421/blog/2964249">https://my.oschina.net/u/3970421/blog/2964249</a></p>
-<h5 id="计算属性"><a href="#计算属性" class="headerlink" title="计算属性"></a>计算属性</h5><p>计算属性就是当其依赖属性的值发生变化时，这个属性的值会自动更新，与之相关的DOM部分也会同步自动更新。对于任何复杂逻辑，你都应当使用计算属性。</p>
-<p>计算属性和侦听器<br>Class和Style绑定<br>条件渲染/列表渲染表单输入绑定</p>
-<p>以上内容的官网解释: <a target="_blank" rel="noopener" href="https://cn.vuejs.org/v2/guide/computed.html">https://cn.vuejs.org/v2/guide/computed.html</a></p>
-<p>还有组件 插槽 插件 混入等功能</p>
-<h5 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h5><p>Vue Router 是 Vue.js 官方的路由管理器。它和 Vue.js 的核心深度集成，让构建单页面应用变得易如反掌。路由实际上就是可以理解为指向，就是我在页面上点击一个按钮需要跳转到对应的页面，这就是路由跳转；</p>
-<p>首先我们来学习三个单词（route，routes，router）：<br>route：首先它是个单数，译为路由，即我们可以理解为单个路由或者某一个路由；<br>routes：它是个复数，表示多个的集合才能为复数；即我们可以理解为多个路由的集合，JS中表示多种不同状态的集合的形式只有数组和对象两种，事实上官方定义routes是一个数组；所以我们记住了，routes表示多个数组的集合；<br>router：译为路由器，上面都是路由，这个是路由器，我们可以理解为一个容器包含上述两个或者说它是一个管理者，负责管理上述两个；举个常见的场景的例子：当用户在页面上点击按钮的时候，这个时候router就会去routes中去查找route，就是说路由器会去路由集合中找对应的路由；</p>
-<h5 id="路由的简单使用"><a href="#路由的简单使用" class="headerlink" title="路由的简单使用"></a>路由的简单使用</h5><p>通过vue.use来注册组件<br>如果是一个函数, 直接调用函数做组件, 如果是对象的话, 会调用对象的install方法来注册插件</p>
-<p><strong>创建路由的步骤</strong><br>1 路由规则<br>2 创建路由对象 传入路由规则<br>3 mainjs引入<br>4 app.vue添加站位<br>5 创建连接</p>
-<p><strong>动态路由</strong><br>懒加载<br>推荐使用props来传参（还有$route.params.id）</p>
-<p><strong>嵌套路由</strong><br>很多时候我们的页面结构决定了我们可能需要嵌套路由，比如当我们进入主页之后有分类，然后当选择其中一个分类之后进入对应的详情，这个时候我们就可以用到嵌套路由；官方文档中给我们提供了一个children属性，这个属性是一个数组类型，里面实际放着一组路由；这个时候父子关系结构就出来了，所以children属性里面的是路由相对来说是children属性外部路由的子路由；</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> routes=[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">path</span>:<span class="string">&#x27;/page1&#x27;</span>,</span><br><span class="line">        <span class="attr">component</span>:page1,</span><br><span class="line">        <span class="attr">children</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">path</span>: <span class="string">&quot;phone&quot;</span>,<span class="comment">// /page1/phone</span></span><br><span class="line">                <span class="attr">component</span>: phone</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">path</span>: <span class="string">&quot;computer&quot;</span>, <span class="comment">// /page1/computer</span></span><br><span class="line">                <span class="attr">component</span>: computer</span><br><span class="line">            &#125;,</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p><strong>路由导航两种方式</strong></p>
-<blockquote>
-<p>标签导航</p>
-</blockquote>
-<p>标签导航<router-link><router-link>是通过转义为<a></a>标签进行跳转，其中router-link标签中的to属性会被转义为a标签中的href属性；</router-link></router-link></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//跳转到名为user路由，并传递参数userId</span><br><span class="line"><span class="tag">&lt;<span class="name">router-link</span> <span class="attr">:to</span>=<span class="string">&quot;&#123; name: &#x27;user&#x27;, params: &#123; userId: 123 &#125;&#125;&quot;</span>&gt;</span>User<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>编程式导航</p>
-</blockquote>
-<p>我们可以通过this.$router.push()这个方法来实现编程式导航，当然也可以实现参数传递，这种编程式导航一般是用于按钮点击之后跳转</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">router.push(&#123; <span class="attr">path</span>: <span class="string">&#x27;/user/:userId&#x27;</span>, <span class="attr">params</span>: &#123; <span class="attr">userId</span>: <span class="number">123</span> &#125;&#125;)</span><br><span class="line"><span class="comment">//push replace go(-2) 等方法</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="hash模式和history模式"><a href="#hash模式和history模式" class="headerlink" title="hash模式和history模式"></a>hash模式和history模式</h5><p>· Hash模式式是基于锚点，以及onhashchange事件, 需要使用问号拼接<br>例: https:/music.163.com/#/playlist?id=3102961863</p>
-<p>· History模式是基于 HTML5 中的 History API（需要服务端配置支持）<br>history.pushState() IE10以后才支持<br>history.replaceState()<br>例: <a target="_blank" rel="noopener" href="https://music.163.com/playlist/3102961863">https://music.163.com/playlist/3102961863</a></p>
-<p><strong>实现原理</strong><br>Hash模式<br>·URL中#后面的内容作为路径地址<br>·监听hashchange 事件<br>·根据当前路由地址找到对应组件重新渲染<br>History模式<br>·通过history.pushState()方法改变地址栏监听popstate事件<br>·根据当前路由地址找到对应组件重新渲染</p>
-<p><strong>模拟实现</strong><br>手写router 参考视频3-1-2  10-19小节 (部分解释以注释的方式写在以下代码块中)</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> _Vue = <span class="literal">null</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">VueRouter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> install (vue) &#123;</span><br><span class="line">    <span class="comment">// 1 判断当前插件是否被安装</span></span><br><span class="line">    <span class="keyword">if</span> (VueRouter.install.installed) <span class="keyword">return</span></span><br><span class="line">    VueRouter.install.installed = <span class="literal">true</span></span><br><span class="line">    <span class="comment">// 2 把Vue的构造函数记录在全局</span></span><br><span class="line">    _Vue = vue</span><br><span class="line">    <span class="comment">// 3 把创建Vue的实例传入的router对象注入到Vue实例</span></span><br><span class="line">    <span class="comment">// _Vue.prototype.$router = this.$options.router</span></span><br><span class="line">    _Vue.mixin(&#123;</span><br><span class="line">      beforeCreate () &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.$options.router) &#123;</span><br><span class="line">          _Vue.prototype.$router = <span class="built_in">this</span>.$options.router</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title">constructor</span> (<span class="params">options</span>) &#123;</span><br><span class="line">    <span class="built_in">this</span>.mode = options.mode || <span class="string">&quot;hash&quot;</span></span><br><span class="line">    <span class="built_in">this</span>.routes = options.routes</span><br><span class="line">    <span class="built_in">this</span>.routeMap = &#123;&#125;</span><br><span class="line">    <span class="comment">// observable</span></span><br><span class="line">    <span class="built_in">this</span>.data = _Vue.observable(&#123;</span><br><span class="line">        <span class="comment">//存储当前的路由地址, 默认是/</span></span><br><span class="line">      <span class="attr">current</span>: <span class="string">&#x27;/&#x27;</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="built_in">this</span>.init()</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//包装方法</span></span><br><span class="line">  init () &#123;</span><br><span class="line">    <span class="built_in">this</span>.createRouteMap()</span><br><span class="line">    <span class="built_in">this</span>.initComponents(_Vue)</span><br><span class="line">    <span class="built_in">this</span>.initEvent()</span><br><span class="line">  &#125;</span><br><span class="line">  createRouteMap () &#123;</span><br><span class="line">    <span class="comment">//遍历所有路由信息，把组件和路由的映射记录到 routeMap 对象中</span></span><br><span class="line">    <span class="built_in">this</span>.routes.forEach( <span class="function"><span class="params">route</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">this</span>.routeMap[route.path] = route.component</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">initComponents</span>(<span class="params">Vue</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//创建 router-link 和 router-view 组件</span></span><br><span class="line">    <span class="keyword">const</span> self = <span class="built_in">this</span></span><br><span class="line">    Vue.component(<span class="string">&#x27;router-link&#x27;</span>,&#123;</span><br><span class="line">      <span class="attr">props</span>:&#123;</span><br><span class="line">        <span class="attr">to</span>:<span class="built_in">String</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">//运行时版本的解决办法</span></span><br><span class="line">      <span class="function"><span class="title">render</span>(<span class="params">h</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> h(<span class="string">&quot;a&quot;</span>,&#123;</span><br><span class="line">          <span class="attr">attrs</span>:&#123;</span><br><span class="line">            <span class="attr">href</span>: self.mode === <span class="string">&quot;history&quot;</span> ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;#&quot;</span> + <span class="built_in">this</span>.to</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="comment">//给a标签注册事件</span></span><br><span class="line">          <span class="attr">on</span>:&#123;</span><br><span class="line">            <span class="attr">click</span>:self.mode === <span class="string">&quot;history&quot;</span> ? <span class="built_in">this</span>.clickhander : <span class="built_in">this</span>.hashClickhander</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,[<span class="built_in">this</span>.$slots.default])</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">methods</span>:&#123;</span><br><span class="line">        <span class="function"><span class="title">clickhander</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            <span class="comment">//参数: 事件 网页标题, 地址</span></span><br><span class="line">          history.pushState(&#123;&#125;,<span class="string">&quot;&quot;</span>,<span class="built_in">this</span>.to)</span><br><span class="line">          <span class="built_in">this</span>.$router.data.current = <span class="built_in">this</span>.to</span><br><span class="line">          e.preventDefault()</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="function"><span class="title">hashClickhander</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">          <span class="built_in">this</span>.$router.data.current=<span class="built_in">this</span>.to</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 运行时版本的vue不支持模版</span></span><br><span class="line">      <span class="comment">// template:&quot;&lt;a :href=&#x27;to&#x27;&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/a&gt;&quot;</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    Vue.component(<span class="string">&#x27;router-view&#x27;</span>,&#123;</span><br><span class="line">      <span class="function"><span class="title">render</span>(<span class="params">h</span>)</span>&#123;</span><br><span class="line">          <span class="comment">//获取路由组件 h帮我们转换成虚拟dom</span></span><br><span class="line">        <span class="keyword">let</span> cm = self.routeMap[self.data.current]</span><br><span class="line">        <span class="keyword">return</span> h(cm)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">initEvent</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      </span><br><span class="line">    <span class="comment">//注册 popstate 事件，当路由地址发生变化，重新记录当前的路径</span></span><br><span class="line">    <span class="keyword">const</span> eventType = <span class="built_in">this</span>.mode === <span class="string">&#x27;history&#x27;</span> ? <span class="string">&#x27;popstate&#x27;</span> : <span class="string">&#x27;hashchange&#x27;</span></span><br><span class="line">    <span class="keyword">const</span> handle = <span class="built_in">this</span>.mode === <span class="string">&#x27;history&#x27;</span> ? <span class="built_in">this</span>.getLocation : <span class="built_in">this</span>.getHash</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(eventType,handle.bind(<span class="built_in">this</span>))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">getLocation</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.data.current = <span class="built_in">window</span>.location.pathname</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">getHash</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> href = <span class="built_in">window</span>.location.href</span><br><span class="line">    <span class="keyword">const</span> index = href.indexOf(<span class="string">&#x27;#&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="string">&#x27;/&#x27;</span></span><br><span class="line">    <span class="built_in">this</span>.data.current = href.slice(index + <span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-gulp"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/06/07/gulp/"
-    >实现一个gulp模块并封装成cli</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/06/07/gulp/" class="article-date">
-  <time datetime="2021-06-07T04:47:14.000Z" itemprop="datePublished">2021-06-07</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="一个简单的gulp案例"><a href="#一个简单的gulp案例" class="headerlink" title="一个简单的gulp案例"></a>一个简单的gulp案例</h4><p>接下来我们通过一个实际的案例, 来看如何使用gulp完成一个网页应用自动化构建工作流<br>首先拿到一个需要构建的项目, 打开项目<br>打开项目: code pages-boilerplate<br>安装gulp: yarn add gulp –dev<br>新建gulpfile.js文件<br>导入gulp的api</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; src, dest &#125; = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>注意: public下是不需要构建加工的文件，src是开发阶段的代码 都需要构建，sass es6都需要构建 图片需要压缩</p>
-<h5 id="样式的编译"><a href="#样式的编译" class="headerlink" title="样式的编译"></a>样式的编译</h5><p>定义一个style, 然后导出</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> style = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/assets/styles/*.scss&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;) <span class="comment">//base校准保存路径</span></span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    style,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>yarn gulp style  经过测试可以打包成功</p>
-<p>安装转换流: yarn add gulp-sass –dev（内部会安装node-sass）</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sass = <span class="built_in">require</span>(<span class="string">&#x27;gulp-sass&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>使用转换: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> style = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/assets/styles/*.scss&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(sass(&#123; <span class="attr">outputstyle</span>: <span class="string">&#x27;expanded&#x27;</span>&#125;))<span class="comment">//完全展开的形式</span></span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>yarn gulp style  经过测试可以打包成功</p>
-<blockquote>
-<p>注意: sass会认为_开头的文件是被引用的文件 所以不会进行转换<br> sass({ outputstyle: ‘expanded’}) 是完全展开的格式, 否则 } 会在 ；后面 而不是另起一行, 如<br> <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.icon-aperture:before &#123;</span><br><span class="line"> <span class="attr">content</span>: <span class="string">&#x27;\e900&#x27;</span>; &#125;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<h5 id="脚本的编译"><a href="#脚本的编译" class="headerlink" title="脚本的编译"></a>脚本的编译</h5><p>定义一个script 然后导出</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> script = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/assets/scripts/*.js&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    script,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>安装babel环境: yarn add gulp-babel –dev<br>安装转换流: yarn add @babel/core @babel/preset-env –dev</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> babel = <span class="built_in">require</span>(<span class="string">&#x27;gulp-babel&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> script = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/assets/scripts/*.js&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(babel(&#123; <span class="attr">presets</span>: [<span class="string">&#x27;@babel/preset-env&#x27;</span>] &#125;))</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>里面这句话不要丢, babel只是一个平台不做转换, presets才是插件, 是新特性的一个整体的打包, s使用它来做转换, 如果不写这句话输出的文件几乎不会变格式</p>
-</blockquote>
-<p>yarn gulp script</p>
-<h5 id="模板文件的编译"><a href="#模板文件的编译" class="headerlink" title="模板文件的编译"></a>模板文件的编译</h5><p>定义一个page, 然后导出</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> page = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/**/*.html&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;) </span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    page</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>安装转换流: yarn add gulp-swig –dev</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> swig = <span class="built_in">require</span>(<span class="string">&#x27;gulp-swig&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> page = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/**/*.html&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;) <span class="comment">// 通配符可以这样写 &#x27;src/** / * .html&#x27;</span></span><br><span class="line">    .pipe(swig())</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>把数据部分的数组放在data中导入，或使用json文件式导入</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  <span class="attr">menus</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;Home&#x27;</span>,</span><br><span class="line">      <span class="attr">icon</span>: <span class="string">&#x27;aperture&#x27;</span>,</span><br><span class="line">      <span class="attr">link</span>: <span class="string">&#x27;index.html&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;Features&#x27;</span>,</span><br><span class="line">      <span class="attr">link</span>: <span class="string">&#x27;features.html&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;About&#x27;</span>,</span><br><span class="line">      <span class="attr">link</span>: <span class="string">&#x27;about.html&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;Contact&#x27;</span>,</span><br><span class="line">      <span class="attr">link</span>: <span class="string">&#x27;#&#x27;</span>,</span><br><span class="line">      <span class="attr">children</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;Twitter&#x27;</span>,</span><br><span class="line">          <span class="attr">link</span>: <span class="string">&#x27;https://twitter.com/w_zce&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;About&#x27;</span>,</span><br><span class="line">          <span class="attr">link</span>: <span class="string">&#x27;https://weibo.com/zceme&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;divider&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;About&#x27;</span>,</span><br><span class="line">          <span class="attr">link</span>: <span class="string">&#x27;https://github.com/zce&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">pkg</span>: <span class="built_in">require</span>(<span class="string">&#x27;./package.json&#x27;</span>),</span><br><span class="line">  <span class="attr">date</span>: <span class="keyword">new</span> </span><br><span class="line">  <span class="built_in">Date</span>()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> page = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/**/*.html&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(plugins.swig(&#123; data &#125;))</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>yarn gulp page</p>
-<h5 id="组合任务"><a href="#组合任务" class="headerlink" title="组合任务"></a>组合任务</h5><p>因为三者没有任何牵连所以使用并行任务<br>引入parallel模块</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; src, dest, parallel, series, watch &#125; = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> compile = parallel(style, script, page)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    compile</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>yarn gulp compile 完成并行组合任务</p>
-<h5 id="图片和字体文件的处理"><a href="#图片和字体文件的处理" class="headerlink" title="图片和字体文件的处理"></a>图片和字体文件的处理</h5><p>安装依赖: yarn add gulp-imagemin –dev(c++模块下载二进制集会比较慢）<br>这个插件可以处理图片和字体文件</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> imagemin = <span class="built_in">require</span>(<span class="string">&#x27;gulp-imagemin&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> image = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/assets/images/**&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(imagemin())</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> font = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/assets/fonts/**&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(imagemin())</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    image,</span><br><span class="line">    font,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>yarn gulp image<br>yarn gulp font</p>
-<h5 id="其他文件以及文件清除"><a href="#其他文件以及文件清除" class="headerlink" title="其他文件以及文件清除"></a>其他文件以及文件清除</h5><p>其他文件就直接拷贝, 如不需要压缩的public文件</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pub = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;public/**&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;public&#x27;</span>&#125;)</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>清除原有的temp文件<br>安装依赖: yarn add del –dev(他不是gulp下的插件, 只不过是可以使用, 是个promise方法</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> del = <span class="built_in">require</span>(<span class="string">&#x27;del&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> clean = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> del([<span class="string">&#x27;temp&#x27;</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后和build串行, 确保先删除后添加temp文件</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> build = series(clean, parallel(compile, pub))</span><br></pre></td></tr></table></figure>
-
-
-<h5 id="自动加载插件"><a href="#自动加载插件" class="headerlink" title="自动加载插件"></a>自动加载插件</h5><p>通过插件自动加载插件（禁止套娃喂）<br>安装依赖: yarn add gulp-load-plugins –dev</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// const sass = require(&#x27;gulp-sass&#x27;)</span></span><br><span class="line"><span class="comment">// const babel = require(&#x27;gulp-babel&#x27;)</span></span><br><span class="line"><span class="comment">// const swig = require(&#x27;gulp-swig&#x27;)</span></span><br><span class="line"><span class="comment">// const imagemin = require(&#x27;gulp-imagemin&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> loadPlugins = <span class="built_in">require</span>(<span class="string">&#x27;gulp-load-plugins&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> plugins = loadPlugins()</span><br></pre></td></tr></table></figure>
-<p>此时我们已经不需要引入一些插件了, 将下面的插件名都更换为plugins.xxx 如</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.pipe(plugins.swig())</span><br></pre></td></tr></table></figure>
-
-
-<h5 id="热更新开发服务器"><a href="#热更新开发服务器" class="headerlink" title="热更新开发服务器"></a>热更新开发服务器</h5><p>热更新开发服务器用于去在开发阶段调试应用, 我们可以通过gulp去启动和管理这个服务器, 实现在代码修改过后能自动编译, 刷新页面, 这样可以大大效率<br>这个模块给我提供了一个服务器, 功能比较强大, 支持我们修改代码过后自动更新到浏览器查看效果, 它不是gulp的插件, 只不过是通过gulp管理而已</p>
-<p>安装依赖: yarn add browser-sync –dev</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> browserSync = <span class="built_in">require</span>(<span class="string">&#x27;browser-sync&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> bs = browserSync.create()</span><br></pre></td></tr></table></figure>
-<p>创建一个服务器</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">onst serve = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  bs.init(&#123;</span><br><span class="line">    <span class="attr">notify</span>: <span class="literal">false</span>, <span class="comment">//控制浏览器刚打开时 右上角的小提示</span></span><br><span class="line">    <span class="attr">port</span>: <span class="number">2080</span>, <span class="comment">//端口</span></span><br><span class="line">    <span class="comment">// open: false,  //false不自动打开浏览器</span></span><br><span class="line">    <span class="comment">// files: &#x27;dist/**&#x27;,  //字符串 被监听的文件路径</span></span><br><span class="line">    <span class="attr">server</span>: &#123;</span><br><span class="line">      <span class="attr">baseDir</span>: [<span class="string">&#x27;temp&#x27;</span>, <span class="string">&#x27;src&#x27;</span>, <span class="string">&#x27;public&#x27;</span>],</span><br><span class="line">      <span class="attr">routes</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;/node_modules&#x27;</span>: <span class="string">&#x27;node_modules&#x27;</span> <span class="comment">//配置路由便于查找html中没有转换的地址</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>yarn gulp serve</p>
-<h5 id="监听src变化以及构建过程优化"><a href="#监听src变化以及构建过程优化" class="headerlink" title="监听src变化以及构建过程优化"></a>监听src变化以及构建过程优化</h5><p>引入watch模块</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; src, dest, parallel, series, watch &#125; = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> serve = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  watch(<span class="string">&#x27;src/assets/styles/*.scss&#x27;</span>, style) <span class="comment">//监听, 有变化就执行后面的任务</span></span><br><span class="line">  watch(<span class="string">&#x27;src/assets/scripts/*.js&#x27;</span>, script)</span><br><span class="line">  watch(<span class="string">&#x27;src/*.html&#x27;</span>, page)</span><br><span class="line">  watch(<span class="string">&#x27;src/assets/images/**&#x27;</span>, image)</span><br><span class="line">  watch(<span class="string">&#x27;src/assets/fonts/**&#x27;</span>, font)</span><br><span class="line">  watch(<span class="string">&#x27;public/**&#x27;</span>, extra)</span><br><span class="line"></span><br><span class="line">  bs.init(&#123;</span><br><span class="line">    <span class="attr">notify</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">port</span>: <span class="number">2080</span>,</span><br><span class="line">    <span class="attr">server</span>: &#123;</span><br><span class="line">      <span class="attr">baseDir</span>: [<span class="string">&#x27;temp&#x27;</span>, <span class="string">&#x27;src&#x27;</span>, <span class="string">&#x27;public&#x27;</span>],</span><br><span class="line">      <span class="attr">routes</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;/node_modules&#x27;</span>: <span class="string">&#x27;node_modules&#x27;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>yarn gulp serve</p>
-<blockquote>
-<p>这里可能会因为swig模板引擎缓存的机制导致页面不会变化<br>此时需要额外将swig 选项中的cache设置为false<br>具体参考源代码72行</p>
-</blockquote>
-<h5 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h5><p>图片字体和不变的文件, 在开发阶段不需要一直重构, 会影响效率, 同事删除并行任务中的图片和字体</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//   watch(&#x27;src/assets/images/**&#x27;, image)</span></span><br><span class="line"><span class="comment">//   watch(&#x27;src/assets/fonts/**&#x27;, font)</span></span><br><span class="line"><span class="comment">//   watch(&#x27;public/**&#x27;, extra)</span></span><br></pre></td></tr></table></figure>
-
-<p>但是如果图片字体文件发生变化也要监视到</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">watch([</span><br><span class="line">  <span class="string">&#x27;src/assets/images/**&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;src/assets/fonts/**&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;public/**&#x27;</span></span><br><span class="line">], bs.reload)</span><br></pre></td></tr></table></figure>
-<p>如果给pipe加上reload, 就不需要bs中的files监视了, 如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> page = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/**/*.html&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(plugins.swig(&#123; data &#125;))</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">    .pipe(bs.reload(&#123; <span class="attr">stream</span>: <span class="literal">true</span> &#125;))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h5 id="useref文件引用处理"><a href="#useref文件引用处理" class="headerlink" title="useref文件引用处理"></a>useref文件引用处理</h5><p>会自动创建构建注释来处理, 会将路径中的文件打包到某文件中<br>安装依赖: yarn add gulp-useref –dev<br>这里的src接口针对的是temp路径下的文件</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> useref = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> src(<span class="string">&#x27;temp/*.html&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;temp&#x27;</span> &#125;)</span><br><span class="line">    .pipe(plugins.useref(&#123; <span class="attr">searchPath</span>: [<span class="string">&#x27;temp&#x27;</span>, <span class="string">&#x27;.&#x27;</span>] &#125;))</span><br><span class="line">    <span class="comment">// html js css</span></span><br><span class="line">    .pipe(plugins.if(<span class="regexp">/\.js$/</span>, plugins.uglify()))</span><br><span class="line">    .pipe(plugins.if(<span class="regexp">/\.css$/</span>, plugins.cleanCss()))</span><br><span class="line">    .pipe(plugins.if(<span class="regexp">/\.html$/</span>, plugins.htmlmin(&#123;</span><br><span class="line">      <span class="attr">collapseWhitespace</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">minifyCSS</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">minifyJS</span>: <span class="literal">true</span></span><br><span class="line">    &#125;)))</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;dist&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后对html css js进行压缩<br>安装依赖: yarn add gulp-htmlmin gulp-uglify gulp-clean-css –dev</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> useref = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> src(<span class="string">&#x27;temp/*.html&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;temp&#x27;</span> &#125;)</span><br><span class="line">    .pipe(plugins.useref(&#123; <span class="attr">searchPath</span>: [<span class="string">&#x27;temp&#x27;</span>, <span class="string">&#x27;.&#x27;</span>] &#125;))</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;dist&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>判断是什么文件, 来决定后续的操作<br>安装判断依赖: yarn add gulp-if –dev</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.pipe(plugins.if(<span class="regexp">/\.js$/</span>, plugins.uglify()))</span><br><span class="line">.pipe(plugins.if(<span class="regexp">/\.css$/</span>, plugins.cleanCss()))</span><br><span class="line">.pipe(plugins.if(<span class="regexp">/\.html$/</span>, plugins.htmlmin(&#123;</span><br><span class="line">  <span class="attr">collapseWhitespace</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">minifyCSS</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">minifyJS</span>: <span class="literal">true</span></span><br><span class="line">&#125;))) <span class="comment">//这里是处理html的空白字符 还可以删除空属性 移除注释等 需要自己扩展</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>如果文件中没有注释, 就useref不成功, 因为useref过后会删除注释，所以第二次需要注意, 先compile再useref, 输入流和输出流不应在同一个目录下</p>
-</blockquote>
-<p>因为useref需要转换到别的文件夹  所以前面所有的转换（除字体图片等）先转换到temp 再useref到dist</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> build = series(clean, parallel(series(compile, useref), extra, image, font))</span><br></pre></td></tr></table></figure>
-
-<h5 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h5><p>构建任务完成后, 需要好好写导出, 让人理解<br>需要放在package.json的scripts里<br>需要在.gitignore中忽略temp dist文件</p>
-<h4 id="封装gulp"><a href="#封装gulp" class="headerlink" title="封装gulp"></a>封装gulp</h4><p>提取一个可复用的自动化构建工作流, 就是创建一个模块, 发布到仓库, 再使用就可以了</p>
-<!-- yarn global add zce-cli
-zce init nm zce-pages
-cd zce-pages
-创建一个git仓库
-新建一个文件（可以使用脚手架）
-git init
-git remote add origin https://xxxx.git
-git push -->
-
-<p>这里就使用我们刚刚建立的简单的gulp</p>
-<p>新建一个项目/仓库<br>提取gulp<br>code . -a(扩展一下）<br>将上面项目的gulpfile中的内容复制给index.js入口文件<br>将原项目中一大串依赖复制过来package.json中的dependencies中, 然后执行 yarn（这个是install）</p>
-<p>回到原项目中把gulpfile清空, 删除node-modules 和 package中的devDepandencies, 这时他就是一个干净的项目了<br>执行 yarn link 和 yarn link “你的模块名字”, 在 gulpfile 中写入导入文件</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="built_in">require</span>(<span class="string">&#x27;你的模块名字&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>执行 yarn (安装生产依赖）, 安装gulp-cli gulp, 并启动 yarn build, 开始排错</p>
-<p><strong>提取index中的data</strong><br>模块中新建pages.config.js来抽象一些不该被集成的东西, 如原项目中的data, 把数据放在这里面这个文件中<br>模块中修改</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> config = &#123;</span><br><span class="line">  <span class="comment">// default config</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> loadConfig = <span class="built_in">require</span>(<span class="string">`<span class="subst">$&#123;cwd&#125;</span>/pages.config.js`</span>)</span><br><span class="line">  config = <span class="built_in">Object</span>.assign(&#123;&#125;, config, loadConfig)</span><br><span class="line">&#125; <span class="keyword">catch</span> (e) &#123;&#125;</span><br><span class="line">    <span class="comment">//使用data的地方也要修改</span></span><br><span class="line">    .pipe(plugins.swig(&#123; <span class="attr">data</span>: config.data, <span class="attr">defaults</span>: &#123; <span class="attr">cache</span>: <span class="literal">false</span> &#125; &#125;))</span><br><span class="line">    <span class="comment">//找不到依赖时也可以这样引入</span></span><br><span class="line">    .pipe(plugins.babel(&#123; <span class="attr">presets</span>: [<span class="built_in">require</span>(<span class="string">&#x27;@babel/preset-env&#x27;</span>)] &#125;))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>yarn build可以成功, 基本完成</p>
-<p><strong>抽象路径配置</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> config = &#123;</span><br><span class="line">  <span class="comment">// default config</span></span><br><span class="line">  <span class="comment">//这个build也要复制到配置文件pages.config.js一份</span></span><br><span class="line">  <span class="attr">build</span>: &#123;</span><br><span class="line">    <span class="attr">src</span>: <span class="string">&#x27;src&#x27;</span>,</span><br><span class="line">    <span class="attr">dist</span>: <span class="string">&#x27;dist&#x27;</span>,</span><br><span class="line">    <span class="attr">temp</span>: <span class="string">&#x27;temp&#x27;</span>,</span><br><span class="line">    <span class="attr">public</span>: <span class="string">&#x27;public&#x27;</span>,</span><br><span class="line">    <span class="attr">paths</span>: &#123;</span><br><span class="line">      <span class="attr">styles</span>: <span class="string">&#x27;assets/styles/*.scss&#x27;</span>,</span><br><span class="line">      <span class="attr">scripts</span>: <span class="string">&#x27;assets/scripts/*.js&#x27;</span>,</span><br><span class="line">      <span class="attr">pages</span>: <span class="string">&#x27;*.html&#x27;</span>,</span><br><span class="line">      <span class="attr">images</span>: <span class="string">&#x27;assets/images/**&#x27;</span>,</span><br><span class="line">      <span class="attr">fonts</span>: <span class="string">&#x27;assets/fonts/**&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">    <span class="comment">//下面的路径全都修改为这种</span></span><br><span class="line">    .pipe(dest(config.build.temp))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-<p>包装gulp cli, 就可以删除gulpfile了</p>
-<p>在bin下的js中写入这些是为了提取命令行中的很长的重复部分, 这样提取之后就可以直接使用 ‘你的cli名’ build来启动了</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env node</span></span><br><span class="line"></span><br><span class="line">process.argv.push(<span class="string">&#x27;--cwd&#x27;</span>)</span><br><span class="line">process.argv.push(process.cwd())</span><br><span class="line">process.argv.push(<span class="string">&#x27;--gulpfile&#x27;</span>)</span><br><span class="line">process.argv.push(<span class="built_in">require</span>.resolve(<span class="string">&#x27;..&#x27;</span>))</span><br><span class="line"></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;gulp/bin/gulp&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>要在packsge.json中记得引入这个文件作为cli的入口文件: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;bin&quot;</span>: <span class="string">&quot;bin/你的文件名.js&quot;</span>,</span><br><span class="line"><span class="string">&quot;files&quot;</span>: [</span><br><span class="line">  <span class="string">&quot;lib&quot;</span>,</span><br><span class="line">  <span class="string">&quot;bin&quot;</span></span><br><span class="line">],</span><br></pre></td></tr></table></figure>
-
-<p><strong>发布并使用模块</strong><br>发布<br>首先使用git提交代码,<br>执行yarn publish 时, 淘宝镜像源是只读的所以publish不上去, 可以使用原镜像</p>
-<blockquote>
-<p>yarn publish –registry<a target="_blank" rel="noopener" href="https://registry.yarnpkg.com/">https://registry.yarnpkg.com</a></p>
-</blockquote>
-<p>使用<br>先新建一个空项目<br>yarn add zce-pages –dev</p>
-<p>yarn zce-pages build, 可以看到package中已有这些cli</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">  <span class="string">&quot;clean&quot;</span>: <span class="string">&quot;zce-pages clean&quot;</span>,</span><br><span class="line">  <span class="string">&quot;build&quot;</span>: <span class="string">&quot;zce-pages build&quot;</span>,</span><br><span class="line">  <span class="string">&quot;develop&quot;</span>: <span class="string">&quot;zce-pages develop&quot;</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注: 官方镜像同步到淘宝镜像是有时间差的, 不要publish完马上就去下载, 可以先去官网查看版本</p>
-</blockquote>
-<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gulp/" rel="tag">gulp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E6%A1%88%E4%BE%8B/" rel="tag">自动化构建案例</a></li></ul>
 
     </footer>
   </div>
