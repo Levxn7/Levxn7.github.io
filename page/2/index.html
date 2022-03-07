@@ -140,6 +140,401 @@
     
     
     <article
+  id="post-functionalProgramming"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/24/functionalProgramming/"
+    >函数式编程</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/24/functionalProgramming/" class="article-date">
+  <time datetime="2021-12-24T02:09:22.000Z" itemprop="datePublished">2021-12-24</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h4><p><strong>函数式编程是—种编程范式</strong>，我们常见的编程范式有命令式编程(lmperative<br>programming)，函数式编程，逻辑式编程，<em>常见的面向对象编程是也是一种命令式编程</em>。</p>
+<p>命令式编程是面向计算机硬件的抽象，有变量(对应着存储单元)，赋值语句(获取，存储指令)，表达式(内存引用和算术运算）和控制语句（跳转指令)。<br>而函数式编程是面向数学的抽象，将计算描述为一种表达式求值，一句话，函数式程序就是一个表达式。</p>
+<p>函数式编程中的函数这个术语不是指计算机中的函数(实际上是Subroutine)，而是指<strong>数学中的函数</strong>，即自<strong>变量的映射</strong>。也就是说一个函数的值仅决定于函数参数的值，不依赖其他状态。比如sqrt(x)函数计算x的平方根，只要x不变，不论什么时候调用，调用几次，值都是不变的。<br>在函数式语言中，<strong>函数作为一等公民</strong>，可以在任何地方定义，在函数内或函数外，可以作为函数的参数和返回值，可以对函数进行组合。</p>
+<p>函数式运算的核心，就是把运算过程抽象成函数，合成的过程就是抽象的过程。函数式运算可以最大程度的重用。<br>函数的名字要有实际性的意义，这对函数式编程来说非常重要。函数式编程经常会使用箭头函数，会使代码更简洁。</p>
+<h5 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h5><p>高阶函数的英文名叫 Higher-Order Function，是函数式编程的基本技术。<strong>把函数作为参数传入，这样的函数称为高阶函数</strong>，编写高阶函数，就是让函数的参数能够接收别的函数。函数式编程就是指这种高度抽象的编程范式。</p>
+<p>因为在JS中函数是一等公民，即函数可以被赋值给变量，被变量引用，这便使得函数可以作为参数，在其他函数间相互传递。这是JS作为一门“一切皆为对象”的语言，也能拥有函数式编程的能力</p>
+<p>闭包（可以判定有基准值的问题）</p>
+<h5 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h5><blockquote>
+<p><strong>函数的副作用</strong><br>函数的副作用会让函数变得不纯（函数如果依赖外部变量，就会产生副作用，既是不纯函数）。副作用会使函数通用性下降，不适合扩展和重用，会给程序带来安全隐患。副作用不能完全禁止，只能尽量控制。<br>副作用来源：全局变量，配置文件，数据库，用户输入等所有的外部交互</p>
+</blockquote>
+<p>纯函数始终有输入和输出，相同的输入一定是相同的输出，没有可观察的副作用。纯函数不会调用外部作用域的变量。使得函数与外部解耦，函数的使用更加安全。</p>
+<p>纯函数的好处有：</p>
+<ul>
+<li>可缓存 可以提高程序的性能</li>
+<li>可测试</li>
+<li>并行处理（对比多线程并行操作共享内存数据的意外）</li>
+</ul>
+<h5 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h5><blockquote>
+<p>维基百科：Currying，是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。</p>
+</blockquote>
+<p>当函数有多个参数时，可以分解函数，先传递一部分（不变）的参数，然后返回新的函数接收剩余的参数，然后返回结果。</p>
+<blockquote>
+<p>示例</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通的add函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Currying后</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curryingAdd</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">y</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x + y</span><br><span class="line">    &#125;&#125;</span><br><span class="line"></span><br><span class="line">add(<span class="number">1</span>, <span class="number">2</span>)           <span class="comment">// 3</span></span><br><span class="line">curryingAdd(<span class="number">1</span>)(<span class="number">2</span>)   <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+
+<p>实际上就是把add函数的x，y两个参数变成了先用一个函数接收x然后返回一个函数去处理y参数。现在思路应该就比较清晰了，就是只传递给函数一部分参数来调用它，让它返回一个函数去处理剩下的参数。</p>
+<p>lodash中的柯里化 _.curry(func)，可以帮我们把多元函数转化为一元函数<br>如果传入所有参数就返回结果，如果传入部分参数就返回一个函数，使之可以继续传入参数<br>图12/10-12</p>
+<p><strong>总结</strong></p>
+<ul>
+<li>柯里化可以先传递一些函数并返回一个已有某些固定参数的新函数</li>
+<li>是对函数参数的一种‘缓存’，让参数可以复用</li>
+<li>让函数变得灵活，颗粒更小 </li>
+<li>把多远函数变为一元函数，可以组合使用，产生强大的功效</li>
+</ul>
+<p>可参考资料<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2975c25e4d71">https://www.jianshu.com/p/2975c25e4d71</a></p>
+<h5 id="函数的组合compose"><a href="#函数的组合compose" class="headerlink" title="函数的组合compose"></a>函数的组合compose</h5><p>其思想为将数据依次经过几个函数处理（函数的嵌套），最终输出结果数据。</p>
+<p>函数组合默认是从右到左执行。大函数拆分成小函数，可以容易debug。函数的组合要满足结合律（数学意义上的结合律）</p>
+<p>Lodash的_.flow 提供了 compose 的功能，且可读性更强。_.flow()从左往右执行 _.flowRight()从右往左执行</p>
+<p>调试函数组合时可以定义一个内含打印和返回的辅助函数</p>
+<h6 id="lodash中的fp模块"><a href="#lodash中的fp模块" class="headerlink" title="lodash中的fp模块"></a>lodash中的fp模块</h6><p>fp模块提供的方法都是经过柯里化的</p>
+<ul>
+<li>提供了实用的对函数式编程友好的方法</li>
+<li>函数优先  数据之后</li>
+</ul>
+<p>_.map有个小问题，它会给第二个参数（函数a）传递三个参数(item, index, array)，这就有可能会影响到函数a的运作,而fp中的map函数可以解决这个问题</p>
+<blockquote>
+<p>示例</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> _ = <span class="built_in">require</span>(<span class="string">&#x27;lodash&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fp = <span class="built_in">require</span>(<span class="string">&#x27;lodash/fp&#x27;</span>);</span><br><span class="line"><span class="keyword">let</span> arr1 = [<span class="string">&#x27;10&#x27;</span>, <span class="string">&#x27;20&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;40&#x27;</span>];</span><br><span class="line"><span class="built_in">console</span>.log(_.map(arr1, <span class="built_in">parseInt</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//执行结果[ 10, NaN, NaN, NaN ]</span></span><br><span class="line"><span class="comment">//parseInt 执行顺序</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;10&#x27;,0,array) 10</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;20&#x27;,1,array) NAN</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;30&#x27;,2,array) NAN</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;40&#x27;,3,array) NAN</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//解决这个问题使用lodash/fp模块</span></span><br><span class="line"><span class="built_in">console</span>.log(fp.map(<span class="built_in">parseInt</span>, arr1));</span><br><span class="line"><span class="comment">//[ 10, 20, 30, 40 ]</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="pointfree模式"><a href="#pointfree模式" class="headerlink" title="pointfree模式"></a>pointfree模式</h5><p>pointFree：我们可以把数据处理的过程定义成与数据无关的合成运算，不需要用到代表数据的那个参数，只要把简单的运算步骤合成到一起，在使用这种模式之前我们需要定义一些辅助的基本运算函数。</p>
+<ul>
+<li>不需要指明处理的数据</li>
+<li>只需要合成运算过程</li>
+<li>需要定义一些辅助的基本运算函数</li>
+</ul>
+<h4 id="函子Functor"><a href="#函子Functor" class="headerlink" title="函子Functor"></a>函子Functor</h4><p>我们学习函子是为了在函数式编程中把副作用控制在可控范围内、作异常处理、异步操作等。我们可以把函子想象成一个盒子，里面有map方法，传进一个值，对值进行处理。<br>函子是一个特殊的容器（包含值和值的变形关系（函数）），通过一个普通的对象来实现。函子是一个对象，对外提供map方法，永远不取值出来，只在map里对值进行操作。（以_开头的值是私有值，不对外公布。）</p>
+<p>总结：</p>
+<ul>
+<li>函数式编程的运算不直接操作值，而是由函子完成。</li>
+<li>函子就是一个实现了map契约的对象</li>
+<li>我们可以把函子想象成一个盒子，这个盒子里封装了一个值</li>
+<li>想要处理盒子中的值，我们需要给盒子的map方法传递一个处理值的函数（纯函数)，由这个函数来对值进行处理</li>
+<li>最终map方法返回一个包含新值的盒子(函子)</li>
+</ul>
+<p><strong>maybe函子</strong><br>maybe函子为了避免函子传入空值（null/undefined）情况的发生，它作用就是可以对外部的空值情况做处理（控制副作用在允许的范围）</p>
+<p><strong>either函子</strong><br> 异常会让函数变的不纯，通过either函子去处理异常，可以记录错误信息。类似于 if…else…的处理。</p>
+<p><strong>IO函子</strong><br>IO函子中的_value是一个函数，这里把函数当做值来处理。IO函子把不纯的操作存储到_value中交给调用者去处理，延迟不纯的操作，包装当前的纯操作。缺点是嵌套函子很不方便。</p>
+<p><strong>task函子</strong><br>task用于解决异步任务，和promise非常像，返回方法是resolver.resolve、resolver.reject，调用方法有.run()、.listen({onRejected/onResolved)}等。</p>
+<blockquote>
+<p>folktale是一个标准的函数式编程库，和lodash、ramda不同的是，他没有提供很多功能函数，只提供了一些函数式处理的操作，例如: compose、curry等，一些函子Task、Either、MayBe等<br>folktale的基本使用<a target="_blank" rel="noopener" href="https://folktale.origamitower.com/">https://folktale.origamitower.com/</a></p>
+</blockquote>
+<p><strong>pointed函子</strong><br>pointed函子只是一个概念而已，是实现了 of 静态方法的函子</p>
+<p><strong>monad函子</strong><br>monad函子是可以变扁的pointed函子，一个函子如果具有join和of两个方法并遵守一些定律就是一个monad。</p>
+<ul>
+<li>处理值用map</li>
+<li>处理函数用flatMap</li>
+</ul>
+<h4 id="函数式编程总结"><a href="#函数式编程总结" class="headerlink" title="函数式编程总结"></a>函数式编程总结</h4><p>1，可读性强：声明式(Declarative)使得代码即使没有注释也有很高的可读性(这也是 React 的一大卖点)。<br>2，代码量少：项目越大，越节省代码量(大量的函数被复用)。<br>3，代码稳定可靠：纯函数的功劳。<br>4，容易维护性：符合「单一职能原则」，使得代码的维护与迭代更加容易。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/" rel="tag">lodash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9F%AF%E9%87%8C%E5%8C%96/" rel="tag">柯里化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/" rel="tag">高阶函数</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-myPromise/myPromise"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/06/myPromise/myPromise/"
+    >手写一个Promise的内部基本实现</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/06/myPromise/myPromise/" class="article-date">
+  <time datetime="2021-12-06T07:53:41.000Z" itemprop="datePublished">2021-12-06</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>参照异步编程那篇博文我们知道，Promise 是 JS 异步编程中的重要概念，异步抽象处理对象，是目前比较流行 Javascript 异步编程解决方案之一.</p>
+<p>今天我们就来尽可能还原 Promise 中的几个基本 API，并通过注释简单描述思路和原理.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Promise有三个状态,且状态为成功和失败时不可再更改,我们且定义三个常量</span></span><br><span class="line"><span class="keyword">const</span> Pending = <span class="string">&#x27;pending&#x27;</span></span><br><span class="line"><span class="keyword">const</span> Resolve = <span class="string">&#x27;fulFilled&#x27;</span></span><br><span class="line"><span class="keyword">const</span> Rejected = <span class="string">&#x27;rejected&#x27;</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">myPromise</span> </span>&#123;</span><br><span class="line">    <span class="comment">//执行器 </span></span><br><span class="line">    <span class="comment">//promise就是一个类,在执行这个类的时候需要传递一个执行器,执行器就是传入的那个回调函数,执行器会立即执行</span></span><br><span class="line">    <span class="title">constructor</span> (<span class="params">ex</span>)&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> ex(<span class="built_in">this</span>.resolve，<span class="built_in">this</span>.reject)</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e)&#123;</span><br><span class="line">            <span class="built_in">this</span>.reject(e)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//声明变量</span></span><br><span class="line">    status = Pending</span><br><span class="line">    value = <span class="literal">undefined</span></span><br><span class="line">    reason = <span class="literal">undefined</span></span><br><span class="line">    <span class="comment">//定义成功回调和失败回调的数组</span></span><br><span class="line">    scb = []</span><br><span class="line">    fcb = []</span><br><span class="line"></span><br><span class="line">    resolve = <span class="function"><span class="params">value</span> =&gt;</span>  &#123;</span><br><span class="line">        <span class="comment">//如果是Pending状态再继续执行 改状态 赋值等操作</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.status !== Pending) <span class="keyword">return</span></span><br><span class="line">        <span class="built_in">this</span>.status = Resolve</span><br><span class="line">        <span class="built_in">this</span>.value = value</span><br><span class="line">        <span class="comment">// this.scb &amp;&amp; this.scb(this.value)</span></span><br><span class="line">        <span class="comment">//循环执行</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="built_in">this</span>.scb.length) <span class="built_in">this</span>.scb.shift()()</span><br><span class="line">    &#125;</span><br><span class="line">    reject = <span class="function"><span class="params">reason</span> =&gt;</span>  &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.status !== Pending) <span class="keyword">return</span></span><br><span class="line">        <span class="built_in">this</span>.status = Rejected</span><br><span class="line">        <span class="built_in">this</span>.reason = reason</span><br><span class="line">        <span class="comment">// this.fcb &amp;&amp; this.fcb(this.reason)</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="built_in">this</span>.fcb.length) <span class="built_in">this</span>.fcb.shift()()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">then</span>(<span class="params">scb，fcb</span>)</span> &#123;</span><br><span class="line">        <span class="comment">//处理then链式调用情况</span></span><br><span class="line">        scb = scb ? scb : <span class="function"><span class="params">value</span> =&gt;</span> value</span><br><span class="line">        fcb = fcb ? fcb : <span class="function"><span class="params">reason</span> =&gt;</span> &#123; <span class="keyword">throw</span> reason&#125;</span><br><span class="line">        <span class="keyword">let</span> p2 = <span class="keyword">new</span> myPromise(<span class="function">(<span class="params">resolve，reject</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">//分三种状态判断</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">this</span>.status === Resolve) &#123;</span><br><span class="line">                <span class="comment">//setTimeout为了可以异步获取p2</span></span><br><span class="line">                <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        resPro(scb(<span class="built_in">this</span>.value)，resolve，reject，p2)</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                        reject(error)</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;，<span class="number">0</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">this</span>.status === Rejected) &#123;</span><br><span class="line">                <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        resPro(fcb(<span class="built_in">this</span>.reason)，resolve，reject，p2)</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                        reject(error)</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;，<span class="number">0</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">this</span>.scb.push(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            resPro(scb(<span class="built_in">this</span>.value)，resolve，reject，p2)</span><br><span class="line">                        &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                            reject(error)</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;，<span class="number">0</span>);</span><br><span class="line">                &#125;)</span><br><span class="line">                <span class="built_in">this</span>.fcb.push(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            resPro(fcb(<span class="built_in">this</span>.reason)，resolve，reject，p2)</span><br><span class="line">                        &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                            reject(error)</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;，<span class="number">0</span>);</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">return</span> p2</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="title">resolve</span>(<span class="params">value</span>)</span>&#123;</span><br><span class="line">        <span class="comment">//如果是primose类型就直接返回, 如果是普通值就包裹一层promise返回</span></span><br><span class="line">        <span class="keyword">if</span>(value <span class="keyword">instanceof</span> myPromise) <span class="keyword">return</span> value</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> myPromise(<span class="function"><span class="params">resolve</span> =&gt;</span> resolve(value))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="title">all</span>(<span class="params">arr</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> result = []</span><br><span class="line">        <span class="keyword">let</span> sum = <span class="number">0</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> myPromise(<span class="function">(<span class="params">resolve，reject</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="function"><span class="keyword">function</span> <span class="title">add</span> (<span class="params">i，t</span>) </span>&#123;</span><br><span class="line">                result[i] = t</span><br><span class="line">                sum++</span><br><span class="line">                <span class="keyword">if</span> (sum === arr.length) &#123;</span><br><span class="line">                    resolve(result) </span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i&lt;arr.length; i++)&#123;</span><br><span class="line">                <span class="keyword">let</span> cur = arr[i]</span><br><span class="line">                <span class="keyword">if</span> (cur <span class="keyword">instanceof</span> myPromise ) &#123;</span><br><span class="line">                    <span class="comment">//如果是promise值</span></span><br><span class="line">                    cur.then(<span class="function"><span class="params">res</span> =&gt;</span> add(i，res)，rej =&gt; reject(rej))</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">//如果是普通值</span></span><br><span class="line">                    add(i，cur)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="title">race</span>(<span class="params">arr</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> sum = <span class="number">0</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> myPromise(<span class="function">(<span class="params">resolve，reject</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="function"><span class="keyword">function</span> <span class="title">addresolve</span> (<span class="params">t</span>) </span>&#123;</span><br><span class="line">                sum++</span><br><span class="line">                <span class="keyword">if</span> (sum === <span class="number">1</span>) &#123;</span><br><span class="line">                    resolve(t) </span><br><span class="line">                    <span class="keyword">return</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="function"><span class="keyword">function</span> <span class="title">addreject</span> (<span class="params">t</span>) </span>&#123;</span><br><span class="line">                sum++</span><br><span class="line">                <span class="keyword">if</span> (sum === <span class="number">1</span>) &#123;</span><br><span class="line">                    reject(t) </span><br><span class="line">                    <span class="keyword">return</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i&lt;arr.length; i++)&#123;</span><br><span class="line">                <span class="keyword">let</span> cur = arr[i]</span><br><span class="line">                <span class="keyword">if</span> (cur <span class="keyword">instanceof</span> myPromise ) &#123;</span><br><span class="line">                    <span class="comment">//promise</span></span><br><span class="line">                    cur.then(<span class="function"><span class="params">res</span> =&gt;</span> addresolve(res)，rej =&gt; addreject(rej))</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">//普通值</span></span><br><span class="line">                    addresolve(cur)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span>(fcb) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.then(<span class="literal">undefined</span>，fcb)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="title">finally</span>(<span class="params">cb</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">//等待cb执行完成</span></span><br><span class="line">            <span class="keyword">return</span> myPromise.resolve(cb()).then(<span class="function">() =&gt;</span> res)</span><br><span class="line">        &#125;,<span class="function"><span class="params">rej</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> myPromise.resolve(cb()).then(<span class="function">() =&gt;</span> &#123;<span class="keyword">throw</span> rej&#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resPro</span>(<span class="params">x，resolve，reject，p2</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//如果和本身一样就抛出错误</span></span><br><span class="line">    <span class="keyword">if</span> (p2 === x) &#123;</span><br><span class="line">        <span class="keyword">return</span> reject(<span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">&#x27;循环&#x27;</span>))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//如果是promise就执行  如果不是就包一层</span></span><br><span class="line">    <span class="keyword">if</span> (x <span class="keyword">instanceof</span> myPromise ) &#123;</span><br><span class="line">        x.then(resolve，reject)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        resolve(x)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>下面我们开始测试</p>
+<p>先定义一个函数，要想创建一个 promise 对象、可以使用 new 来调用 Promise 的构造器来进行实例化.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> pro = <span class="keyword">new</span> myPromise(<span class="function"><span class="keyword">function</span> (<span class="params">resolve，reject</span>) </span>&#123;</span><br><span class="line">    resolve(<span class="string">&#x27;resolve1&#x27;</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>Promise 构造函数包含一个参数和一个带有 resolve（解析）和 reject（拒绝）两个参数的回调.在回调中执行一些操作（例如异步），如果一切都正常，则调用 resolve，否则调用 reject.<br>对于已经实例化过的 promise 对象可以调用 promise.then() 方法，传递 resolve 和 reject 方法作为回调.</p>
+<h5 id="测试-then-链式调用情况"><a href="#测试-then-链式调用情况" class="headerlink" title="测试.then()链式调用情况"></a>测试.then()链式调用情况</h5><p>经测试，下面代码打印结果为: resolve1<br>说明.then()方法的参数是可选的，当参数为空时，promise会把结果返回给下一个then来接收</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pro.then().then().then(<span class="function"><span class="params">resolve</span> =&gt;</span> <span class="built_in">console</span>.log(resolve)，reject =&gt; <span class="built_in">console</span>.log(reject))</span><br></pre></td></tr></table></figure>
+
+<h5 id="测试循环调用的情况"><a href="#测试循环调用的情况" class="headerlink" title="测试循环调用的情况"></a>测试循环调用的情况</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> p1 = pro.then(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value)</span><br><span class="line">    <span class="keyword">return</span> p1</span><br><span class="line">&#125;);</span><br><span class="line">p1.then(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value)</span><br><span class="line">&#125;，reason =&gt; <span class="built_in">console</span>.log(reason.message))</span><br></pre></td></tr></table></figure>
+<p>这一段打印结果是: resolve1 循环<br>证明我们循环调用处理的是没什么问题的</p>
+<hr>
+<p>为了方便测试.all()和.race()方法，我们先定义三个函数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">p1</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> myPromise(<span class="function"><span class="keyword">function</span> (<span class="params">resolve，reject</span>) </span>&#123;</span><br><span class="line">      <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        resolve(<span class="string">&#x27;p1&#x27;</span>)</span><br><span class="line">      &#125;，<span class="number">1000</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">p2</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> myPromise(<span class="function"><span class="keyword">function</span> (<span class="params">resolve，reject</span>) </span>&#123;</span><br><span class="line">        resolve(<span class="string">&#x27;p2&#x27;</span>);  </span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">p3</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> myPromise(<span class="function"><span class="keyword">function</span> (<span class="params">resolve，reject</span>) </span>&#123;</span><br><span class="line">        reject(<span class="string">&#x27;失败&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="all"><a href="#all" class="headerlink" title=".all()"></a>.all()</h5><p>Promise.all 方法接受一个数组作为参数，p1、p2、p3 都是 Promise 对象的实例.（Promise.all 方法的参数不一定是数组，但是必须具有 iterator 接口，且返回的每个成员都是 Promise 实例.）</p>
+<p>.all()的状态分成两种情况.</p>
+<ul>
+<li>只有p1、p2/p3的状态都变成fulfilled，p的状态才会变成fulfilled，此时入参的返回值组成一个数组，传递给p的回调函数.</li>
+<li>只要p1、p2/p3之中有一个被rejected，p的状态就变成rejected，此时第一个被reject的实例的返回值，会传递给p的回调函数.</li>
+</ul>
+<p>此时我们测试.all()函数，运行结果为: alla,b,p1,p2,c</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.all([<span class="string">&#x27;a&#x27;</span>，<span class="string">&#x27;b&#x27;</span>，p1()，p2()，<span class="string">&#x27;c&#x27;</span>]).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;all&#x27;</span> + res),<span class="function"><span class="params">rej</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;all&#x27;</span> + rej))</span><br></pre></td></tr></table></figure>
+<p>如果我们给.all加入一个失败的参数，运行结果为: all失败</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.all([<span class="string">&#x27;a&#x27;</span>，<span class="string">&#x27;b&#x27;</span>，p1()，p3()，<span class="string">&#x27;c&#x27;</span>]).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;all&#x27;</span> + res),<span class="function"><span class="params">rej</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;all&#x27;</span> + rej))</span><br></pre></td></tr></table></figure>
+<p>结合测试可以证明我们.all()方法实现的是没有问题的.</p>
+<h5 id="race"><a href="#race" class="headerlink" title=".race()"></a>.race()</h5><p>.race()只要有一个promise对象进入 FulFilled 或者 Rejected 状态的话，就会继续进行后面的处理.</p>
+<p>此时我们测试.race()函数，传入两个不同速度的函数的情况，运行结果为: racep2</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.race([p1()，p2()]).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;race&#x27;</span> + res),<span class="function"><span class="params">rej</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;race&#x27;</span> + rej))</span><br></pre></td></tr></table></figure>
+<p>此时我们测试传入函数和常量的情况，运行结果为: racea</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.race([<span class="string">&#x27;a&#x27;</span>，p2()]).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;race&#x27;</span> + res),<span class="function"><span class="params">rej</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;race&#x27;</span> + rej))</span><br></pre></td></tr></table></figure>
+<p>如果我们给.race()加入一个失败的参数，运行结果为: race失败</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.race([p1()，p3()]).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;race&#x27;</span> + res),<span class="function"><span class="params">rej</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;race&#x27;</span> + rej))</span><br></pre></td></tr></table></figure>
+<p>结合测试可以证明我们.race()方法实现也是基本可以的.</p>
+<h5 id="resolve"><a href="#resolve" class="headerlink" title=".resolve"></a>.resolve</h5><p>有时需要将现有对象转为Promise对象，Promise.resolve方法就起到这个作用.</p>
+<p>此时我们测试.resolve()函数，如果传入一个promise则返回这个promise，运行结果为: p1</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.resolve(p1()).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br></pre></td></tr></table></figure>
+<p>如果传入一个常量则返回一个promise包裹这个常量，运行结果为: 100</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.resolve(<span class="number">100</span>).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br></pre></td></tr></table></figure>
+
+<h5 id="finally"><a href="#finally" class="headerlink" title=".finally()"></a>.finally()</h5><p>.finally()方法用于指定不管 Promise 对象最后状态如何，都会执行的操作.它接受一个普通的回调函数作为参数，该函数不管怎样都必须执行.</p>
+<p>promise状态为成功的情况</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">p2().then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res)</span><br><span class="line">&#125;,<span class="function"><span class="params">rej</span>=&gt;</span><span class="built_in">console</span>.log(rej))</span><br><span class="line">.finally(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;res&#x27;</span>)</span><br><span class="line">&#125;).</span><br></pre></td></tr></table></figure>
+<p>运行结果为: p2 res</p>
+<p>promise状态为失败的情况</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">p3().then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res)</span><br><span class="line">&#125;,<span class="function"><span class="params">rej</span>=&gt;</span><span class="built_in">console</span>.log(rej))</span><br><span class="line">.finally(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;finally&#x27;</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>运行结果为: 失败 res</p>
+<h5 id="catch"><a href="#catch" class="headerlink" title=".catch()"></a>.catch()</h5><p>.catch()方法用于指定发生错误时的回调函数.Promise 对象的错误具有”冒泡”性质，会一直向后传递，直到被捕获为止.也就是说，错误总是会被下一个 catch 语句捕获.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">p3().then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res)</span><br><span class="line">&#125;).catch(<span class="function"><span class="params">rea</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;rea&#x27;</span>+rea)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>运行结果为: rea失败</p>
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Promise/" rel="tag">Promise</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-eventloop"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/04/eventloop/"
+    >事件循环</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/04/eventloop/" class="article-date">
+  <time datetime="2021-12-04T04:14:11.000Z" itemprop="datePublished">2021-12-04</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="一、主题"><a href="#一、主题" class="headerlink" title="一、主题"></a>一、主题</h4><p>JS执行中的堆栈（浏览器平台下）<br>系统的梳理一些底层的知识</p>
+<h4 id="二、XXX"><a href="#二、XXX" class="headerlink" title="二、XXX"></a>二、XXX</h4><p>基于代码的执行结果我们有必要对这些“简单代码的执行过程” 有一个深刻的理解。</p>
+<ol>
+<li>哪些平台可以执行 JS 代码：</li>
+</ol>
+<ul>
+<li>浏览器平台 </li>
+<li>NodejS </li>
+<li>webview </li>
+</ul>
+<ol start="2">
+<li>无论 JS 代码在哪些个平台上执行，最终都需要有一个执行的地方</li>
+</ol>
+<ul>
+<li>代码最终都是运行在内存当中的</li>
+<li>在 JS 执行过的过程中我们认为浏览器加载界面的时候就会向计算机的内存申请一片空间，用于执行 JS 代码</li>
+<li>这个空间我们称之为叫 执行环境栈（ ECS execution context stack ）</li>
+</ul>
+<ol start="3">
+<li>常见的名词 </li>
+</ol>
+<ul>
+<li><p>执行环境栈：本质就是一个内存空间</p>
+</li>
+<li><p>执行上下文：( EC(execution context) )</p>
+<ul>
+<li>一段JS 代码里肯定会有很多内容：变量的声明、函数的定义、对象、块作用域</li>
+<li>上述这些区域内都有自己的代码，默认情况下他们里面的内容可能会出现重名</li>
+<li>所以代码将来在执行时候不可能直接放在一个“环境”下去运行，我们需要将它们隔离开</li>
+<li>JS当中就有了执行上下文的概念，专门用于将不同区域的代码 “分开” 【  】</li>
+<li>它也是一个内存空间，我们无须将它具像化。在它里面存放了当前区域代码运行时所需要的数据</li>
+</ul>
+</li>
+<li><p>进栈执行</p>
+<ul>
+<li>执行环境栈具有先进后出的特点（）</li>
+<li>每当“一段”代码要运行的时候，就会生成一个新的执行上下文，然后在这个上下文当中将执行时需要的内容准备好，之后就开始进栈执行 </li>
+</ul>
+</li>
+<li><p>EC(G) （execution context global）</p>
+<ul>
+<li>全局执行上下文， 浏览器加载界面的时候就默认创建的一个环境 [这个上下文和我们代码执行与否没关系]</li>
+<li>当前这个上下文如果想要出栈必然是界面关闭【 垃圾回收 】</li>
+</ul>
+</li>
+<li><p>VO(G) variable object global） </p>
+<ul>
+<li>全局变量对象（ 全局执行上下文当中的变量需要有一个地方来存放，因此就有了这个对象 ）</li>
+<li>每一段代码中都有声明和定义，他们放在哪？</li>
+<li>针对全局执行上下文来说，它里面的声明和定义放在了一个对象当中，这个对象我们叫 VO(G)</li>
+</ul>
+</li>
+<li><p>GO( global object ) </p>
+<ul>
+<li>全局对象， 它和 VO(G) 不是同一个东西 【 window 】</li>
+<li>它也是浏览器加载界面时就会创建的一个对象，在它内部存放了许多JS默认就可以调用的属性和方法（ setTimeout setInterval JSON eval….. ）</li>
+</ul>
+</li>
+<li><p>声明和定义 </p>
+<ul>
+<li>声明： var obj; </li>
+<li>定义： obj = XXXX </li>
+</ul>
+</li>
+</ul>
+<h4 id="三、堆栈中的基本值"><a href="#三、堆栈中的基本值" class="headerlink" title="三、堆栈中的基本值"></a>三、堆栈中的基本值</h4><ul>
+<li>在EC(G) 当中有 VO(G) 用来存储当前执行上下文里的变量声明和定义 </li>
+<li>代码执行之前会有提升操作：对于 var 操作来说只声明不定义【重要】</li>
+<li>基本数据类型值是直接存放在栈区当中的 </li>
+<li>VO(G) 当中默认就有一个window 它存放的是一个内存地址，指向 GO 对象所在内存 </li>
+</ul>
+<h4 id="四、堆栈中的引用类型"><a href="#四、堆栈中的引用类型" class="headerlink" title="四、堆栈中的引用类型"></a>四、堆栈中的引用类型</h4><ol>
+<li>引用类型在 JS 中会单独开辟一个空间进行存储（堆区）</li>
+<li>堆区本质上也是一个内存，因此会有一个16进制的地址 </li>
+<li>在栈区当中存放的是这个内存的16进制地址</li>
+</ol>
+<h4 id="五、函数在堆栈中的存储"><a href="#五、函数在堆栈中的存储" class="headerlink" title="五、函数在堆栈中的存储"></a>五、函数在堆栈中的存储</h4><ul>
+<li>函数的创建<ul>
+<li>创建函数和声明变量类似，可以将函数名看做是变量名</li>
+<li>函数的提升与变量不同，它是既声明又定义（ 函数可以在定义之前调用 ）</li>
+<li>函数创建时就会确认自己的作用域（就是当前所在执行上下文）</li>
+</ul>
+</li>
+<li>函数执行  <ul>
+<li>执行目的就是为了将函数创建时所保存的那些字符串形式的代码运行起来</li>
+<li>代码运行时为了和其它上下文做隔离，因此每个函数执行时都会创建一个全新的私有上下文</li>
+<li>在这个私有上下文当中有一个 AO(xxx) 用来存储函数上下文里的变量声明和定义 </li>
+<li>执行步骤<ul>
+<li>确定作用域链＜当前执行上下文，函数作用域＞</li>
+<li>确定this 指向</li>
+<li>初始化 arguments</li>
+<li>形参赋值： 这里定义的变量都是当前函数上下文私有的</li>
+<li>变量提升 </li>
+<li>代码执行  </li>
+</ul>
+</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<h4 id="六、闭包"><a href="#六、闭包" class="headerlink" title="六、闭包"></a>六、闭包</h4><p>闭包是一种机制，代码是具体表现，例如我们常见 大函数套小函数然后再返回小函数  </p>
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/eventloop/" rel="tag">eventloop</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-es6NewFeatures/es6NewFeatures"
   class="article article-type-post"
   itemscope
@@ -963,275 +1358,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%85%B6%E4%BB%96/" rel="tag">其他</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-snabbdom/snabbdom"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/15/snabbdom/snabbdom/"
-    >snabbdom</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/15/snabbdom/snabbdom/" class="article-date">
-  <time datetime="2021-07-15T07:37:29.000Z" itemprop="datePublished">2021-07-15</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>mkdir snabdom-demo</p>
-<p>cd snabdom-demo</p>
-<p>//创建package</p>
-<p>npm init -y</p>
-<p>//本地安装parcel</p>
-<p>npm install parcel-bundler -D</p>
-<p>配置scripts</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;scripts&quot;</span> :&#123;</span><br><span class="line"><span class="string">&quot;dev&quot;</span> :<span class="string">&quot;parcel index.html -- open&quot;</span>,</span><br><span class="line"><span class="string">&quot;build&quot;</span>: <span class="string">&quot;parcel build index.html&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在根目录创建index.html文件  来引入</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./src/01-basicusage.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>npm install <a href="mailto:&#x73;&#110;&#97;&#98;&#x62;&#100;&#x6f;&#x6d;&#x40;&#50;&#46;&#49;&#x2e;&#48;">&#x73;&#110;&#97;&#98;&#x62;&#100;&#x6f;&#x6d;&#x40;&#50;&#46;&#49;&#x2e;&#48;</a></p>
-<p>h(‘!’) //这是 一个空的节点</p>
-<h4 id="snabbdom模块的使用"><a href="#snabbdom模块的使用" class="headerlink" title="snabbdom模块的使用"></a>snabbdom模块的使用</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 导入模块</span></span><br><span class="line"><span class="keyword">import</span> &#123; styleModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/style&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; eventListenersModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/eventlisteners&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 注册模块</span></span><br><span class="line"><span class="keyword">const</span> patch = init([</span><br><span class="line">  styleModule,</span><br><span class="line">  eventListenersModule</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 使用h() 函数的第二个参数传入模块中使用的数据（对象）</span></span><br><span class="line"><span class="keyword">let</span> vnode = h(<span class="string">&#x27;div&#x27;</span>, [</span><br><span class="line">  h(<span class="string">&#x27;h1&#x27;</span>, &#123; <span class="attr">style</span>: &#123; <span class="attr">backgroundColor</span>: <span class="string">&#x27;red&#x27;</span> &#125; &#125;, <span class="string">&#x27;Hello World&#x27;</span>),</span><br><span class="line">  h(<span class="string">&#x27;p&#x27;</span>, &#123; <span class="attr">on</span>: &#123; <span class="attr">click</span>: eventHandler &#125; &#125;, <span class="string">&#x27;Hello P&#x27;</span>)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">eventHandler</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;别点我，疼&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> app = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#app&#x27;</span>)</span><br><span class="line"><span class="comment">// 生成虚拟dom 根据diff算法更新dom</span></span><br><span class="line">patch(app, vnode)</span><br></pre></td></tr></table></figure>
-
-
-<p>snabbdom源码学习</p>
-<p>snabbdom源码地址</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/snabbdom/snabbdom">https://github.com/snabbdom/snabbdom</a></p>
-<p>Snabbdom的核心<br>init() 设置模块，创建patch()函数<br>使用h()函数创建JavaScript对象(VNode)描述真实DOM<br>patch()比较新旧两个Vnode<br>把变化的内容更新到真实DOM树</p>
-<h4 id="一个简单的例子"><a href="#一个简单的例子" class="headerlink" title="一个简单的例子"></a>一个简单的例子</h4><p>总体代码在<a target="_blank" rel="noopener" href="https://github.com/Levxn7/lagouhomework/tree/master/part3/fed-e-task-03-01/third">https://github.com/Levxn7/lagouhomework/tree/master/part3/fed-e-task-03-01/third</a></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; init &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/init&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; h &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/h&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; styleModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/style&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; eventListenersModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/eventlisteners&#x27;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> patch = init([styleModule, eventListenersModule]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> vnode;</span><br><span class="line"><span class="keyword">let</span> sortBy = <span class="string">&quot;rank&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> data = []</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">  <span class="keyword">let</span> a = &#123;</span><br><span class="line">    <span class="attr">rank</span>: i,</span><br><span class="line">    <span class="attr">title</span>: <span class="string">&#x27;title&#x27;</span> + i,</span><br><span class="line">    <span class="attr">desc</span>: <span class="string">&#x27;this is desc&#x27;</span> + i</span><br><span class="line">  &#125;</span><br><span class="line">  data.push(a)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">change</span>(<span class="params">prop</span>) </span>&#123;</span><br><span class="line">  data.sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (a[prop] &gt; b[prop]) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (a[prop] &lt; b[prop]) &#123;</span><br><span class="line">      <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  vnode = patch(vnode, view(data));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> a = &#123;</span><br><span class="line">    <span class="attr">rank</span>: data.length,</span><br><span class="line">    <span class="attr">title</span>: <span class="string">&#x27;title&#x27;</span> + data.length,</span><br><span class="line">    <span class="attr">desc</span>: <span class="string">&#x27;this is desc&#x27;</span> + data.length</span><br><span class="line">  &#125;</span><br><span class="line">  data.unshift(a)</span><br><span class="line">  vnode = patch(vnode, view(data));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">remove</span>(<span class="params">index</span>) </span>&#123;</span><br><span class="line">  data.splice(index, <span class="number">1</span>)</span><br><span class="line">  vnode = patch(vnode, view(data));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">movieView</span>(<span class="params">movie,index</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> h(</span><br><span class="line">    <span class="string">&quot;div.li&quot;</span>,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">key</span>: movie.rank,</span><br><span class="line">      <span class="attr">style</span>: &#123;</span><br><span class="line">        <span class="attr">padding</span>: <span class="string">&#x27;0 16px&#x27;</span>,</span><br><span class="line">        <span class="attr">height</span>: <span class="string">&#x27;50px&#x27;</span>,</span><br><span class="line">        <span class="attr">display</span>: <span class="string">&#x27;flex&#x27;</span>,</span><br><span class="line">        <span class="attr">alignItems</span>: <span class="string">&#x27;center&#x27;</span>,</span><br><span class="line">        <span class="attr">borderBottom</span>: <span class="string">&#x27;1px solid #ccc&#x27;</span>,</span><br><span class="line">        <span class="attr">justifyContent</span>: <span class="string">&#x27;space-between&#x27;</span>,</span><br><span class="line">        <span class="attr">opacity</span>: <span class="string">&#x27;0&#x27;</span>,</span><br><span class="line">        <span class="attr">delayed</span>: &#123; <span class="attr">transition</span>: <span class="string">&#x27;opacity 2s&#x27;</span>, <span class="attr">opacity</span>: <span class="string">&#x27;1&#x27;</span> &#125;,</span><br><span class="line">        <span class="attr">remove</span>: &#123; <span class="attr">transition</span>: <span class="string">&#x27;opacity 0.3s&#x27;</span>, <span class="attr">opacity</span>: <span class="string">&#x27;0&#x27;</span> &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    [</span><br><span class="line">      h(<span class="string">&quot;div&quot;</span>, &#123; <span class="attr">style</span>: &#123; <span class="attr">fontWeight</span>: <span class="string">&quot;bold&quot;</span> &#125; &#125;, movie.rank),</span><br><span class="line">      h(<span class="string">&quot;div&quot;</span>, movie.title),</span><br><span class="line">      h(<span class="string">&quot;div&quot;</span>, movie.desc),</span><br><span class="line">      h(</span><br><span class="line">        <span class="string">&quot;button.btn.rm-btn&quot;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">on</span>: &#123;</span><br><span class="line">            <span class="attr">click</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">              remove(index);</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;删除&quot;</span></span><br><span class="line">      ),</span><br><span class="line">    ]</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">view</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> h(<span class="string">&quot;div&quot;</span>, [</span><br><span class="line">    h(<span class="string">&quot;h1&quot;</span>, <span class="string">&quot;Top 10 movies&quot;</span>),</span><br><span class="line">    h(<span class="string">&quot;div&quot;</span>, [</span><br><span class="line">      h(<span class="string">&quot;button.add&quot;</span>, &#123; <span class="attr">on</span>: &#123; <span class="attr">click</span>: add &#125; &#125;, <span class="string">&quot; 添加 &quot;</span>),</span><br><span class="line">      <span class="string">&quot;排序方式: &quot;</span>,</span><br><span class="line">      h(<span class="string">&quot;span.btn-group&quot;</span>, [</span><br><span class="line">        h(</span><br><span class="line">          <span class="string">&quot;button.rank&quot;</span>,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">class</span>: &#123; <span class="attr">active</span>: sortBy === <span class="string">&quot;rank&quot;</span> &#125;,</span><br><span class="line">            <span class="attr">on</span>: &#123;</span><br><span class="line">              <span class="attr">click</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">                change(<span class="string">&quot;rank&quot;</span>);</span><br><span class="line">              &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="string">&quot; Rank &quot;</span></span><br><span class="line">        ),</span><br><span class="line">        h(</span><br><span class="line">          <span class="string">&quot;button.title&quot;</span>,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">class</span>: &#123; <span class="attr">active</span>: sortBy === <span class="string">&quot;title&quot;</span> &#125;,</span><br><span class="line">            <span class="attr">on</span>: &#123;</span><br><span class="line">              <span class="attr">click</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">                change(<span class="string">&quot;title&quot;</span>);</span><br><span class="line">              &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="string">&quot; Title &quot;</span></span><br><span class="line">        ),</span><br><span class="line">        h(</span><br><span class="line">          <span class="string">&quot;button.desc&quot;</span>,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">class</span>: &#123; <span class="attr">active</span>: sortBy === <span class="string">&quot;desc&quot;</span> &#125;,</span><br><span class="line">            <span class="attr">on</span>: &#123;</span><br><span class="line">              <span class="attr">click</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">                change(<span class="string">&quot;desc&quot;</span>);</span><br><span class="line">              &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="string">&quot; Description &quot;</span></span><br><span class="line">        ),</span><br><span class="line">      ]),</span><br><span class="line">    ]),</span><br><span class="line">    h(</span><br><span class="line">      <span class="string">&quot;div.list&quot;</span>,</span><br><span class="line">      &#123; <span class="attr">style</span>: &#123; <span class="attr">height</span>: <span class="string">&quot;8px&quot;</span> &#125; &#125;,</span><br><span class="line">      data.map(movieView)</span><br><span class="line">    ),</span><br><span class="line">  ]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> addEl = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#app&#x27;</span>);</span><br><span class="line">vnode = patch(addEl, view(data));</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/snabbdom/" rel="tag">snabbdom</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-vuecode/vuecode"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/12/vuecode/vuecode/"
-    >vue源码琐碎知识点</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/12/vuecode/vuecode/" class="article-date">
-  <time datetime="2021-07-12T06:20:26.000Z" itemprop="datePublished">2021-07-12</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="一些零碎的知识"><a href="#一些零碎的知识" class="headerlink" title="一些零碎的知识"></a>一些零碎的知识</h4><p>flow是js的静态类型检查器，但vue3以后是用ts检查的</p>
-<p>vue的打包工具是rollup，rollup更适合库打包</p>
-<p>调试需要开启sourcemap</p>
-<p>js文件中的flow语法检查红线报错问题：setting。json中设置为false就能解决<br>泛型导致高亮显示失效问题，安装插件 babel-JavaScript可以解决</p>
-<p>with函数的扩展</p>
-<p>vue Template Explorer网页工具，把html代码转换为模板编译后的代码</p>
-<p>静态成员 initGlobalAPI（core/index.js）<br>初始化vue.config util set selete nextTick等</p>
-<p>初始化vue.options并给其扩展components directives filters</p>
-<h5 id="初始化的过程"><a href="#初始化的过程" class="headerlink" title="初始化的过程"></a>初始化的过程</h5><p>实例成员<br>//注册 vm 的init() 方法，初始化Vm<br>initMixin(Vue)<br>// 注册 vm 的 $data/ $props/ $set/ $delete/ $watch<br>stateMixin(Vue)<br>//初始化事件相关方法<br>// $on/$once/$off/$emit<br>eventsMixin(Vue)<br>//初始化生命周期相关的混入方法<br>// _update/$forceUpdate/ $destroy<br>lifecycleMixin(Vue)<br>// 混入 render<br>// $nextTick/_render<br>renderMixin(Vue)</p>
-<p>init函数 初始化<br>是分模块实现的</p>
-<h5 id="Vue-首次渲染的过程。"><a href="#Vue-首次渲染的过程。" class="headerlink" title="Vue 首次渲染的过程。"></a>Vue 首次渲染的过程。</h5><p>在首次渲染之前，先进行vue的初始化，初始化实例成员，静态成员，当初始化结束后调用vue的构造函数，在构造函数中调用了init方法，这个方法相当于整个文件的入口<br>方法中调用了$mount<br>第一个$mount通过compileToFunction帮我们把模板编译成render函数，存入options.render中<br>第二个$mount中重新获取$el<br>调用mountComponent，先判断是否是render选项，如果没有，但是传入的是模板并且是运行版本时，版本会被警告不支持编译器<br>触发beforemount，定义updateComponent，调用render生成虚拟dom和update方法将虚拟dom转换成真实dom并挂载到页面上来<br>创建watcher对象，传入了updateComponent函数，在watcher中调用，调用的get方法<br>创建完watcher会调用一个get方法，在get中调用updateComponent，updateComponent中会调用render和update两个方法<br>render的作用是创建虚拟dom，最终调用的用户传入的或者模板编译的render<br>返回vnode，调用vm._update，在其中调用__patch__ 这个方法将虚拟dom转换成真实dom并挂载到页面上来，真实dom渲染到$el中<br>触发mounted 挂载结束 返回vue实例</p>
-<h4 id="响应式原理"><a href="#响应式原理" class="headerlink" title="响应式原理"></a>响应式原理</h4><p>处理的入口<br>observe就是响应式处理的入口，调用了Observer对象<br>Observer是一个类 使用的flow的语法<br>defineReactive</p>
-<p>Watcher 分为三种，Computed Watcher、用户 Watcher (侦听器)、渲染Watcher<br>instance/lifecycle.js</p>
-<h5 id="Vue-响应式原理。"><a href="#Vue-响应式原理。" class="headerlink" title="Vue 响应式原理。"></a>Vue 响应式原理。</h5><p>响应式是从vue实例的init方法开始的，在init方法中先调用initState()方法初始化vue实例的状态<br>在其中调用了initData，这个方法是把data属性注入到vue实例上，并且调用observe把data对象转换成响应式的对象，observe就是响应式的入口<br>observe接受一个参数，这个参数就是响应式要处理的对象，observe在src/corelobserver/index.js中，先判断value是否是对象，如果不是对象就直接返回<br>然后判断value对象是否有__ob__属性，,如果有就说明这个对象已经做过响应式处理，直接返回，如果没有，就创建observer对象，返回observer 对象<br>Observe类会给value对象定义一个不可枚举的__ob__属性，并把这个属性记录到当前的observer中，然后给对象做响应式处理<br>数组的处理就是设置几个特殊的方法，方法会改变数组，会发送通知，找到dep方法调用，遍历成员，调用observe<br>对象的处理会调用walk方法，遍历对象，给每个属性调用defineReactive方法<br>defineReactive会给每个属性创建dep对象，让dep去收集依赖，如果当前属性是对象，就调用observe，要把这个对象变成响应式<br>定义getter收集依赖，包括对象的子对象<br>定义setter保存新值，如果新值是对象，就调用observe，发送通知，调用dep.notify<br>依赖收集：首先执行watcher对象中的get方法，调用pushTarget把watcher对象记录到dep.target属性中<br>在访问data中的成员的时候收集依赖，触发defineReactive中的getter收集依赖，把属性对应的watcher对象添加到dep的subs数组中，也就是为属性收集依赖，如果属性的值是个对象，就创建一个childOb收集依赖，目的是子对象添加和删除成员时发送通知<br>watcher：当数据发生变化的时候通过dep.notify发送通知，他会调用watcher对象的update方法，在update方法中会调用queueWatcher函数，来判断watcher是否被处理了，如果没有就添加到queue队列，并调用flushSchedulerQueue刷新队列<br>flushSchedulerQueue会触发beforeUpdata钩子函数，然后调用watcher.run函数，在其中调用run–&gt;get–&gt;getter–&gt;updateComponent<br>调用run方法之后，就可以在页面上看到数据了<br>清空上一次的依赖，重置watcher的状态，然后触发actived钩子函数，然后触发updated钩子函数</p>
-<h5 id="动态添加响应式数据"><a href="#动态添加响应式数据" class="headerlink" title="动态添加响应式数据"></a>动态添加响应式数据</h5><p>例子:<br>vm.$set(vm.obj, ‘name’, ‘zs’)<br>用法:<br>向响应式对象中添加一个property，并确保这个新property同样是响应式的，且触发视图更新。它必须用于向响应式对象上添加新<br>property，因为Vue无法探测普通的新增property (比如<br>this.my0bject.newProperty = ‘hi’ )<br>!注意对象不能是Vue实例，或者Vue实例的根数据对象。</p>
-<p>watcher和set类似</p>
-<p>nexTick是在dom行程后获取内容,本身是一个微任务,运行环境不支持时降级为宏任务,</p>
-<h5 id="为什么要使用虚拟DOM"><a href="#为什么要使用虚拟DOM" class="headerlink" title="为什么要使用虚拟DOM"></a>为什么要使用虚拟DOM</h5><ul>
-<li>避免直接操作DOM,提高开发效率</li>
-<li>作为一个中间层可以跨平台</li>
-<li>虚拟DOM不一定可以提高性能</li>
-<li>首次渲染的时候会增加开销</li>
-<li>复杂视图情况下提升渲染性能</li>
-</ul>
-<h4 id="vnode的创建过程"><a href="#vnode的创建过程" class="headerlink" title="vnode的创建过程"></a>vnode的创建过程</h4><p>render函数返回vnode<br>update函数把虚拟dom渲染成真实dom<br>执行__patch__函数设置modules和nodeops，返回patch函数<br>patch函数</p>
-<h5 id="虚拟dom创建的整体过程"><a href="#虚拟dom创建的整体过程" class="headerlink" title="虚拟dom创建的整体过程"></a>虚拟dom创建的整体过程</h5><p>vm._render()<br>vnode = render.call(vm._renderProxy, vm.$createElement)</p>
-<p>vm.$createElement()<br>h函教,用户设置的render函数中调用<br>createElement(vm, a, b.c.d, true)</p>
-<p>vm._c()<br>h函数。模板编译的render函数中调用<br>createElement(vm,a,b.c.d, true)</p>
-<p>createElement()<br>vnode = new VNode( config.parsePlatformTagName(tag). data,children, undefined, undefined, context )<br>vm._render()结束，返回vnode</p>
-<p>vm._update()<br>负责把虚拟 DOM，渲染成真实DOM<br>首次执行 vm. patch vm.$el, vnode,hydrating.false)<br>数据更新 vm.patch  (prevVnode, vnode)</p>
-<p>vm.__patch__()<br>runtimefindexjs中挂载vue.prototype.__patch__<br>runtime/patch.js 的patch函数<br>设置modules和nodeOps<br>调用createPatchFunction0函数返回patch函数</p>
-<p>patch()<br>vdom/patch.js 中的createPatchFunction返回patch函数<br>挂载cbs节点的属性/事件/样式操作的钩了函数<br>判断第一个参数是真实DOM还是虚拟 DOM.首次加载,第个参数就是真实DOM，转换成VNode，调用createElm<br>如里是数据更新的时候,新旧节点是samevnode执行 patchVnode,也就是 Diff<br>删除旧节点</p>
-<p>createElm(vnode,insertedVnodeQueue)<br>把虚拟节点,转换为真实DOM，并插入到DOM树<br>把虚拟节点的children，转换为真实DOM，并插入到DOM树</p>
-<p>patchVnode<br>对比新旧VNode，以及新旧VNode的了节点更新差异<br>如果新旧VNode都有了节点并且了节点不同的话，会调用updateChildren对比子节点的差异</p>
-<p>updatechildren<br>从头和尾开始依次找到相同的了节点进行比较patchVnode，总共有四种比较方式<br>在老节点的了节点中查找newStartVnode，并进行处理<br>如果新节点比老节点多，把新增的了节点插入到DOM中<br>如果老节点比新节点多，把多余的老节点删除
-　</p>
-<h5 id="虚拟-DOM-中-Key-的作用和好处。"><a href="#虚拟-DOM-中-Key-的作用和好处。" class="headerlink" title="虚拟 DOM 中 Key 的作用和好处。"></a>虚拟 DOM 中 Key 的作用和好处。</h5><p>key主要用在Vue的虚拟DOM算法，在新旧nodes对比时辨识VNodes。如果不使用key，Vue会使用一种最大限度减少动态元素并且尽可能的尝试就地修改\复用相同类型元素的算法。而使用key时，它会基于key的变化重新排列元素顺序，并且会移除key不存在的元素。有相同父元素的子元素必须有独有的key。重复的key会造成渲染错误。<br>设置key比不设置的dom操作要少很多，减少diff和渲染所需要的时间，提升了性能。</p>
-<h4 id="模板编译"><a href="#模板编译" class="headerlink" title="模板编译"></a>模板编译</h4><p> 模板编译的主要作用是将模板转换为渲染函数<br> 模板编译的作用</p>
-<ul>
-<li>Vue 2.x使用VNode描述视图以及各种交互，用户自己编写VNode 比较复杂</li>
-<li>通过模板编译用户只需要编写类似HTML的代码</li>
-<li>Vue.js模板，通过编译器将模板转换为返回 VNode 的render 函数</li>
-<li>vue文件会被webpack在构建的过程中转换成render 函数</li>
-</ul>
-<h5 id="Vue-中模板编译的过程。"><a href="#Vue-中模板编译的过程。" class="headerlink" title="Vue 中模板编译的过程。"></a>Vue 中模板编译的过程。</h5><p>　<br>入口函数是compileToFunctions，在这个函数中先从缓存中加载编译好的render函数，如果缓存中没有的话就调用compile函数<br>在compile函数中，首先去合并options选项，然后调用baseCompile编译模板，compile的核心是合并选项，真正的处理是在baseCompile中完成的<br>把模板和合并后的选项传递给baseCompile函数，baseCompile完成了编译核心的以下三件事情<br>parse函数把模板转换成AST对象 也就是抽象语法树<br>optimize函数标记AST中的静态根节点，静态根节点不需要被重绘，patch的过程中会跳过静态根节点<br>generate函数把优化过后的AST对象转换成字符串形式的js代码<br>当compile执行完毕后，回到入口文件compileToFunctions，此处会继续把字符串形式的代码转换为函数的形式，然后调用createFuntion，当render和staticFuntion执行完毕，挂在到vue实例的options对应的属性上<br>所以，不要在代码中写入无意义的空白和换行，这些空白和换行都会被存储到内存中，对浏览器的渲染是毫无意义的
-　</p>
-<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-vuejc/vuejc"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/06/25/vuejc/vuejc/"
-    >vue基础</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/06/25/vuejc/vuejc/" class="article-date">
-  <time datetime="2021-06-25T04:58:56.000Z" itemprop="datePublished">2021-06-25</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h4><h5 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h5><p>每个 Vue 实例在被创建时都要经过一系列的初始化过程——例如，需要设置数据监听、编译模板、将实例挂载到 DOM 并在数据变化时更新 DOM 等。同时在这个过程中也会运行一些叫做生命周期钩子的函数，这给了用户在不同阶段添加自己的代码的机会。比如说created ,mounted ,updated等钩子函数。<br><img src="/2021/06/25/vuejc/vuejc/1408390-20190502182244199-1878074396.png" alt="vue生命周期"></p>
-<h5 id="内置指令"><a href="#内置指令" class="headerlink" title="内置指令"></a>内置指令</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">1.v-bind:响应并更新DOM特性; 例如：v-bind:href v-bind:class v-bind:title 等等; 主要用法是绑定属性，动态更新HTML元素上的属性；</span></span><br><span class="line"><span class="comment">2.v-on:用于监听DOM事件; 例如:v-on:click v-on:keyup </span></span><br><span class="line"><span class="comment">3.v-model:数据双向绑定;用于表单输入等;例如:&lt; input v-model= &quot;message&quot;&gt;</span></span><br><span class="line"><span class="comment">4.v-show:条件渲染指令,为DOM设置css的style属性</span></span><br><span class="line"><span class="comment">5.v-if:条件渲染指令,动态在DOM内添加或删除DOM元素</span></span><br><span class="line"><span class="comment">6、v-else：条件渲染指令，必须跟v-if成对使用</span></span><br><span class="line"><span class="comment">7、v-else-if：判断多层条件，必须跟v-if成对使用；</span></span><br><span class="line"><span class="comment">8、v-text：更新元素的textContent；例如：&lt; span v-text=&quot;msg&quot;&gt;&lt;/ span&gt;等同于 &lt; span&gt;&#123;&#123;msg&#125;&#125; &lt;/ span&gt;；</span></span><br><span class="line"><span class="comment">9、v-html：更新元素的innerHTML；会把标签名也带上。</span></span><br><span class="line"><span class="comment">10、v-for：循环指令；</span></span><br><span class="line"><span class="comment">11、v-cloak：不需要表达式，这个指令保持在元素上直到关联实例结束编译； v-cloak 是一个解决初始化慢导致页面闪动的最佳实践 ；</span></span><br><span class="line"><span class="comment">12、v-once：也是一个不需要表达式的指令，作用是定义它的元素或组件只渲染一次，包括元素或组件的所有子节点。首次渲染后，不再随数据的变化重新渲染，将被视为静态内容； v-once 在业务中也很少使用，当你需要进一步优化性能时，可能会用到。 </span></span><br><span class="line"><span class="comment">13、v-pre：不需要表达式，跳过这个元素以及子元素的编译过程，以此来加快整个项目的编译速度；例如： &lt; span v-pre&gt;&#123;&#123; this will not be /compiled &#125;&#125; &lt;/ span&gt;；</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-<p>具体使用可参考: <a target="_blank" rel="noopener" href="https://my.oschina.net/u/3970421/blog/2964249">https://my.oschina.net/u/3970421/blog/2964249</a></p>
-<h5 id="计算属性"><a href="#计算属性" class="headerlink" title="计算属性"></a>计算属性</h5><p>计算属性就是当其依赖属性的值发生变化时，这个属性的值会自动更新，与之相关的DOM部分也会同步自动更新。对于任何复杂逻辑，你都应当使用计算属性。</p>
-<p>计算属性和侦听器<br>Class和Style绑定<br>条件渲染/列表渲染表单输入绑定</p>
-<p>以上内容的官网解释: <a target="_blank" rel="noopener" href="https://cn.vuejs.org/v2/guide/computed.html">https://cn.vuejs.org/v2/guide/computed.html</a></p>
-<p>还有组件 插槽 插件 混入等功能</p>
-<h5 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h5><p>Vue Router 是 Vue.js 官方的路由管理器。它和 Vue.js 的核心深度集成，让构建单页面应用变得易如反掌。路由实际上就是可以理解为指向，就是我在页面上点击一个按钮需要跳转到对应的页面，这就是路由跳转；</p>
-<p>首先我们来学习三个单词（route，routes，router）：<br>route：首先它是个单数，译为路由，即我们可以理解为单个路由或者某一个路由；<br>routes：它是个复数，表示多个的集合才能为复数；即我们可以理解为多个路由的集合，JS中表示多种不同状态的集合的形式只有数组和对象两种，事实上官方定义routes是一个数组；所以我们记住了，routes表示多个数组的集合；<br>router：译为路由器，上面都是路由，这个是路由器，我们可以理解为一个容器包含上述两个或者说它是一个管理者，负责管理上述两个；举个常见的场景的例子：当用户在页面上点击按钮的时候，这个时候router就会去routes中去查找route，就是说路由器会去路由集合中找对应的路由；</p>
-<h5 id="路由的简单使用"><a href="#路由的简单使用" class="headerlink" title="路由的简单使用"></a>路由的简单使用</h5><p>通过vue.use来注册组件<br>如果是一个函数, 直接调用函数做组件, 如果是对象的话, 会调用对象的install方法来注册插件</p>
-<p><strong>创建路由的步骤</strong><br>1 路由规则<br>2 创建路由对象 传入路由规则<br>3 mainjs引入<br>4 app.vue添加站位<br>5 创建连接</p>
-<p><strong>动态路由</strong><br>懒加载<br>推荐使用props来传参（还有$route.params.id）</p>
-<p><strong>嵌套路由</strong><br>很多时候我们的页面结构决定了我们可能需要嵌套路由，比如当我们进入主页之后有分类，然后当选择其中一个分类之后进入对应的详情，这个时候我们就可以用到嵌套路由；官方文档中给我们提供了一个children属性，这个属性是一个数组类型，里面实际放着一组路由；这个时候父子关系结构就出来了，所以children属性里面的是路由相对来说是children属性外部路由的子路由；</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> routes=[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">path</span>:<span class="string">&#x27;/page1&#x27;</span>,</span><br><span class="line">        <span class="attr">component</span>:page1,</span><br><span class="line">        <span class="attr">children</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">path</span>: <span class="string">&quot;phone&quot;</span>,<span class="comment">// /page1/phone</span></span><br><span class="line">                <span class="attr">component</span>: phone</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">path</span>: <span class="string">&quot;computer&quot;</span>, <span class="comment">// /page1/computer</span></span><br><span class="line">                <span class="attr">component</span>: computer</span><br><span class="line">            &#125;,</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p><strong>路由导航两种方式</strong></p>
-<blockquote>
-<p>标签导航</p>
-</blockquote>
-<p>标签导航<router-link><router-link>是通过转义为<a></a>标签进行跳转，其中router-link标签中的to属性会被转义为a标签中的href属性；</router-link></router-link></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//跳转到名为user路由，并传递参数userId</span><br><span class="line"><span class="tag">&lt;<span class="name">router-link</span> <span class="attr">:to</span>=<span class="string">&quot;&#123; name: &#x27;user&#x27;, params: &#123; userId: 123 &#125;&#125;&quot;</span>&gt;</span>User<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>编程式导航</p>
-</blockquote>
-<p>我们可以通过this.$router.push()这个方法来实现编程式导航，当然也可以实现参数传递，这种编程式导航一般是用于按钮点击之后跳转</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">router.push(&#123; <span class="attr">path</span>: <span class="string">&#x27;/user/:userId&#x27;</span>, <span class="attr">params</span>: &#123; <span class="attr">userId</span>: <span class="number">123</span> &#125;&#125;)</span><br><span class="line"><span class="comment">//push replace go(-2) 等方法</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="hash模式和history模式"><a href="#hash模式和history模式" class="headerlink" title="hash模式和history模式"></a>hash模式和history模式</h5><p>· Hash模式式是基于锚点，以及onhashchange事件, 需要使用问号拼接<br>例: https:/music.163.com/#/playlist?id=3102961863</p>
-<p>· History模式是基于 HTML5 中的 History API（需要服务端配置支持）<br>history.pushState() IE10以后才支持<br>history.replaceState()<br>例: <a target="_blank" rel="noopener" href="https://music.163.com/playlist/3102961863">https://music.163.com/playlist/3102961863</a></p>
-<p><strong>实现原理</strong><br>Hash模式<br>·URL中#后面的内容作为路径地址<br>·监听hashchange 事件<br>·根据当前路由地址找到对应组件重新渲染<br>History模式<br>·通过history.pushState()方法改变地址栏监听popstate事件<br>·根据当前路由地址找到对应组件重新渲染</p>
-<p><strong>模拟实现</strong><br>手写router 参考视频3-1-2  10-19小节 (部分解释以注释的方式写在以下代码块中)</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> _Vue = <span class="literal">null</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">VueRouter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> install (vue) &#123;</span><br><span class="line">    <span class="comment">// 1 判断当前插件是否被安装</span></span><br><span class="line">    <span class="keyword">if</span> (VueRouter.install.installed) <span class="keyword">return</span></span><br><span class="line">    VueRouter.install.installed = <span class="literal">true</span></span><br><span class="line">    <span class="comment">// 2 把Vue的构造函数记录在全局</span></span><br><span class="line">    _Vue = vue</span><br><span class="line">    <span class="comment">// 3 把创建Vue的实例传入的router对象注入到Vue实例</span></span><br><span class="line">    <span class="comment">// _Vue.prototype.$router = this.$options.router</span></span><br><span class="line">    _Vue.mixin(&#123;</span><br><span class="line">      beforeCreate () &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.$options.router) &#123;</span><br><span class="line">          _Vue.prototype.$router = <span class="built_in">this</span>.$options.router</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title">constructor</span> (<span class="params">options</span>) &#123;</span><br><span class="line">    <span class="built_in">this</span>.mode = options.mode || <span class="string">&quot;hash&quot;</span></span><br><span class="line">    <span class="built_in">this</span>.routes = options.routes</span><br><span class="line">    <span class="built_in">this</span>.routeMap = &#123;&#125;</span><br><span class="line">    <span class="comment">// observable</span></span><br><span class="line">    <span class="built_in">this</span>.data = _Vue.observable(&#123;</span><br><span class="line">        <span class="comment">//存储当前的路由地址, 默认是/</span></span><br><span class="line">      <span class="attr">current</span>: <span class="string">&#x27;/&#x27;</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="built_in">this</span>.init()</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//包装方法</span></span><br><span class="line">  init () &#123;</span><br><span class="line">    <span class="built_in">this</span>.createRouteMap()</span><br><span class="line">    <span class="built_in">this</span>.initComponents(_Vue)</span><br><span class="line">    <span class="built_in">this</span>.initEvent()</span><br><span class="line">  &#125;</span><br><span class="line">  createRouteMap () &#123;</span><br><span class="line">    <span class="comment">//遍历所有路由信息，把组件和路由的映射记录到 routeMap 对象中</span></span><br><span class="line">    <span class="built_in">this</span>.routes.forEach( <span class="function"><span class="params">route</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">this</span>.routeMap[route.path] = route.component</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">initComponents</span>(<span class="params">Vue</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//创建 router-link 和 router-view 组件</span></span><br><span class="line">    <span class="keyword">const</span> self = <span class="built_in">this</span></span><br><span class="line">    Vue.component(<span class="string">&#x27;router-link&#x27;</span>,&#123;</span><br><span class="line">      <span class="attr">props</span>:&#123;</span><br><span class="line">        <span class="attr">to</span>:<span class="built_in">String</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">//运行时版本的解决办法</span></span><br><span class="line">      <span class="function"><span class="title">render</span>(<span class="params">h</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> h(<span class="string">&quot;a&quot;</span>,&#123;</span><br><span class="line">          <span class="attr">attrs</span>:&#123;</span><br><span class="line">            <span class="attr">href</span>: self.mode === <span class="string">&quot;history&quot;</span> ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;#&quot;</span> + <span class="built_in">this</span>.to</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="comment">//给a标签注册事件</span></span><br><span class="line">          <span class="attr">on</span>:&#123;</span><br><span class="line">            <span class="attr">click</span>:self.mode === <span class="string">&quot;history&quot;</span> ? <span class="built_in">this</span>.clickhander : <span class="built_in">this</span>.hashClickhander</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,[<span class="built_in">this</span>.$slots.default])</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">methods</span>:&#123;</span><br><span class="line">        <span class="function"><span class="title">clickhander</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            <span class="comment">//参数: 事件 网页标题, 地址</span></span><br><span class="line">          history.pushState(&#123;&#125;,<span class="string">&quot;&quot;</span>,<span class="built_in">this</span>.to)</span><br><span class="line">          <span class="built_in">this</span>.$router.data.current = <span class="built_in">this</span>.to</span><br><span class="line">          e.preventDefault()</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="function"><span class="title">hashClickhander</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">          <span class="built_in">this</span>.$router.data.current=<span class="built_in">this</span>.to</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 运行时版本的vue不支持模版</span></span><br><span class="line">      <span class="comment">// template:&quot;&lt;a :href=&#x27;to&#x27;&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/a&gt;&quot;</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    Vue.component(<span class="string">&#x27;router-view&#x27;</span>,&#123;</span><br><span class="line">      <span class="function"><span class="title">render</span>(<span class="params">h</span>)</span>&#123;</span><br><span class="line">          <span class="comment">//获取路由组件 h帮我们转换成虚拟dom</span></span><br><span class="line">        <span class="keyword">let</span> cm = self.routeMap[self.data.current]</span><br><span class="line">        <span class="keyword">return</span> h(cm)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">initEvent</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      </span><br><span class="line">    <span class="comment">//注册 popstate 事件，当路由地址发生变化，重新记录当前的路径</span></span><br><span class="line">    <span class="keyword">const</span> eventType = <span class="built_in">this</span>.mode === <span class="string">&#x27;history&#x27;</span> ? <span class="string">&#x27;popstate&#x27;</span> : <span class="string">&#x27;hashchange&#x27;</span></span><br><span class="line">    <span class="keyword">const</span> handle = <span class="built_in">this</span>.mode === <span class="string">&#x27;history&#x27;</span> ? <span class="built_in">this</span>.getLocation : <span class="built_in">this</span>.getHash</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(eventType,handle.bind(<span class="built_in">this</span>))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">getLocation</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.data.current = <span class="built_in">window</span>.location.pathname</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">getHash</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> href = <span class="built_in">window</span>.location.href</span><br><span class="line">    <span class="keyword">const</span> index = href.indexOf(<span class="string">&#x27;#&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="string">&#x27;/&#x27;</span></span><br><span class="line">    <span class="built_in">this</span>.data.current = href.slice(index + <span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li></ul>
 
     </footer>
   </div>

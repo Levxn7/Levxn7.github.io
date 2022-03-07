@@ -140,6 +140,188 @@
     
     
     <article
+  id="post-vueymfx/我的Markdown笔记/vue源码复习整理三（虚拟dom）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+     
+    <div class="article-meta">
+      <a href="/2022/03/07/vueymfx/%E6%88%91%E7%9A%84Markdown%E7%AC%94%E8%AE%B0/vue%E6%BA%90%E7%A0%81%E5%A4%8D%E4%B9%A0%E6%95%B4%E7%90%86%E4%B8%89%EF%BC%88%E8%99%9A%E6%8B%9Fdom%EF%BC%89/" class="article-date">
+  <time datetime="2022-03-07T03:22:49.208Z" itemprop="datePublished">2022-03-07</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h4><p>vue中的虚拟dom的实现借鉴了snabdom这个虚拟dom库，如模块机制、钩子函数、diff算法，在此基础上额外添加了指令和组件等。虚拟dom是使用JS对象来描述真实dom，虚拟dom就是js对象。</p>
+<p>为什么要使用虚拟dom：<br>避免直接操作真实dom，提高开发效率。可以作为一个中间层来跨平台。在复杂试图的情况下可以提高渲染性能，简单视图的情况下可能会增加开销。</p>
+<p>在v-for的时候可以给每个节点增加key属性，key只能是原始值，不能是对象。因新老节点对比顺序不同，设置key会比不设置key的dom操作少很多。</p>
+<h5 id="源码部分"><a href="#源码部分" class="headerlink" title="源码部分"></a>源码部分</h5><p><strong>虚拟dom创建的整体过程</strong><br>这个过程是接着vue的首次渲染过程来讲的，在updateComponent()中我们调用了render()函数和_update()函数。</p>
+<p>在render中我们调用了用户传入的render函数或者是模板编译成的render函数，如果是用户传入的render函数的话，就调用vm.$createElement()方法，如果是模板编译成的render的话，调用的是vm._c()方法。不管vm.$createElement()还是vm._c(),他最后都会执行createElement方法。在createElement中处理了参数的差异，最终调用了_createElement()方法。在这个方法中创建了vnode对象，最终返回vnode。<br><img src="/2022/03/07/vueymfx/%E6%88%91%E7%9A%84Markdown%E7%AC%94%E8%AE%B0/vue%E6%BA%90%E7%A0%81%E5%A4%8D%E4%B9%A0%E6%95%B4%E7%90%86%E4%B8%89%EF%BC%88%E8%99%9A%E6%8B%9Fdom%EF%BC%89/D36D403B-B738-4A3A-A620-8EA128A49D54.png" alt="0295fbf3548dfa0579eecb29a23f05b2"></p>
+<p>在update函数是负责把虚拟dom渲染成真实dom，在update里边会调用__patch__方法。如果是首次执行，patch的第一个参数是$el，也就是一个真实dom。如果是数据更新那就传入两个vnode，第一个prevVnode也就是上次保存下来的vnode。<br>patch函数是在runtime下的index.js中初始化的，他是给vue原型上挂载了__patch__这个方法，所有的vue实例都可以访问到，他其实就是runtime下的patch.js模块中导出的patch函数。在这个函数中设置了moudles和nodeOps两个对象，moudles中存储的是一些模块，nodeOps是用来操作dom的。设置好后会把这两个对象传递给createPatchFunction()函数，这个函数最终返回的是我们需要的patch函数。<br><img src="/2022/03/07/vueymfx/%E6%88%91%E7%9A%84Markdown%E7%AC%94%E8%AE%B0/vue%E6%BA%90%E7%A0%81%E5%A4%8D%E4%B9%A0%E6%95%B4%E7%90%86%E4%B8%89%EF%BC%88%E8%99%9A%E6%8B%9Fdom%EF%BC%89/D3317FFA-E67E-47BD-B87B-FB3A7070CF97.png" alt="6cb8377bdd89d8d0cfa09019b227d13f"></p>
+<p>patch是vdom/patch.js中的createPatchFunction()返回的函数，在createPatchFunction中首先做了初始化的事情，她里面有很多的辅助函数，特别定义了cbs对象。在cbs对象中存储了所有模块中定义的那些钩子函数，这些钩子函数是为了处理节点的属性、事件、样式等。<br>在patch中还会判断第一个参数是不是真实dom，如果是真实dom的话说明是首次加载。这时会把真实dom转化为vnode，然后去调用createElm，把newVnode转换为真实dom，挂载到dom树上来。如果是数据更新的时候，就要通过sameVnode函数判断新旧vnode是否是相同的节点。如果不是相同节点的话，就执行其中的patchVnode，也就是diff算法。patch执行结束之后，删除旧节点。<br><img src="/2022/03/07/vueymfx/%E6%88%91%E7%9A%84Markdown%E7%AC%94%E8%AE%B0/vue%E6%BA%90%E7%A0%81%E5%A4%8D%E4%B9%A0%E6%95%B4%E7%90%86%E4%B8%89%EF%BC%88%E8%99%9A%E6%8B%9Fdom%EF%BC%89/96EE883B-C1B1-431A-8A07-163D7BC713E4.png" alt="c193a5cb93662967e61d92f5bd7f38cb"></p>
+<p>createElm函数是用来把虚拟节点转换为真实dom，并挂载到dom树上。他也会把虚拟节点的子节点children，转换为真实节点，挂载到dom树上。<br>patchVnode是用来对比新旧vnode，以及新旧vnode的子节点，然后更新他们的差异。如果新旧vnode都有子节点，并且子节点不同的话，还会调用updateChildren去对比子节点的差异。<br>updateChildren会去处理新旧子节点，在处理的过程中优化了这个操作。他会先去把新旧节点的头和尾取出来进行比较，总共有4种比较方式。在比较的过程中，如果我们的节点是sameVnode，那就会调用patchVnode打补丁。如果这4种比较的方式都不满足的话，就会在老节点的子节点种查找newStartVnode，也就是新的开始节点在老的节点中是否存在，并进行处理。如果新节点比老节点多，会把新增的节点插入到dom中，如果老节点比较多，就把多余的老节点删除。<br><img src="/2022/03/07/vueymfx/%E6%88%91%E7%9A%84Markdown%E7%AC%94%E8%AE%B0/vue%E6%BA%90%E7%A0%81%E5%A4%8D%E4%B9%A0%E6%95%B4%E7%90%86%E4%B8%89%EF%BC%88%E8%99%9A%E6%8B%9Fdom%EF%BC%89/5DA71656-C1C3-4A04-B539-B1287BE68A6B.png" alt="cfa4cb62a5b1b3adb9e1cffdcccf6a08"></p>
+<h4 id="模板编译和组件化"><a href="#模板编译和组件化" class="headerlink" title="模板编译和组件化"></a>模板编译和组件化</h4><p>模板编译的作用，就是把模板中的内容（html）转换为渲染函数。.vue文件是webpack通过vue-loader在构建的过程中转换成render函数的。</p>
+<p>compileToFunctions()是模板编译的入口函数，他的内部先从缓存加载编译好的render渲染函数，如果缓存中没有，就调用compile开始编译。<br>在compile中先合并选项（options），然后调用baseCompile编译模板。compile的核心是合并选项，真正的处理是在baseCompile中完成的。<br>把模板和合并好的选项传递给baseCompile，他做了三件事情。一、使用parse函数把template模板转换成AST tree（抽象语法树）。二、使用optimze函数对AST tree进行优化：标记所有AST tree中的sub trees（静态根节点），sub trees不需要每次被重绘，patch的过程会跳过sub trees。三、将优化过的AST tree生成字符串形式的js代码。<br>当compile执行完毕以后，会回到入口函数compileToFunctions中，他继续把字符串形式的代码转换为函数的形式，通过执行createFunction，当render和staticRenderFuns创建完毕，最终他们都会被挂载到vue实例中的options选项对应的属性上。<br>注：<br>模板编译的过程中，会标记静态根节点，对静态根节点进行优化处理，重新渲染的时候不需要渲染静态根节点，因为他们不会发生改变。另外在模板中不要多写无意义的空格和换行，生成AST对象时会保留这些空格和换行，他们都会被存储到内存中。<br><img src="/2022/03/07/vueymfx/%E6%88%91%E7%9A%84Markdown%E7%AC%94%E8%AE%B0/vue%E6%BA%90%E7%A0%81%E5%A4%8D%E4%B9%A0%E6%95%B4%E7%90%86%E4%B8%89%EF%BC%88%E8%99%9A%E6%8B%9Fdom%EF%BC%89/967222E7-DF80-458C-AF98-6F5A4CF032BD.png" alt="a28ffcef5fccd93a5778d8f185793c20"></p>
+<h5 id="组件化"><a href="#组件化" class="headerlink" title="组件化"></a>组件化</h5><p>一个vue组件就是一个拥有预定义选项的一个vue实例。<br>一个组件可以组成页面上一个功能完备的区域，组件可以包含脚本、样式、模板</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-vueymfx/vueymfx2"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/03/02/vueymfx/vueymfx2/"
+    >vue源码复习(数据响应式)</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/03/02/vueymfx/vueymfx2/" class="article-date">
+  <time datetime="2022-03-02T04:58:56.000Z" itemprop="datePublished">2022-03-02</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="数据响应式原理"><a href="#数据响应式原理" class="headerlink" title="数据响应式原理"></a>数据响应式原理</h4><p>响应式的意思是，当数据发生改变，视图会跟着改变，无需我们操作dom，响应式处理的入口是instance\init.js</p>
+<p>响应式是从vue实例的_init()方法开始的，在_init()方法中先调用initState()方法初始化vue实例的状态，在其中调用了initData()，这个方法是把data属性注入到vue实例上，并且调用observe()把data对象转换成响应式的对象，observe()就是响应式的入口。</p>
+<p>observe(value)接受一个参数，这个参数就是响应式要处理的对象，observe()在src/core/observer/index.js中，先判断value是否是对象，如果不是对象就直接返回。</p>
+<p>然后判断value对象是否有__ob__属性，,如果有就说明这个对象已经做过响应式处理，也直接返回。如果没有，就为这个对象创建observer对象，然后把这个observer对象返回。<br><img src="/2022/03/02/vueymfx/vueymfx2/1646185395364.jpg" alt="3828aebf462cc43da6dc120bc960e503"></p>
+<p>Observe类会给value对象定义一个不可枚举的__ob__属性，并把当前的observer对象记录到枚举__ob__里面来，然后进行数组和对象的响应式处理。<br><img src="/2022/03/02/vueymfx/vueymfx2/56737F2A-8FF5-475B-AC0F-BFA25015690F.png" alt="3828aebf462cc43da6dc120bc960e503"></p>
+<p>数组的处理就是设置数组那几个特殊的方法，这些方法会改变数组，所以当这些方法被调用的时候，我们要发送通知，找到数组对应的__ob__，也就是observer对象，再找到observer对象中的dep方法调用，调用dep当中的notify方法。处理完这些方法后，遍历成员，对每一个成员调用observe，如果这个成员是对象的话，也会被转换为响应式的对象。 </p>
+<p>对象的处理会调用walk方法，遍历对象所有属性，给每个属性调用defineReactive方法。<br>defineReactive会给每个属性创建dep对象，让dep去收集依赖，如果当前属性的值是对象，就调用observe，要把这个对象变成响应式。</p>
+<p>defineReactive的核心就是定义getter和setter。<br>定义getter为每一个属性收集依赖，包括对象的子对象。<br>定义setter保存新值，如果新值是对象，就调用observe也转换成响应式，发送通知，就是调用dep.notify方法。<br><img src="/2022/03/02/vueymfx/vueymfx2/3A65CD6C-0740-42ED-9185-19234C239D9E.png" alt="266f9d19cdafcf66b22a546c361fd9ae"></p>
+<p>依赖收集：首先执行watcher对象中的get方法，在get中调用pushTarget，在pushTarget中会把watcher对象记录到dep.target属性中。<br>在访问data中的成员的时候收集依赖，在访问值时就会触发defineReactive中的getter收集依赖，把属性对应的watcher添加到dep的subs数组中，也就是为属性收集依赖，如果属性的值是个对象，就创建一个childOb为这个子对象收集依赖，目的是子对象添加和删除成员时发送通知<br><img src="/2022/03/02/vueymfx/vueymfx2/E9D9E42D-6D38-4EDF-AE3B-69D7B782008A.png" alt="2d155fa9c0aa9b61d97d6488e0b84e85"></p>
+<p>watcher：当数据发生变化的时候通过dep.notify发送通知，他会调用watcher的update方法，在update方法中会调用queueWatcher函数，来判断watcher是否被处理了，如果没有就添加到queue队列，并调用flushSchedulerQueue刷新队列</p>
+<p>flushSchedulerQueue会触发beforeUpdata钩子函数，然后调用watcher.run()函数，在其中调用get()–&gt;getter()–&gt;updateComponent</p>
+<p>调用run方法之后，就可以在页面上看到最新的数据了</p>
+<p>然后就会清空上一次的依赖，重置watcher的状态，然后触发actived钩子函数，然后触发updated钩子函数<br><img src="/2022/03/02/vueymfx/vueymfx2/6733F301-2725-441A-AD21-4C54011B6FE2.png" alt="2b9b14348506a056db1f6d3d2846069e"></p>
+<h5 id="异步更新队列"><a href="#异步更新队列" class="headerlink" title="异步更新队列"></a>异步更新队列</h5><p>nexTick是在dom行程后获取内容，本身是一个微任务，运行环境不支持时降级为宏任务。数据更新到dom上之后，才会去执行nextTick中的回调函数。</p>
+<p>nextTick静态方法是在global-api的index.js中被定义的，实例方法在instance下面的index.js中，在renderMixin()这个函数中，定义了nextTick。nextTick的核心，其实就是timerFunc()的处理。</p>
+<p>在timerFunc()源码中我们可以得知：<br>如果支持 Promise 就用 Promise。如果不支持Promise<br>就用MutationObserver，MutationObserver 它会在指定的DOM发生变化时被调用。<br>如果不支持 MutationObserver 的话就用 setImmediate，但是这个特性只有最新版IE和node支持。<br>如果这些都不支持的话就用setTimeout。</p>
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-vueymfx/vueymfx3"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/03/02/vueymfx/vueymfx3/"
+    >vue源码复习(虚拟DOM)</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/03/02/vueymfx/vueymfx3/" class="article-date">
+  <time datetime="2022-03-02T04:58:56.000Z" itemprop="datePublished">2022-03-02</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h4><p>vue中的虚拟dom的实现借鉴了snabdom这个虚拟dom库，如模块机制、钩子函数、diff算法，在此基础上额外添加了指令和组件等。虚拟dom是使用JS对象来描述真实dom，虚拟dom就是js对象。</p>
+<p>为什么要使用虚拟dom：<br>避免直接操作真实dom，提高开发效率。可以作为一个中间层来跨平台。在复杂试图的情况下可以提高渲染性能，简单视图的情况下可能会增加开销。</p>
+<p>在v-for的时候可以给每个节点增加key属性，key只能是原始值，不能是对象。因新老节点对比顺序不同，设置key会比不设置key的dom操作少很多。</p>
+<h5 id="源码部分"><a href="#源码部分" class="headerlink" title="源码部分"></a>源码部分</h5><p><strong>虚拟dom创建的整体过程</strong><br>这个过程是接着vue的首次渲染过程来讲的，在updateComponent()中我们调用了render()函数和_update()函数。</p>
+<p>在render中我们调用了用户传入的render函数或者是模板编译成的render函数，如果是用户传入的render函数的话，就调用vm.$createElement()方法，如果是模板编译成的render的话，调用的是vm._c()方法。不管vm.$createElement()还是vm._c(),他最后都会执行createElement方法。在createElement中处理了参数的差异，最终调用了_createElement()方法。在这个方法中创建了vnode对象，最终返回vnode。<br><img src="/2022/03/02/vueymfx/vueymfx3/D36D403B-B738-4A3A-A620-8EA128A49D54.png" alt="0295fbf3548dfa0579eecb29a23f05b2"></p>
+<p>在update函数是负责把虚拟dom渲染成真实dom，在update里边会调用__patch__方法。如果是首次执行，patch的第一个参数是$el，也就是一个真实dom。如果是数据更新那就传入两个vnode，第一个prevVnode也就是上次保存下来的vnode。<br>patch函数是在runtime下的index.js中初始化的，他是给vue原型上挂载了__patch__这个方法，所有的vue实例都可以访问到，他其实就是runtime下的patch.js模块中导出的patch函数。在这个函数中设置了moudles和nodeOps两个对象，moudles中存储的是一些模块，nodeOps是用来操作dom的。设置好后会把这两个对象传递给createPatchFunction()函数，这个函数最终返回的是我们需要的patch函数。<br><img src="/2022/03/02/vueymfx/vueymfx3/D3317FFA-E67E-47BD-B87B-FB3A7070CF97.png" alt="6cb8377bdd89d8d0cfa09019b227d13f"></p>
+<p>patch是vdom/patch.js中的createPatchFunction()返回的函数，在createPatchFunction中首先做了初始化的事情，她里面有很多的辅助函数，特别定义了cbs对象。在cbs对象中存储了所有模块中定义的那些钩子函数，这些钩子函数是为了处理节点的属性、事件、样式等。<br>在patch中还会判断第一个参数是不是真实dom，如果是真实dom的话说明是首次加载。这时会把真实dom转化为vnode，然后去调用createElm，把newVnode转换为真实dom，挂载到dom树上来。如果是数据更新的时候，就要通过sameVnode函数判断新旧vnode是否是相同的节点。如果不是相同节点的话，就执行其中的patchVnode，也就是diff算法。patch执行结束之后，删除旧节点。<br><img src="/2022/03/02/vueymfx/vueymfx3/96EE883B-C1B1-431A-8A07-163D7BC713E4.png" alt="c193a5cb93662967e61d92f5bd7f38cb"></p>
+<p>createElm函数是用来把虚拟节点转换为真实dom，并挂载到dom树上。他也会把虚拟节点的子节点children，转换为真实节点，挂载到dom树上。<br>patchVnode是用来对比新旧vnode，以及新旧vnode的子节点，然后更新他们的差异。如果新旧vnode都有子节点，并且子节点不同的话，还会调用updateChildren去对比子节点的差异。<br>updateChildren会去处理新旧子节点，在处理的过程中优化了这个操作。他会先去把新旧节点的头和尾取出来进行比较，总共有4种比较方式。在比较的过程中，如果我们的节点是sameVnode，那就会调用patchVnode打补丁。如果这4种比较的方式都不满足的话，就会在老节点的子节点种查找newStartVnode，也就是新的开始节点在老的节点中是否存在，并进行处理。如果新节点比老节点多，会把新增的节点插入到dom中，如果老节点比较多，就把多余的老节点删除。<br><img src="/2022/03/02/vueymfx/vueymfx3/5DA71656-C1C3-4A04-B539-B1287BE68A6B.png" alt="cfa4cb62a5b1b3adb9e1cffdcccf6a08"></p>
+<h4 id="模板编译和组件化"><a href="#模板编译和组件化" class="headerlink" title="模板编译和组件化"></a>模板编译和组件化</h4><p>模板编译的作用，就是把模板中的内容（html）转换为渲染函数。.vue文件是webpack通过vue-loader在构建的过程中转换成render函数的。</p>
+<p>compileToFunctions()是模板编译的入口函数，他的内部先从缓存加载编译好的render渲染函数，如果缓存中没有，就调用compile开始编译。<br>在compile中先合并选项（options），然后调用baseCompile编译模板。compile的核心是合并选项，真正的处理是在baseCompile中完成的。<br>把模板和合并好的选项传递给baseCompile，他做了三件事情。一、使用parse函数把template模板转换成AST tree（抽象语法树）。二、使用optimze函数对AST tree进行优化：标记所有AST tree中的sub trees（静态根节点），sub trees不需要每次被重绘，patch的过程会跳过sub trees。三、将优化过的AST tree生成字符串形式的js代码。<br>当compile执行完毕以后，会回到入口函数compileToFunctions中，他继续把字符串形式的代码转换为函数的形式，通过执行createFunction，当render和staticRenderFuns创建完毕，最终他们都会被挂载到vue实例中的options选项对应的属性上。<br>注：<br>模板编译的过程中，会标记静态根节点，对静态根节点进行优化处理，重新渲染的时候不需要渲染静态根节点，因为他们不会发生改变。另外在模板中不要多写无意义的空格和换行，生成AST对象时会保留这些空格和换行，他们都会被存储到内存中。<br><img src="/2022/03/02/vueymfx/vueymfx3/967222E7-DF80-458C-AF98-6F5A4CF032BD.png" alt="a28ffcef5fccd93a5778d8f185793c20"></p>
+<h5 id="组件化"><a href="#组件化" class="headerlink" title="组件化"></a>组件化</h5><p>一个vue组件就是一个拥有预定义选项的一个vue实例。<br>一个组件可以组成页面上一个功能完备的区域，组件可以包含脚本、样式、模板</p>
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-vueymfx/vueymfx"
   class="article article-type-post"
   itemscope
@@ -152,7 +334,7 @@
        
 <h2 itemprop="name">
   <a class="article-title" href="/2022/03/01/vueymfx/vueymfx/"
-    >vue源码复习</a> 
+    >vue源码复习(首次渲染)</a> 
 </h2>
  
 
@@ -197,20 +379,6 @@
 <p>render的作用是创建虚拟dom，最终调用的用户传入的或者模板编译的render返回vnode，调用vm._update，在其中调用__patch__ 这个方法将虚拟dom转换成真实dom并挂载到页面上来，真实dom渲染到$el中</p>
 <p>触发mounted 挂载结束 返回vue实例</p>
 <p><img src="/2022/03/01/vueymfx/vueymfx/34E5255B-F8F3-4424-ABFC-ADCFF160486E.png" alt="62954824e5d7d1645e674798997297e6"><br><img src="/2022/03/01/vueymfx/vueymfx/A90B15BB-0364-4B29-BA2A-2BB6D3D4A595.png" alt="7fee6d20c4962409267eb71a325cfdfa"><br><img src="/2022/03/01/vueymfx/vueymfx/0625729F-EBC8-4926-A8D2-FED25F91B09E.png" alt="fc61d97566402dd356dd3a8d25902f98"></p>
-<h4 id="数据响应式原理"><a href="#数据响应式原理" class="headerlink" title="数据响应式原理"></a>数据响应式原理</h4><p>响应式的意思是，当数据发生改变，视图会跟着改变，无需我们操作dom，响应式处理的入口是instance\init.js</p>
-<p>响应式是从vue实例的_init()方法开始的，在_init()方法中先调用initState()方法初始化vue实例的状态，在其中调用了initData()，这个方法是把data属性注入到vue实例上，并且调用observe()把data对象转换成响应式的对象，observe()就是响应式的入口。</p>
-<p>observe(value)接受一个参数，这个参数就是响应式要处理的对象，observe()在src/core/observer/index.js中，先判断value是否是对象，如果不是对象就直接返回。</p>
-<p>然后判断value对象是否有__ob__属性，,如果有就说明这个对象已经做过响应式处理，也直接返回。如果没有，就为这个对象创建observer对象，然后把这个observer对象返回。<br><img src="/2022/03/01/vueymfx/vueymfx/1646185395364.jpg" alt="3828aebf462cc43da6dc120bc960e503"></p>
-<p>Observe类会给value对象定义一个不可枚举的__ob__属性，并把当前的observer对象记录到枚举__ob__里面来，然后进行数组和对象的响应式处理。<br><img src="/2022/03/01/vueymfx/vueymfx/56737F2A-8FF5-475B-AC0F-BFA25015690F.png" alt="3828aebf462cc43da6dc120bc960e503"></p>
-<p>数组的处理就是设置数组那几个特殊的方法，这些方法会改变数组，所以当这些方法被调用的时候，我们要发送通知，找到数组对应的__ob__，也就是observer对象，再找到observer对象中的dep方法调用，调用dep当中的notify方法。处理完这些方法后，遍历成员，对每一个成员调用observe，如果这个成员是对象的话，也会被转换为响应式的对象。 </p>
-<p>对象的处理会调用walk方法，遍历对象所有属性，给每个属性调用defineReactive方法。<br>defineReactive会给每个属性创建dep对象，让dep去收集依赖，如果当前属性的值是对象，就调用observe，要把这个对象变成响应式。</p>
-<p>defineReactive的核心就是定义getter和setter。<br>定义getter为每一个属性收集依赖，包括对象的子对象。<br>定义setter保存新值，如果新值是对象，就调用observe也转换成响应式，发送通知，就是调用dep.notify方法。<br><img src="/2022/03/01/vueymfx/vueymfx/3A65CD6C-0740-42ED-9185-19234C239D9E.png" alt="266f9d19cdafcf66b22a546c361fd9ae"></p>
-<p>依赖收集：首先执行watcher对象中的get方法，在get中调用pushTarget，在pushTarget中会把watcher对象记录到dep.target属性中。<br>在访问data中的成员的时候收集依赖，在访问值时就会触发defineReactive中的getter收集依赖，把属性对应的watcher添加到dep的subs数组中，也就是为属性收集依赖，如果属性的值是个对象，就创建一个childOb为这个子对象收集依赖，目的是子对象添加和删除成员时发送通知<br><img src="/2022/03/01/vueymfx/vueymfx/E9D9E42D-6D38-4EDF-AE3B-69D7B782008A.png" alt="2d155fa9c0aa9b61d97d6488e0b84e85"></p>
-<p>watcher：当数据发生变化的时候通过dep.notify发送通知，他会调用watcher的update方法，在update方法中会调用queueWatcher函数，来判断watcher是否被处理了，如果没有就添加到queue队列，并调用flushSchedulerQueue刷新队列</p>
-<p>flushSchedulerQueue会触发beforeUpdata钩子函数，然后调用watcher.run()函数，在其中调用get()–&gt;getter()–&gt;updateComponent</p>
-<p>调用run方法之后，就可以在页面上看到最新的数据了</p>
-<p>然后就会清空上一次的依赖，重置watcher的状态，然后触发actived钩子函数，然后触发updated钩子函数<br><img src="/2022/03/01/vueymfx/vueymfx/6733F301-2725-441A-AD21-4C54011B6FE2.png" alt="2b9b14348506a056db1f6d3d2846069e"></p>
-<h5 id="异步更新队列"><a href="#异步更新队列" class="headerlink" title="异步更新队列"></a>异步更新队列</h5><p>nexTick是在dom行程后获取内容，本身是一个微任务，运行环境不支持时降级为宏任务</p>
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
  
       <!-- reward -->
@@ -884,401 +1052,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CommonJS/" rel="tag">CommonJS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES-Modules/" rel="tag">ES Modules</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-functionalProgramming"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/12/24/functionalProgramming/"
-    >函数式编程</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/12/24/functionalProgramming/" class="article-date">
-  <time datetime="2021-12-24T02:09:22.000Z" itemprop="datePublished">2021-12-24</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h4><p><strong>函数式编程是—种编程范式</strong>，我们常见的编程范式有命令式编程(lmperative<br>programming)，函数式编程，逻辑式编程，<em>常见的面向对象编程是也是一种命令式编程</em>。</p>
-<p>命令式编程是面向计算机硬件的抽象，有变量(对应着存储单元)，赋值语句(获取，存储指令)，表达式(内存引用和算术运算）和控制语句（跳转指令)。<br>而函数式编程是面向数学的抽象，将计算描述为一种表达式求值，一句话，函数式程序就是一个表达式。</p>
-<p>函数式编程中的函数这个术语不是指计算机中的函数(实际上是Subroutine)，而是指<strong>数学中的函数</strong>，即自<strong>变量的映射</strong>。也就是说一个函数的值仅决定于函数参数的值，不依赖其他状态。比如sqrt(x)函数计算x的平方根，只要x不变，不论什么时候调用，调用几次，值都是不变的。<br>在函数式语言中，<strong>函数作为一等公民</strong>，可以在任何地方定义，在函数内或函数外，可以作为函数的参数和返回值，可以对函数进行组合。</p>
-<p>函数式运算的核心，就是把运算过程抽象成函数，合成的过程就是抽象的过程。函数式运算可以最大程度的重用。<br>函数的名字要有实际性的意义，这对函数式编程来说非常重要。函数式编程经常会使用箭头函数，会使代码更简洁。</p>
-<h5 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h5><p>高阶函数的英文名叫 Higher-Order Function，是函数式编程的基本技术。<strong>把函数作为参数传入，这样的函数称为高阶函数</strong>，编写高阶函数，就是让函数的参数能够接收别的函数。函数式编程就是指这种高度抽象的编程范式。</p>
-<p>因为在JS中函数是一等公民，即函数可以被赋值给变量，被变量引用，这便使得函数可以作为参数，在其他函数间相互传递。这是JS作为一门“一切皆为对象”的语言，也能拥有函数式编程的能力</p>
-<p>闭包（可以判定有基准值的问题）</p>
-<h5 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h5><blockquote>
-<p><strong>函数的副作用</strong><br>函数的副作用会让函数变得不纯（函数如果依赖外部变量，就会产生副作用，既是不纯函数）。副作用会使函数通用性下降，不适合扩展和重用，会给程序带来安全隐患。副作用不能完全禁止，只能尽量控制。<br>副作用来源：全局变量，配置文件，数据库，用户输入等所有的外部交互</p>
-</blockquote>
-<p>纯函数始终有输入和输出，相同的输入一定是相同的输出，没有可观察的副作用。纯函数不会调用外部作用域的变量。使得函数与外部解耦，函数的使用更加安全。</p>
-<p>纯函数的好处有：</p>
-<ul>
-<li>可缓存 可以提高程序的性能</li>
-<li>可测试</li>
-<li>并行处理（对比多线程并行操作共享内存数据的意外）</li>
-</ul>
-<h5 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h5><blockquote>
-<p>维基百科：Currying，是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。</p>
-</blockquote>
-<p>当函数有多个参数时，可以分解函数，先传递一部分（不变）的参数，然后返回新的函数接收剩余的参数，然后返回结果。</p>
-<blockquote>
-<p>示例</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通的add函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Currying后</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curryingAdd</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">y</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x + y</span><br><span class="line">    &#125;&#125;</span><br><span class="line"></span><br><span class="line">add(<span class="number">1</span>, <span class="number">2</span>)           <span class="comment">// 3</span></span><br><span class="line">curryingAdd(<span class="number">1</span>)(<span class="number">2</span>)   <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
-
-<p>实际上就是把add函数的x，y两个参数变成了先用一个函数接收x然后返回一个函数去处理y参数。现在思路应该就比较清晰了，就是只传递给函数一部分参数来调用它，让它返回一个函数去处理剩下的参数。</p>
-<p>lodash中的柯里化 _.curry(func)，可以帮我们把多元函数转化为一元函数<br>如果传入所有参数就返回结果，如果传入部分参数就返回一个函数，使之可以继续传入参数<br>图12/10-12</p>
-<p><strong>总结</strong></p>
-<ul>
-<li>柯里化可以先传递一些函数并返回一个已有某些固定参数的新函数</li>
-<li>是对函数参数的一种‘缓存’，让参数可以复用</li>
-<li>让函数变得灵活，颗粒更小 </li>
-<li>把多远函数变为一元函数，可以组合使用，产生强大的功效</li>
-</ul>
-<p>可参考资料<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2975c25e4d71">https://www.jianshu.com/p/2975c25e4d71</a></p>
-<h5 id="函数的组合compose"><a href="#函数的组合compose" class="headerlink" title="函数的组合compose"></a>函数的组合compose</h5><p>其思想为将数据依次经过几个函数处理（函数的嵌套），最终输出结果数据。</p>
-<p>函数组合默认是从右到左执行。大函数拆分成小函数，可以容易debug。函数的组合要满足结合律（数学意义上的结合律）</p>
-<p>Lodash的_.flow 提供了 compose 的功能，且可读性更强。_.flow()从左往右执行 _.flowRight()从右往左执行</p>
-<p>调试函数组合时可以定义一个内含打印和返回的辅助函数</p>
-<h6 id="lodash中的fp模块"><a href="#lodash中的fp模块" class="headerlink" title="lodash中的fp模块"></a>lodash中的fp模块</h6><p>fp模块提供的方法都是经过柯里化的</p>
-<ul>
-<li>提供了实用的对函数式编程友好的方法</li>
-<li>函数优先  数据之后</li>
-</ul>
-<p>_.map有个小问题，它会给第二个参数（函数a）传递三个参数(item, index, array)，这就有可能会影响到函数a的运作,而fp中的map函数可以解决这个问题</p>
-<blockquote>
-<p>示例</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> _ = <span class="built_in">require</span>(<span class="string">&#x27;lodash&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fp = <span class="built_in">require</span>(<span class="string">&#x27;lodash/fp&#x27;</span>);</span><br><span class="line"><span class="keyword">let</span> arr1 = [<span class="string">&#x27;10&#x27;</span>, <span class="string">&#x27;20&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;40&#x27;</span>];</span><br><span class="line"><span class="built_in">console</span>.log(_.map(arr1, <span class="built_in">parseInt</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//执行结果[ 10, NaN, NaN, NaN ]</span></span><br><span class="line"><span class="comment">//parseInt 执行顺序</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;10&#x27;,0,array) 10</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;20&#x27;,1,array) NAN</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;30&#x27;,2,array) NAN</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;40&#x27;,3,array) NAN</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//解决这个问题使用lodash/fp模块</span></span><br><span class="line"><span class="built_in">console</span>.log(fp.map(<span class="built_in">parseInt</span>, arr1));</span><br><span class="line"><span class="comment">//[ 10, 20, 30, 40 ]</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="pointfree模式"><a href="#pointfree模式" class="headerlink" title="pointfree模式"></a>pointfree模式</h5><p>pointFree：我们可以把数据处理的过程定义成与数据无关的合成运算，不需要用到代表数据的那个参数，只要把简单的运算步骤合成到一起，在使用这种模式之前我们需要定义一些辅助的基本运算函数。</p>
-<ul>
-<li>不需要指明处理的数据</li>
-<li>只需要合成运算过程</li>
-<li>需要定义一些辅助的基本运算函数</li>
-</ul>
-<h4 id="函子Functor"><a href="#函子Functor" class="headerlink" title="函子Functor"></a>函子Functor</h4><p>我们学习函子是为了在函数式编程中把副作用控制在可控范围内、作异常处理、异步操作等。我们可以把函子想象成一个盒子，里面有map方法，传进一个值，对值进行处理。<br>函子是一个特殊的容器（包含值和值的变形关系（函数）），通过一个普通的对象来实现。函子是一个对象，对外提供map方法，永远不取值出来，只在map里对值进行操作。（以_开头的值是私有值，不对外公布。）</p>
-<p>总结：</p>
-<ul>
-<li>函数式编程的运算不直接操作值，而是由函子完成。</li>
-<li>函子就是一个实现了map契约的对象</li>
-<li>我们可以把函子想象成一个盒子，这个盒子里封装了一个值</li>
-<li>想要处理盒子中的值，我们需要给盒子的map方法传递一个处理值的函数（纯函数)，由这个函数来对值进行处理</li>
-<li>最终map方法返回一个包含新值的盒子(函子)</li>
-</ul>
-<p><strong>maybe函子</strong><br>maybe函子为了避免函子传入空值（null/undefined）情况的发生，它作用就是可以对外部的空值情况做处理（控制副作用在允许的范围）</p>
-<p><strong>either函子</strong><br> 异常会让函数变的不纯，通过either函子去处理异常，可以记录错误信息。类似于 if…else…的处理。</p>
-<p><strong>IO函子</strong><br>IO函子中的_value是一个函数，这里把函数当做值来处理。IO函子把不纯的操作存储到_value中交给调用者去处理，延迟不纯的操作，包装当前的纯操作。缺点是嵌套函子很不方便。</p>
-<p><strong>task函子</strong><br>task用于解决异步任务，和promise非常像，返回方法是resolver.resolve、resolver.reject，调用方法有.run()、.listen({onRejected/onResolved)}等。</p>
-<blockquote>
-<p>folktale是一个标准的函数式编程库，和lodash、ramda不同的是，他没有提供很多功能函数，只提供了一些函数式处理的操作，例如: compose、curry等，一些函子Task、Either、MayBe等<br>folktale的基本使用<a target="_blank" rel="noopener" href="https://folktale.origamitower.com/">https://folktale.origamitower.com/</a></p>
-</blockquote>
-<p><strong>pointed函子</strong><br>pointed函子只是一个概念而已，是实现了 of 静态方法的函子</p>
-<p><strong>monad函子</strong><br>monad函子是可以变扁的pointed函子，一个函子如果具有join和of两个方法并遵守一些定律就是一个monad。</p>
-<ul>
-<li>处理值用map</li>
-<li>处理函数用flatMap</li>
-</ul>
-<h4 id="函数式编程总结"><a href="#函数式编程总结" class="headerlink" title="函数式编程总结"></a>函数式编程总结</h4><p>1，可读性强：声明式(Declarative)使得代码即使没有注释也有很高的可读性(这也是 React 的一大卖点)。<br>2，代码量少：项目越大，越节省代码量(大量的函数被复用)。<br>3，代码稳定可靠：纯函数的功劳。<br>4，容易维护性：符合「单一职能原则」，使得代码的维护与迭代更加容易。</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/" rel="tag">lodash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9F%AF%E9%87%8C%E5%8C%96/" rel="tag">柯里化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/" rel="tag">高阶函数</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-myPromise/myPromise"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/12/06/myPromise/myPromise/"
-    >手写一个Promise的内部基本实现</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/12/06/myPromise/myPromise/" class="article-date">
-  <time datetime="2021-12-06T07:53:41.000Z" itemprop="datePublished">2021-12-06</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>参照异步编程那篇博文我们知道，Promise 是 JS 异步编程中的重要概念，异步抽象处理对象，是目前比较流行 Javascript 异步编程解决方案之一.</p>
-<p>今天我们就来尽可能还原 Promise 中的几个基本 API，并通过注释简单描述思路和原理.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Promise有三个状态,且状态为成功和失败时不可再更改,我们且定义三个常量</span></span><br><span class="line"><span class="keyword">const</span> Pending = <span class="string">&#x27;pending&#x27;</span></span><br><span class="line"><span class="keyword">const</span> Resolve = <span class="string">&#x27;fulFilled&#x27;</span></span><br><span class="line"><span class="keyword">const</span> Rejected = <span class="string">&#x27;rejected&#x27;</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">myPromise</span> </span>&#123;</span><br><span class="line">    <span class="comment">//执行器 </span></span><br><span class="line">    <span class="comment">//promise就是一个类,在执行这个类的时候需要传递一个执行器,执行器就是传入的那个回调函数,执行器会立即执行</span></span><br><span class="line">    <span class="title">constructor</span> (<span class="params">ex</span>)&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> ex(<span class="built_in">this</span>.resolve，<span class="built_in">this</span>.reject)</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e)&#123;</span><br><span class="line">            <span class="built_in">this</span>.reject(e)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//声明变量</span></span><br><span class="line">    status = Pending</span><br><span class="line">    value = <span class="literal">undefined</span></span><br><span class="line">    reason = <span class="literal">undefined</span></span><br><span class="line">    <span class="comment">//定义成功回调和失败回调的数组</span></span><br><span class="line">    scb = []</span><br><span class="line">    fcb = []</span><br><span class="line"></span><br><span class="line">    resolve = <span class="function"><span class="params">value</span> =&gt;</span>  &#123;</span><br><span class="line">        <span class="comment">//如果是Pending状态再继续执行 改状态 赋值等操作</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.status !== Pending) <span class="keyword">return</span></span><br><span class="line">        <span class="built_in">this</span>.status = Resolve</span><br><span class="line">        <span class="built_in">this</span>.value = value</span><br><span class="line">        <span class="comment">// this.scb &amp;&amp; this.scb(this.value)</span></span><br><span class="line">        <span class="comment">//循环执行</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="built_in">this</span>.scb.length) <span class="built_in">this</span>.scb.shift()()</span><br><span class="line">    &#125;</span><br><span class="line">    reject = <span class="function"><span class="params">reason</span> =&gt;</span>  &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.status !== Pending) <span class="keyword">return</span></span><br><span class="line">        <span class="built_in">this</span>.status = Rejected</span><br><span class="line">        <span class="built_in">this</span>.reason = reason</span><br><span class="line">        <span class="comment">// this.fcb &amp;&amp; this.fcb(this.reason)</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="built_in">this</span>.fcb.length) <span class="built_in">this</span>.fcb.shift()()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">then</span>(<span class="params">scb，fcb</span>)</span> &#123;</span><br><span class="line">        <span class="comment">//处理then链式调用情况</span></span><br><span class="line">        scb = scb ? scb : <span class="function"><span class="params">value</span> =&gt;</span> value</span><br><span class="line">        fcb = fcb ? fcb : <span class="function"><span class="params">reason</span> =&gt;</span> &#123; <span class="keyword">throw</span> reason&#125;</span><br><span class="line">        <span class="keyword">let</span> p2 = <span class="keyword">new</span> myPromise(<span class="function">(<span class="params">resolve，reject</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">//分三种状态判断</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">this</span>.status === Resolve) &#123;</span><br><span class="line">                <span class="comment">//setTimeout为了可以异步获取p2</span></span><br><span class="line">                <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        resPro(scb(<span class="built_in">this</span>.value)，resolve，reject，p2)</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                        reject(error)</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;，<span class="number">0</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">this</span>.status === Rejected) &#123;</span><br><span class="line">                <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        resPro(fcb(<span class="built_in">this</span>.reason)，resolve，reject，p2)</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                        reject(error)</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;，<span class="number">0</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">this</span>.scb.push(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            resPro(scb(<span class="built_in">this</span>.value)，resolve，reject，p2)</span><br><span class="line">                        &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                            reject(error)</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;，<span class="number">0</span>);</span><br><span class="line">                &#125;)</span><br><span class="line">                <span class="built_in">this</span>.fcb.push(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            resPro(fcb(<span class="built_in">this</span>.reason)，resolve，reject，p2)</span><br><span class="line">                        &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                            reject(error)</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;，<span class="number">0</span>);</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">return</span> p2</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="title">resolve</span>(<span class="params">value</span>)</span>&#123;</span><br><span class="line">        <span class="comment">//如果是primose类型就直接返回, 如果是普通值就包裹一层promise返回</span></span><br><span class="line">        <span class="keyword">if</span>(value <span class="keyword">instanceof</span> myPromise) <span class="keyword">return</span> value</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> myPromise(<span class="function"><span class="params">resolve</span> =&gt;</span> resolve(value))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="title">all</span>(<span class="params">arr</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> result = []</span><br><span class="line">        <span class="keyword">let</span> sum = <span class="number">0</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> myPromise(<span class="function">(<span class="params">resolve，reject</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="function"><span class="keyword">function</span> <span class="title">add</span> (<span class="params">i，t</span>) </span>&#123;</span><br><span class="line">                result[i] = t</span><br><span class="line">                sum++</span><br><span class="line">                <span class="keyword">if</span> (sum === arr.length) &#123;</span><br><span class="line">                    resolve(result) </span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i&lt;arr.length; i++)&#123;</span><br><span class="line">                <span class="keyword">let</span> cur = arr[i]</span><br><span class="line">                <span class="keyword">if</span> (cur <span class="keyword">instanceof</span> myPromise ) &#123;</span><br><span class="line">                    <span class="comment">//如果是promise值</span></span><br><span class="line">                    cur.then(<span class="function"><span class="params">res</span> =&gt;</span> add(i，res)，rej =&gt; reject(rej))</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">//如果是普通值</span></span><br><span class="line">                    add(i，cur)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="title">race</span>(<span class="params">arr</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> sum = <span class="number">0</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> myPromise(<span class="function">(<span class="params">resolve，reject</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="function"><span class="keyword">function</span> <span class="title">addresolve</span> (<span class="params">t</span>) </span>&#123;</span><br><span class="line">                sum++</span><br><span class="line">                <span class="keyword">if</span> (sum === <span class="number">1</span>) &#123;</span><br><span class="line">                    resolve(t) </span><br><span class="line">                    <span class="keyword">return</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="function"><span class="keyword">function</span> <span class="title">addreject</span> (<span class="params">t</span>) </span>&#123;</span><br><span class="line">                sum++</span><br><span class="line">                <span class="keyword">if</span> (sum === <span class="number">1</span>) &#123;</span><br><span class="line">                    reject(t) </span><br><span class="line">                    <span class="keyword">return</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i&lt;arr.length; i++)&#123;</span><br><span class="line">                <span class="keyword">let</span> cur = arr[i]</span><br><span class="line">                <span class="keyword">if</span> (cur <span class="keyword">instanceof</span> myPromise ) &#123;</span><br><span class="line">                    <span class="comment">//promise</span></span><br><span class="line">                    cur.then(<span class="function"><span class="params">res</span> =&gt;</span> addresolve(res)，rej =&gt; addreject(rej))</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">//普通值</span></span><br><span class="line">                    addresolve(cur)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span>(fcb) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.then(<span class="literal">undefined</span>，fcb)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="title">finally</span>(<span class="params">cb</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">//等待cb执行完成</span></span><br><span class="line">            <span class="keyword">return</span> myPromise.resolve(cb()).then(<span class="function">() =&gt;</span> res)</span><br><span class="line">        &#125;,<span class="function"><span class="params">rej</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> myPromise.resolve(cb()).then(<span class="function">() =&gt;</span> &#123;<span class="keyword">throw</span> rej&#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resPro</span>(<span class="params">x，resolve，reject，p2</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//如果和本身一样就抛出错误</span></span><br><span class="line">    <span class="keyword">if</span> (p2 === x) &#123;</span><br><span class="line">        <span class="keyword">return</span> reject(<span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">&#x27;循环&#x27;</span>))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//如果是promise就执行  如果不是就包一层</span></span><br><span class="line">    <span class="keyword">if</span> (x <span class="keyword">instanceof</span> myPromise ) &#123;</span><br><span class="line">        x.then(resolve，reject)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        resolve(x)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>下面我们开始测试</p>
-<p>先定义一个函数，要想创建一个 promise 对象、可以使用 new 来调用 Promise 的构造器来进行实例化.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> pro = <span class="keyword">new</span> myPromise(<span class="function"><span class="keyword">function</span> (<span class="params">resolve，reject</span>) </span>&#123;</span><br><span class="line">    resolve(<span class="string">&#x27;resolve1&#x27;</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>Promise 构造函数包含一个参数和一个带有 resolve（解析）和 reject（拒绝）两个参数的回调.在回调中执行一些操作（例如异步），如果一切都正常，则调用 resolve，否则调用 reject.<br>对于已经实例化过的 promise 对象可以调用 promise.then() 方法，传递 resolve 和 reject 方法作为回调.</p>
-<h5 id="测试-then-链式调用情况"><a href="#测试-then-链式调用情况" class="headerlink" title="测试.then()链式调用情况"></a>测试.then()链式调用情况</h5><p>经测试，下面代码打印结果为: resolve1<br>说明.then()方法的参数是可选的，当参数为空时，promise会把结果返回给下一个then来接收</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pro.then().then().then(<span class="function"><span class="params">resolve</span> =&gt;</span> <span class="built_in">console</span>.log(resolve)，reject =&gt; <span class="built_in">console</span>.log(reject))</span><br></pre></td></tr></table></figure>
-
-<h5 id="测试循环调用的情况"><a href="#测试循环调用的情况" class="headerlink" title="测试循环调用的情况"></a>测试循环调用的情况</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> p1 = pro.then(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value)</span><br><span class="line">    <span class="keyword">return</span> p1</span><br><span class="line">&#125;);</span><br><span class="line">p1.then(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value)</span><br><span class="line">&#125;，reason =&gt; <span class="built_in">console</span>.log(reason.message))</span><br></pre></td></tr></table></figure>
-<p>这一段打印结果是: resolve1 循环<br>证明我们循环调用处理的是没什么问题的</p>
-<hr>
-<p>为了方便测试.all()和.race()方法，我们先定义三个函数</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">p1</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> myPromise(<span class="function"><span class="keyword">function</span> (<span class="params">resolve，reject</span>) </span>&#123;</span><br><span class="line">      <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        resolve(<span class="string">&#x27;p1&#x27;</span>)</span><br><span class="line">      &#125;，<span class="number">1000</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">p2</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> myPromise(<span class="function"><span class="keyword">function</span> (<span class="params">resolve，reject</span>) </span>&#123;</span><br><span class="line">        resolve(<span class="string">&#x27;p2&#x27;</span>);  </span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">p3</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> myPromise(<span class="function"><span class="keyword">function</span> (<span class="params">resolve，reject</span>) </span>&#123;</span><br><span class="line">        reject(<span class="string">&#x27;失败&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="all"><a href="#all" class="headerlink" title=".all()"></a>.all()</h5><p>Promise.all 方法接受一个数组作为参数，p1、p2、p3 都是 Promise 对象的实例.（Promise.all 方法的参数不一定是数组，但是必须具有 iterator 接口，且返回的每个成员都是 Promise 实例.）</p>
-<p>.all()的状态分成两种情况.</p>
-<ul>
-<li>只有p1、p2/p3的状态都变成fulfilled，p的状态才会变成fulfilled，此时入参的返回值组成一个数组，传递给p的回调函数.</li>
-<li>只要p1、p2/p3之中有一个被rejected，p的状态就变成rejected，此时第一个被reject的实例的返回值，会传递给p的回调函数.</li>
-</ul>
-<p>此时我们测试.all()函数，运行结果为: alla,b,p1,p2,c</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.all([<span class="string">&#x27;a&#x27;</span>，<span class="string">&#x27;b&#x27;</span>，p1()，p2()，<span class="string">&#x27;c&#x27;</span>]).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;all&#x27;</span> + res),<span class="function"><span class="params">rej</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;all&#x27;</span> + rej))</span><br></pre></td></tr></table></figure>
-<p>如果我们给.all加入一个失败的参数，运行结果为: all失败</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.all([<span class="string">&#x27;a&#x27;</span>，<span class="string">&#x27;b&#x27;</span>，p1()，p3()，<span class="string">&#x27;c&#x27;</span>]).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;all&#x27;</span> + res),<span class="function"><span class="params">rej</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;all&#x27;</span> + rej))</span><br></pre></td></tr></table></figure>
-<p>结合测试可以证明我们.all()方法实现的是没有问题的.</p>
-<h5 id="race"><a href="#race" class="headerlink" title=".race()"></a>.race()</h5><p>.race()只要有一个promise对象进入 FulFilled 或者 Rejected 状态的话，就会继续进行后面的处理.</p>
-<p>此时我们测试.race()函数，传入两个不同速度的函数的情况，运行结果为: racep2</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.race([p1()，p2()]).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;race&#x27;</span> + res),<span class="function"><span class="params">rej</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;race&#x27;</span> + rej))</span><br></pre></td></tr></table></figure>
-<p>此时我们测试传入函数和常量的情况，运行结果为: racea</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.race([<span class="string">&#x27;a&#x27;</span>，p2()]).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;race&#x27;</span> + res),<span class="function"><span class="params">rej</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;race&#x27;</span> + rej))</span><br></pre></td></tr></table></figure>
-<p>如果我们给.race()加入一个失败的参数，运行结果为: race失败</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.race([p1()，p3()]).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;race&#x27;</span> + res),<span class="function"><span class="params">rej</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;race&#x27;</span> + rej))</span><br></pre></td></tr></table></figure>
-<p>结合测试可以证明我们.race()方法实现也是基本可以的.</p>
-<h5 id="resolve"><a href="#resolve" class="headerlink" title=".resolve"></a>.resolve</h5><p>有时需要将现有对象转为Promise对象，Promise.resolve方法就起到这个作用.</p>
-<p>此时我们测试.resolve()函数，如果传入一个promise则返回这个promise，运行结果为: p1</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.resolve(p1()).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br></pre></td></tr></table></figure>
-<p>如果传入一个常量则返回一个promise包裹这个常量，运行结果为: 100</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPromise.resolve(<span class="number">100</span>).then( <span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br></pre></td></tr></table></figure>
-
-<h5 id="finally"><a href="#finally" class="headerlink" title=".finally()"></a>.finally()</h5><p>.finally()方法用于指定不管 Promise 对象最后状态如何，都会执行的操作.它接受一个普通的回调函数作为参数，该函数不管怎样都必须执行.</p>
-<p>promise状态为成功的情况</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">p2().then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res)</span><br><span class="line">&#125;,<span class="function"><span class="params">rej</span>=&gt;</span><span class="built_in">console</span>.log(rej))</span><br><span class="line">.finally(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;res&#x27;</span>)</span><br><span class="line">&#125;).</span><br></pre></td></tr></table></figure>
-<p>运行结果为: p2 res</p>
-<p>promise状态为失败的情况</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">p3().then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res)</span><br><span class="line">&#125;,<span class="function"><span class="params">rej</span>=&gt;</span><span class="built_in">console</span>.log(rej))</span><br><span class="line">.finally(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;finally&#x27;</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>运行结果为: 失败 res</p>
-<h5 id="catch"><a href="#catch" class="headerlink" title=".catch()"></a>.catch()</h5><p>.catch()方法用于指定发生错误时的回调函数.Promise 对象的错误具有”冒泡”性质，会一直向后传递，直到被捕获为止.也就是说，错误总是会被下一个 catch 语句捕获.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">p3().then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res)</span><br><span class="line">&#125;).catch(<span class="function"><span class="params">rea</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;rea&#x27;</span>+rea)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>运行结果为: rea失败</p>
-<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Promise/" rel="tag">Promise</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-eventloop"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/12/04/eventloop/"
-    >事件循环</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/12/04/eventloop/" class="article-date">
-  <time datetime="2021-12-04T04:14:11.000Z" itemprop="datePublished">2021-12-04</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="一、主题"><a href="#一、主题" class="headerlink" title="一、主题"></a>一、主题</h4><p>JS执行中的堆栈（浏览器平台下）<br>系统的梳理一些底层的知识</p>
-<h4 id="二、XXX"><a href="#二、XXX" class="headerlink" title="二、XXX"></a>二、XXX</h4><p>基于代码的执行结果我们有必要对这些“简单代码的执行过程” 有一个深刻的理解。</p>
-<ol>
-<li>哪些平台可以执行 JS 代码：</li>
-</ol>
-<ul>
-<li>浏览器平台 </li>
-<li>NodejS </li>
-<li>webview </li>
-</ul>
-<ol start="2">
-<li>无论 JS 代码在哪些个平台上执行，最终都需要有一个执行的地方</li>
-</ol>
-<ul>
-<li>代码最终都是运行在内存当中的</li>
-<li>在 JS 执行过的过程中我们认为浏览器加载界面的时候就会向计算机的内存申请一片空间，用于执行 JS 代码</li>
-<li>这个空间我们称之为叫 执行环境栈（ ECS execution context stack ）</li>
-</ul>
-<ol start="3">
-<li>常见的名词 </li>
-</ol>
-<ul>
-<li><p>执行环境栈：本质就是一个内存空间</p>
-</li>
-<li><p>执行上下文：( EC(execution context) )</p>
-<ul>
-<li>一段JS 代码里肯定会有很多内容：变量的声明、函数的定义、对象、块作用域</li>
-<li>上述这些区域内都有自己的代码，默认情况下他们里面的内容可能会出现重名</li>
-<li>所以代码将来在执行时候不可能直接放在一个“环境”下去运行，我们需要将它们隔离开</li>
-<li>JS当中就有了执行上下文的概念，专门用于将不同区域的代码 “分开” 【  】</li>
-<li>它也是一个内存空间，我们无须将它具像化。在它里面存放了当前区域代码运行时所需要的数据</li>
-</ul>
-</li>
-<li><p>进栈执行</p>
-<ul>
-<li>执行环境栈具有先进后出的特点（）</li>
-<li>每当“一段”代码要运行的时候，就会生成一个新的执行上下文，然后在这个上下文当中将执行时需要的内容准备好，之后就开始进栈执行 </li>
-</ul>
-</li>
-<li><p>EC(G) （execution context global）</p>
-<ul>
-<li>全局执行上下文， 浏览器加载界面的时候就默认创建的一个环境 [这个上下文和我们代码执行与否没关系]</li>
-<li>当前这个上下文如果想要出栈必然是界面关闭【 垃圾回收 】</li>
-</ul>
-</li>
-<li><p>VO(G) variable object global） </p>
-<ul>
-<li>全局变量对象（ 全局执行上下文当中的变量需要有一个地方来存放，因此就有了这个对象 ）</li>
-<li>每一段代码中都有声明和定义，他们放在哪？</li>
-<li>针对全局执行上下文来说，它里面的声明和定义放在了一个对象当中，这个对象我们叫 VO(G)</li>
-</ul>
-</li>
-<li><p>GO( global object ) </p>
-<ul>
-<li>全局对象， 它和 VO(G) 不是同一个东西 【 window 】</li>
-<li>它也是浏览器加载界面时就会创建的一个对象，在它内部存放了许多JS默认就可以调用的属性和方法（ setTimeout setInterval JSON eval….. ）</li>
-</ul>
-</li>
-<li><p>声明和定义 </p>
-<ul>
-<li>声明： var obj; </li>
-<li>定义： obj = XXXX </li>
-</ul>
-</li>
-</ul>
-<h4 id="三、堆栈中的基本值"><a href="#三、堆栈中的基本值" class="headerlink" title="三、堆栈中的基本值"></a>三、堆栈中的基本值</h4><ul>
-<li>在EC(G) 当中有 VO(G) 用来存储当前执行上下文里的变量声明和定义 </li>
-<li>代码执行之前会有提升操作：对于 var 操作来说只声明不定义【重要】</li>
-<li>基本数据类型值是直接存放在栈区当中的 </li>
-<li>VO(G) 当中默认就有一个window 它存放的是一个内存地址，指向 GO 对象所在内存 </li>
-</ul>
-<h4 id="四、堆栈中的引用类型"><a href="#四、堆栈中的引用类型" class="headerlink" title="四、堆栈中的引用类型"></a>四、堆栈中的引用类型</h4><ol>
-<li>引用类型在 JS 中会单独开辟一个空间进行存储（堆区）</li>
-<li>堆区本质上也是一个内存，因此会有一个16进制的地址 </li>
-<li>在栈区当中存放的是这个内存的16进制地址</li>
-</ol>
-<h4 id="五、函数在堆栈中的存储"><a href="#五、函数在堆栈中的存储" class="headerlink" title="五、函数在堆栈中的存储"></a>五、函数在堆栈中的存储</h4><ul>
-<li>函数的创建<ul>
-<li>创建函数和声明变量类似，可以将函数名看做是变量名</li>
-<li>函数的提升与变量不同，它是既声明又定义（ 函数可以在定义之前调用 ）</li>
-<li>函数创建时就会确认自己的作用域（就是当前所在执行上下文）</li>
-</ul>
-</li>
-<li>函数执行  <ul>
-<li>执行目的就是为了将函数创建时所保存的那些字符串形式的代码运行起来</li>
-<li>代码运行时为了和其它上下文做隔离，因此每个函数执行时都会创建一个全新的私有上下文</li>
-<li>在这个私有上下文当中有一个 AO(xxx) 用来存储函数上下文里的变量声明和定义 </li>
-<li>执行步骤<ul>
-<li>确定作用域链＜当前执行上下文，函数作用域＞</li>
-<li>确定this 指向</li>
-<li>初始化 arguments</li>
-<li>形参赋值： 这里定义的变量都是当前函数上下文私有的</li>
-<li>变量提升 </li>
-<li>代码执行  </li>
-</ul>
-</li>
-<li></li>
-</ul>
-</li>
-</ul>
-<h4 id="六、闭包"><a href="#六、闭包" class="headerlink" title="六、闭包"></a>六、闭包</h4><p>闭包是一种机制，代码是具体表现，例如我们常见 大函数套小函数然后再返回小函数  </p>
-<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/eventloop/" rel="tag">eventloop</a></li></ul>
 
     </footer>
   </div>
