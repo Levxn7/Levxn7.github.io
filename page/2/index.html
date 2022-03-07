@@ -140,139 +140,6 @@
     
     
     <article
-  id="post-functionalProgramming"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/12/24/functionalProgramming/"
-    >函数式编程</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/12/24/functionalProgramming/" class="article-date">
-  <time datetime="2021-12-24T02:09:22.000Z" itemprop="datePublished">2021-12-24</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h4><p><strong>函数式编程是—种编程范式</strong>，我们常见的编程范式有命令式编程(lmperative<br>programming)，函数式编程，逻辑式编程，<em>常见的面向对象编程是也是一种命令式编程</em>。</p>
-<p>命令式编程是面向计算机硬件的抽象，有变量(对应着存储单元)，赋值语句(获取，存储指令)，表达式(内存引用和算术运算）和控制语句（跳转指令)。<br>而函数式编程是面向数学的抽象，将计算描述为一种表达式求值，一句话，函数式程序就是一个表达式。</p>
-<p>函数式编程中的函数这个术语不是指计算机中的函数(实际上是Subroutine)，而是指<strong>数学中的函数</strong>，即自<strong>变量的映射</strong>。也就是说一个函数的值仅决定于函数参数的值，不依赖其他状态。比如sqrt(x)函数计算x的平方根，只要x不变，不论什么时候调用，调用几次，值都是不变的。<br>在函数式语言中，<strong>函数作为一等公民</strong>，可以在任何地方定义，在函数内或函数外，可以作为函数的参数和返回值，可以对函数进行组合。</p>
-<p>函数式运算的核心，就是把运算过程抽象成函数，合成的过程就是抽象的过程。函数式运算可以最大程度的重用。<br>函数的名字要有实际性的意义，这对函数式编程来说非常重要。函数式编程经常会使用箭头函数，会使代码更简洁。</p>
-<h5 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h5><p>高阶函数的英文名叫 Higher-Order Function，是函数式编程的基本技术。<strong>把函数作为参数传入，这样的函数称为高阶函数</strong>，编写高阶函数，就是让函数的参数能够接收别的函数。函数式编程就是指这种高度抽象的编程范式。</p>
-<p>因为在JS中函数是一等公民，即函数可以被赋值给变量，被变量引用，这便使得函数可以作为参数，在其他函数间相互传递。这是JS作为一门“一切皆为对象”的语言，也能拥有函数式编程的能力</p>
-<p>闭包（可以判定有基准值的问题）</p>
-<h5 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h5><blockquote>
-<p><strong>函数的副作用</strong><br>函数的副作用会让函数变得不纯（函数如果依赖外部变量，就会产生副作用，既是不纯函数）。副作用会使函数通用性下降，不适合扩展和重用，会给程序带来安全隐患。副作用不能完全禁止，只能尽量控制。<br>副作用来源：全局变量，配置文件，数据库，用户输入等所有的外部交互</p>
-</blockquote>
-<p>纯函数始终有输入和输出，相同的输入一定是相同的输出，没有可观察的副作用。纯函数不会调用外部作用域的变量。使得函数与外部解耦，函数的使用更加安全。</p>
-<p>纯函数的好处有：</p>
-<ul>
-<li>可缓存 可以提高程序的性能</li>
-<li>可测试</li>
-<li>并行处理（对比多线程并行操作共享内存数据的意外）</li>
-</ul>
-<h5 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h5><blockquote>
-<p>维基百科：Currying，是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。</p>
-</blockquote>
-<p>当函数有多个参数时，可以分解函数，先传递一部分（不变）的参数，然后返回新的函数接收剩余的参数，然后返回结果。</p>
-<blockquote>
-<p>示例</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通的add函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Currying后</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curryingAdd</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">y</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x + y</span><br><span class="line">    &#125;&#125;</span><br><span class="line"></span><br><span class="line">add(<span class="number">1</span>, <span class="number">2</span>)           <span class="comment">// 3</span></span><br><span class="line">curryingAdd(<span class="number">1</span>)(<span class="number">2</span>)   <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
-
-<p>实际上就是把add函数的x，y两个参数变成了先用一个函数接收x然后返回一个函数去处理y参数。现在思路应该就比较清晰了，就是只传递给函数一部分参数来调用它，让它返回一个函数去处理剩下的参数。</p>
-<p>lodash中的柯里化 _.curry(func)，可以帮我们把多元函数转化为一元函数<br>如果传入所有参数就返回结果，如果传入部分参数就返回一个函数，使之可以继续传入参数<br>图12/10-12</p>
-<p><strong>总结</strong></p>
-<ul>
-<li>柯里化可以先传递一些函数并返回一个已有某些固定参数的新函数</li>
-<li>是对函数参数的一种‘缓存’，让参数可以复用</li>
-<li>让函数变得灵活，颗粒更小 </li>
-<li>把多远函数变为一元函数，可以组合使用，产生强大的功效</li>
-</ul>
-<p>可参考资料<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2975c25e4d71">https://www.jianshu.com/p/2975c25e4d71</a></p>
-<h5 id="函数的组合compose"><a href="#函数的组合compose" class="headerlink" title="函数的组合compose"></a>函数的组合compose</h5><p>其思想为将数据依次经过几个函数处理（函数的嵌套），最终输出结果数据。</p>
-<p>函数组合默认是从右到左执行。大函数拆分成小函数，可以容易debug。函数的组合要满足结合律（数学意义上的结合律）</p>
-<p>Lodash的_.flow 提供了 compose 的功能，且可读性更强。_.flow()从左往右执行 _.flowRight()从右往左执行</p>
-<p>调试函数组合时可以定义一个内含打印和返回的辅助函数</p>
-<h6 id="lodash中的fp模块"><a href="#lodash中的fp模块" class="headerlink" title="lodash中的fp模块"></a>lodash中的fp模块</h6><p>fp模块提供的方法都是经过柯里化的</p>
-<ul>
-<li>提供了实用的对函数式编程友好的方法</li>
-<li>函数优先  数据之后</li>
-</ul>
-<p>_.map有个小问题，它会给第二个参数（函数a）传递三个参数(item, index, array)，这就有可能会影响到函数a的运作,而fp中的map函数可以解决这个问题</p>
-<blockquote>
-<p>示例</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> _ = <span class="built_in">require</span>(<span class="string">&#x27;lodash&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fp = <span class="built_in">require</span>(<span class="string">&#x27;lodash/fp&#x27;</span>);</span><br><span class="line"><span class="keyword">let</span> arr1 = [<span class="string">&#x27;10&#x27;</span>, <span class="string">&#x27;20&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;40&#x27;</span>];</span><br><span class="line"><span class="built_in">console</span>.log(_.map(arr1, <span class="built_in">parseInt</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//执行结果[ 10, NaN, NaN, NaN ]</span></span><br><span class="line"><span class="comment">//parseInt 执行顺序</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;10&#x27;,0,array) 10</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;20&#x27;,1,array) NAN</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;30&#x27;,2,array) NAN</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;40&#x27;,3,array) NAN</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//解决这个问题使用lodash/fp模块</span></span><br><span class="line"><span class="built_in">console</span>.log(fp.map(<span class="built_in">parseInt</span>, arr1));</span><br><span class="line"><span class="comment">//[ 10, 20, 30, 40 ]</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="pointfree模式"><a href="#pointfree模式" class="headerlink" title="pointfree模式"></a>pointfree模式</h5><p>pointFree：我们可以把数据处理的过程定义成与数据无关的合成运算，不需要用到代表数据的那个参数，只要把简单的运算步骤合成到一起，在使用这种模式之前我们需要定义一些辅助的基本运算函数。</p>
-<ul>
-<li>不需要指明处理的数据</li>
-<li>只需要合成运算过程</li>
-<li>需要定义一些辅助的基本运算函数</li>
-</ul>
-<h4 id="函子Functor"><a href="#函子Functor" class="headerlink" title="函子Functor"></a>函子Functor</h4><p>我们学习函子是为了在函数式编程中把副作用控制在可控范围内、作异常处理、异步操作等。我们可以把函子想象成一个盒子，里面有map方法，传进一个值，对值进行处理。<br>函子是一个特殊的容器（包含值和值的变形关系（函数）），通过一个普通的对象来实现。函子是一个对象，对外提供map方法，永远不取值出来，只在map里对值进行操作。（以_开头的值是私有值，不对外公布。）</p>
-<p>总结：</p>
-<ul>
-<li>函数式编程的运算不直接操作值，而是由函子完成。</li>
-<li>函子就是一个实现了map契约的对象</li>
-<li>我们可以把函子想象成一个盒子，这个盒子里封装了一个值</li>
-<li>想要处理盒子中的值，我们需要给盒子的map方法传递一个处理值的函数（纯函数)，由这个函数来对值进行处理</li>
-<li>最终map方法返回一个包含新值的盒子(函子)</li>
-</ul>
-<p><strong>maybe函子</strong><br>maybe函子为了避免函子传入空值（null/undefined）情况的发生，它作用就是可以对外部的空值情况做处理（控制副作用在允许的范围）</p>
-<p><strong>either函子</strong><br> 异常会让函数变的不纯，通过either函子去处理异常，可以记录错误信息。类似于 if…else…的处理。</p>
-<p><strong>IO函子</strong><br>IO函子中的_value是一个函数，这里把函数当做值来处理。IO函子把不纯的操作存储到_value中交给调用者去处理，延迟不纯的操作，包装当前的纯操作。缺点是嵌套函子很不方便。</p>
-<p><strong>task函子</strong><br>task用于解决异步任务，和promise非常像，返回方法是resolver.resolve、resolver.reject，调用方法有.run()、.listen({onRejected/onResolved)}等。</p>
-<blockquote>
-<p>folktale是一个标准的函数式编程库，和lodash、ramda不同的是，他没有提供很多功能函数，只提供了一些函数式处理的操作，例如: compose、curry等，一些函子Task、Either、MayBe等<br>folktale的基本使用<a target="_blank" rel="noopener" href="https://folktale.origamitower.com/">https://folktale.origamitower.com/</a></p>
-</blockquote>
-<p><strong>pointed函子</strong><br>pointed函子只是一个概念而已，是实现了 of 静态方法的函子</p>
-<p><strong>monad函子</strong><br>monad函子是可以变扁的pointed函子，一个函子如果具有join和of两个方法并遵守一些定律就是一个monad。</p>
-<ul>
-<li>处理值用map</li>
-<li>处理函数用flatMap</li>
-</ul>
-<h4 id="函数式编程总结"><a href="#函数式编程总结" class="headerlink" title="函数式编程总结"></a>函数式编程总结</h4><p>1，可读性强：声明式(Declarative)使得代码即使没有注释也有很高的可读性(这也是 React 的一大卖点)。<br>2，代码量少：项目越大，越节省代码量(大量的函数被复用)。<br>3，代码稳定可靠：纯函数的功劳。<br>4，容易维护性：符合「单一职能原则」，使得代码的维护与迭代更加容易。</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/" rel="tag">lodash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9F%AF%E9%87%8C%E5%8C%96/" rel="tag">柯里化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/" rel="tag">高阶函数</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
   id="post-myPromise/myPromise"
   class="article article-type-post"
   itemscope
@@ -1358,6 +1225,86 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%85%B6%E4%BB%96/" rel="tag">其他</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-snabbdom/snabbdom"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/15/snabbdom/snabbdom/"
+    >snabbdom</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/15/snabbdom/snabbdom/" class="article-date">
+  <time datetime="2021-07-15T07:37:29.000Z" itemprop="datePublished">2021-07-15</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>mkdir snabdom-demo</p>
+<p>cd snabdom-demo</p>
+<p>//创建package</p>
+<p>npm init -y</p>
+<p>//本地安装parcel</p>
+<p>npm install parcel-bundler -D</p>
+<p>配置scripts</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;scripts&quot;</span> :&#123;</span><br><span class="line"><span class="string">&quot;dev&quot;</span> :<span class="string">&quot;parcel index.html -- open&quot;</span>,</span><br><span class="line"><span class="string">&quot;build&quot;</span>: <span class="string">&quot;parcel build index.html&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在根目录创建index.html文件  来引入</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./src/01-basicusage.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>npm install <a href="mailto:&#x73;&#110;&#97;&#98;&#x62;&#100;&#x6f;&#x6d;&#x40;&#50;&#46;&#49;&#x2e;&#48;">&#x73;&#110;&#97;&#98;&#x62;&#100;&#x6f;&#x6d;&#x40;&#50;&#46;&#49;&#x2e;&#48;</a></p>
+<p>h(‘!’) //这是 一个空的节点</p>
+<h4 id="snabbdom模块的使用"><a href="#snabbdom模块的使用" class="headerlink" title="snabbdom模块的使用"></a>snabbdom模块的使用</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 导入模块</span></span><br><span class="line"><span class="keyword">import</span> &#123; styleModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/style&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; eventListenersModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/eventlisteners&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 注册模块</span></span><br><span class="line"><span class="keyword">const</span> patch = init([</span><br><span class="line">  styleModule,</span><br><span class="line">  eventListenersModule</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 使用h() 函数的第二个参数传入模块中使用的数据（对象）</span></span><br><span class="line"><span class="keyword">let</span> vnode = h(<span class="string">&#x27;div&#x27;</span>, [</span><br><span class="line">  h(<span class="string">&#x27;h1&#x27;</span>, &#123; <span class="attr">style</span>: &#123; <span class="attr">backgroundColor</span>: <span class="string">&#x27;red&#x27;</span> &#125; &#125;, <span class="string">&#x27;Hello World&#x27;</span>),</span><br><span class="line">  h(<span class="string">&#x27;p&#x27;</span>, &#123; <span class="attr">on</span>: &#123; <span class="attr">click</span>: eventHandler &#125; &#125;, <span class="string">&#x27;Hello P&#x27;</span>)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">eventHandler</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;别点我，疼&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> app = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#app&#x27;</span>)</span><br><span class="line"><span class="comment">// 生成虚拟dom 根据diff算法更新dom</span></span><br><span class="line">patch(app, vnode)</span><br></pre></td></tr></table></figure>
+
+
+<p>snabbdom源码学习</p>
+<p>snabbdom源码地址</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/snabbdom/snabbdom">https://github.com/snabbdom/snabbdom</a></p>
+<p>Snabbdom的核心<br>init() 设置模块，创建patch()函数<br>使用h()函数创建JavaScript对象(VNode)描述真实DOM<br>patch()比较新旧两个Vnode<br>把变化的内容更新到真实DOM树</p>
+<h4 id="一个简单的例子"><a href="#一个简单的例子" class="headerlink" title="一个简单的例子"></a>一个简单的例子</h4><p>总体代码在<a target="_blank" rel="noopener" href="https://github.com/Levxn7/lagouhomework/tree/master/part3/fed-e-task-03-01/third">https://github.com/Levxn7/lagouhomework/tree/master/part3/fed-e-task-03-01/third</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; init &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/init&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; h &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/h&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; styleModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/style&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; eventListenersModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/eventlisteners&#x27;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> patch = init([styleModule, eventListenersModule]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> vnode;</span><br><span class="line"><span class="keyword">let</span> sortBy = <span class="string">&quot;rank&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> data = []</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">  <span class="keyword">let</span> a = &#123;</span><br><span class="line">    <span class="attr">rank</span>: i,</span><br><span class="line">    <span class="attr">title</span>: <span class="string">&#x27;title&#x27;</span> + i,</span><br><span class="line">    <span class="attr">desc</span>: <span class="string">&#x27;this is desc&#x27;</span> + i</span><br><span class="line">  &#125;</span><br><span class="line">  data.push(a)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">change</span>(<span class="params">prop</span>) </span>&#123;</span><br><span class="line">  data.sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (a[prop] &gt; b[prop]) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (a[prop] &lt; b[prop]) &#123;</span><br><span class="line">      <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  vnode = patch(vnode, view(data));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> a = &#123;</span><br><span class="line">    <span class="attr">rank</span>: data.length,</span><br><span class="line">    <span class="attr">title</span>: <span class="string">&#x27;title&#x27;</span> + data.length,</span><br><span class="line">    <span class="attr">desc</span>: <span class="string">&#x27;this is desc&#x27;</span> + data.length</span><br><span class="line">  &#125;</span><br><span class="line">  data.unshift(a)</span><br><span class="line">  vnode = patch(vnode, view(data));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">remove</span>(<span class="params">index</span>) </span>&#123;</span><br><span class="line">  data.splice(index, <span class="number">1</span>)</span><br><span class="line">  vnode = patch(vnode, view(data));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">movieView</span>(<span class="params">movie,index</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> h(</span><br><span class="line">    <span class="string">&quot;div.li&quot;</span>,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">key</span>: movie.rank,</span><br><span class="line">      <span class="attr">style</span>: &#123;</span><br><span class="line">        <span class="attr">padding</span>: <span class="string">&#x27;0 16px&#x27;</span>,</span><br><span class="line">        <span class="attr">height</span>: <span class="string">&#x27;50px&#x27;</span>,</span><br><span class="line">        <span class="attr">display</span>: <span class="string">&#x27;flex&#x27;</span>,</span><br><span class="line">        <span class="attr">alignItems</span>: <span class="string">&#x27;center&#x27;</span>,</span><br><span class="line">        <span class="attr">borderBottom</span>: <span class="string">&#x27;1px solid #ccc&#x27;</span>,</span><br><span class="line">        <span class="attr">justifyContent</span>: <span class="string">&#x27;space-between&#x27;</span>,</span><br><span class="line">        <span class="attr">opacity</span>: <span class="string">&#x27;0&#x27;</span>,</span><br><span class="line">        <span class="attr">delayed</span>: &#123; <span class="attr">transition</span>: <span class="string">&#x27;opacity 2s&#x27;</span>, <span class="attr">opacity</span>: <span class="string">&#x27;1&#x27;</span> &#125;,</span><br><span class="line">        <span class="attr">remove</span>: &#123; <span class="attr">transition</span>: <span class="string">&#x27;opacity 0.3s&#x27;</span>, <span class="attr">opacity</span>: <span class="string">&#x27;0&#x27;</span> &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    [</span><br><span class="line">      h(<span class="string">&quot;div&quot;</span>, &#123; <span class="attr">style</span>: &#123; <span class="attr">fontWeight</span>: <span class="string">&quot;bold&quot;</span> &#125; &#125;, movie.rank),</span><br><span class="line">      h(<span class="string">&quot;div&quot;</span>, movie.title),</span><br><span class="line">      h(<span class="string">&quot;div&quot;</span>, movie.desc),</span><br><span class="line">      h(</span><br><span class="line">        <span class="string">&quot;button.btn.rm-btn&quot;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">on</span>: &#123;</span><br><span class="line">            <span class="attr">click</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">              remove(index);</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;删除&quot;</span></span><br><span class="line">      ),</span><br><span class="line">    ]</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">view</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> h(<span class="string">&quot;div&quot;</span>, [</span><br><span class="line">    h(<span class="string">&quot;h1&quot;</span>, <span class="string">&quot;Top 10 movies&quot;</span>),</span><br><span class="line">    h(<span class="string">&quot;div&quot;</span>, [</span><br><span class="line">      h(<span class="string">&quot;button.add&quot;</span>, &#123; <span class="attr">on</span>: &#123; <span class="attr">click</span>: add &#125; &#125;, <span class="string">&quot; 添加 &quot;</span>),</span><br><span class="line">      <span class="string">&quot;排序方式: &quot;</span>,</span><br><span class="line">      h(<span class="string">&quot;span.btn-group&quot;</span>, [</span><br><span class="line">        h(</span><br><span class="line">          <span class="string">&quot;button.rank&quot;</span>,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">class</span>: &#123; <span class="attr">active</span>: sortBy === <span class="string">&quot;rank&quot;</span> &#125;,</span><br><span class="line">            <span class="attr">on</span>: &#123;</span><br><span class="line">              <span class="attr">click</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">                change(<span class="string">&quot;rank&quot;</span>);</span><br><span class="line">              &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="string">&quot; Rank &quot;</span></span><br><span class="line">        ),</span><br><span class="line">        h(</span><br><span class="line">          <span class="string">&quot;button.title&quot;</span>,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">class</span>: &#123; <span class="attr">active</span>: sortBy === <span class="string">&quot;title&quot;</span> &#125;,</span><br><span class="line">            <span class="attr">on</span>: &#123;</span><br><span class="line">              <span class="attr">click</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">                change(<span class="string">&quot;title&quot;</span>);</span><br><span class="line">              &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="string">&quot; Title &quot;</span></span><br><span class="line">        ),</span><br><span class="line">        h(</span><br><span class="line">          <span class="string">&quot;button.desc&quot;</span>,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">class</span>: &#123; <span class="attr">active</span>: sortBy === <span class="string">&quot;desc&quot;</span> &#125;,</span><br><span class="line">            <span class="attr">on</span>: &#123;</span><br><span class="line">              <span class="attr">click</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">                change(<span class="string">&quot;desc&quot;</span>);</span><br><span class="line">              &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="string">&quot; Description &quot;</span></span><br><span class="line">        ),</span><br><span class="line">      ]),</span><br><span class="line">    ]),</span><br><span class="line">    h(</span><br><span class="line">      <span class="string">&quot;div.list&quot;</span>,</span><br><span class="line">      &#123; <span class="attr">style</span>: &#123; <span class="attr">height</span>: <span class="string">&quot;8px&quot;</span> &#125; &#125;,</span><br><span class="line">      data.map(movieView)</span><br><span class="line">    ),</span><br><span class="line">  ]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> addEl = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#app&#x27;</span>);</span><br><span class="line">vnode = patch(addEl, view(data));</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/snabbdom/" rel="tag">snabbdom</a></li></ul>
 
     </footer>
   </div>
