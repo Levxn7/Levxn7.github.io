@@ -1,6 +1,6 @@
 ---
 title: 手写一个Promise的内部基本实现
-date: 2021-05-26 15:53:41
+date: 2021-12-06 15:53:41
 categories: 
 - 前端进阶笔记
 tags: 

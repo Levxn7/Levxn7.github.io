@@ -1,11 +1,12 @@
 ---
-title: modules
-date: 2021-06-08 12:01:47
+title: 模块化
+date: 2022-01-11 12:01:47
 categories: 
 - 前端进阶笔记
 tags: 
-- modules
 - 模块化
+- CommonJS
+- ES Modules
 ---
 #### 模块化
 内容概要

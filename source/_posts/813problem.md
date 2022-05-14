@@ -16,7 +16,7 @@ tags:
 remote: Support for password authentication was removed on August 13, 2021. Please use a personal access token instead.
 ```
 这个问题其实很好解决,网上有很多人分享了解决过程,解决完上述报错,一般还会引起一系列报错,国内网络上都有很多人分享解决办法,这里不多赘述.
-参考[!https://www.codepeople.cn/2021/09/02/github-problem/]
+参考<https://www.codepeople.cn/2021/09/02/github-problem/>
 
 但是修改之后hexo编译后也是犹豫8.13的问题同步不到github.io上面去,怎么办呢
 
@@ -30,11 +30,16 @@ ssh -v git@github.com
 //　　这时候再输入
 ssh-agent -s
 /*然后会提示类似的信息：　　
-SSH_AUTH_SOCK=/tmp/ssh-GTpABX1a05qH/agent.404; export SSH_AUTH_SOCK;  　　SSH_AGENT_PID=13144; export SSH_AGENT_PID;  　　echo Agent pid 13144;
+SSH_AUTH_SOCK=/tmp/ssh-GTpABX1a05qH/agent.404; export SSH_AUTH_SOCK;  　　
+SSH_AGENT_PID=13144; export SSH_AGENT_PID;  　　
+echo Agent pid 13144;
 */
 ssh-add ~/.ssh/id_rsa
-/*这时候应该会提示：　　Identity added: ...（这里是一些ssh key文件路径的信息）　　（注意）如果出现错误提示：　　Could not open a connection to your authentication agent.　　请执行命令：eval `ssh-agent -s`后继续执行命令 ssh-add ~/.ssh/id_rsa，这时候一般没问题啦。
-将里面的内容复制，进入你的github账号，在settings下，SSH and GPG keys下new SSH key，title随便取一个名字，然后将id_rsa.pub里的内容复制到Key中，完成后Add SSH Key。
+/*这时候应该会提示：　　Identity added: ...（这里是一些ssh key文件路径的信息）　　
+（注意）如果出现错误提示：　　Could not open a connection to your authentication agent.　　
+请执行命令：eval `ssh-agent -s`后继续执行命令 ssh-add ~/.ssh/id_rsa，这时候一般没问题啦。
+将里面的内容复制，进入你的github账号，在settings下，SSH and GPG keys下new SSH key，
+title随便取一个名字，然后将id_rsa.pub里的内容复制到Key中，完成后Add SSH Key。
 */
 ssh -T git@github.com
 /*提示：Hi xxx! You've successfully authenticated, but GitHub does not provide shell access.
