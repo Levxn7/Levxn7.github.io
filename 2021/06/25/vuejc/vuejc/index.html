@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>vue基础 |  就花荫</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    <link rel="alternate" href="/atom.xml" title="就花荫" type="application/atom+xml">
+</head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-vuejc/vuejc"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  vue基础
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/06/25/vuejc/vuejc/" class="article-date">
+  <time datetime="2021-06-25T04:58:56.000Z" itemprop="datePublished">2021-06-25</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.2k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">8 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h4><h5 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h5><p>每个 Vue 实例在被创建时都要经过一系列的初始化过程——例如，需要设置数据监听、编译模板、将实例挂载到 DOM 并在数据变化时更新 DOM 等。同时在这个过程中也会运行一些叫做生命周期钩子的函数，这给了用户在不同阶段添加自己的代码的机会。比如说created ,mounted ,updated等钩子函数。<br><img src="/2021/06/25/vuejc/vuejc/1408390-20190502182244199-1878074396.png" alt="vue生命周期"></p>
+<h5 id="内置指令"><a href="#内置指令" class="headerlink" title="内置指令"></a>内置指令</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">1.v-bind:响应并更新DOM特性; 例如：v-bind:href v-bind:class v-bind:title 等等; 主要用法是绑定属性，动态更新HTML元素上的属性；</span></span><br><span class="line"><span class="comment">2.v-on:用于监听DOM事件; 例如:v-on:click v-on:keyup </span></span><br><span class="line"><span class="comment">3.v-model:数据双向绑定;用于表单输入等;例如:&lt; input v-model= &quot;message&quot;&gt;</span></span><br><span class="line"><span class="comment">4.v-show:条件渲染指令,为DOM设置css的style属性</span></span><br><span class="line"><span class="comment">5.v-if:条件渲染指令,动态在DOM内添加或删除DOM元素</span></span><br><span class="line"><span class="comment">6、v-else：条件渲染指令，必须跟v-if成对使用</span></span><br><span class="line"><span class="comment">7、v-else-if：判断多层条件，必须跟v-if成对使用；</span></span><br><span class="line"><span class="comment">8、v-text：更新元素的textContent；例如：&lt; span v-text=&quot;msg&quot;&gt;&lt;/ span&gt;等同于 &lt; span&gt;&#123;&#123;msg&#125;&#125; &lt;/ span&gt;；</span></span><br><span class="line"><span class="comment">9、v-html：更新元素的innerHTML；会把标签名也带上。</span></span><br><span class="line"><span class="comment">10、v-for：循环指令；</span></span><br><span class="line"><span class="comment">11、v-cloak：不需要表达式，这个指令保持在元素上直到关联实例结束编译； v-cloak 是一个解决初始化慢导致页面闪动的最佳实践 ；</span></span><br><span class="line"><span class="comment">12、v-once：也是一个不需要表达式的指令，作用是定义它的元素或组件只渲染一次，包括元素或组件的所有子节点。首次渲染后，不再随数据的变化重新渲染，将被视为静态内容； v-once 在业务中也很少使用，当你需要进一步优化性能时，可能会用到。 </span></span><br><span class="line"><span class="comment">13、v-pre：不需要表达式，跳过这个元素以及子元素的编译过程，以此来加快整个项目的编译速度；例如： &lt; span v-pre&gt;&#123;&#123; this will not be /compiled &#125;&#125; &lt;/ span&gt;；</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p>具体使用可参考: <a target="_blank" rel="noopener" href="https://my.oschina.net/u/3970421/blog/2964249">https://my.oschina.net/u/3970421/blog/2964249</a></p>
+<h5 id="计算属性"><a href="#计算属性" class="headerlink" title="计算属性"></a>计算属性</h5><p>计算属性就是当其依赖属性的值发生变化时，这个属性的值会自动更新，与之相关的DOM部分也会同步自动更新。对于任何复杂逻辑，你都应当使用计算属性。</p>
+<p>计算属性和侦听器<br>Class和Style绑定<br>条件渲染/列表渲染表单输入绑定</p>
+<p>以上内容的官网解释: <a target="_blank" rel="noopener" href="https://cn.vuejs.org/v2/guide/computed.html">https://cn.vuejs.org/v2/guide/computed.html</a></p>
+<p>还有组件 插槽 插件 混入等功能</p>
+<h5 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h5><p>Vue Router 是 Vue.js 官方的路由管理器。它和 Vue.js 的核心深度集成，让构建单页面应用变得易如反掌。路由实际上就是可以理解为指向，就是我在页面上点击一个按钮需要跳转到对应的页面，这就是路由跳转；</p>
+<p>首先我们来学习三个单词（route，routes，router）：<br>route：首先它是个单数，译为路由，即我们可以理解为单个路由或者某一个路由；<br>routes：它是个复数，表示多个的集合才能为复数；即我们可以理解为多个路由的集合，JS中表示多种不同状态的集合的形式只有数组和对象两种，事实上官方定义routes是一个数组；所以我们记住了，routes表示多个数组的集合；<br>router：译为路由器，上面都是路由，这个是路由器，我们可以理解为一个容器包含上述两个或者说它是一个管理者，负责管理上述两个；举个常见的场景的例子：当用户在页面上点击按钮的时候，这个时候router就会去routes中去查找route，就是说路由器会去路由集合中找对应的路由；</p>
+<h5 id="路由的简单使用"><a href="#路由的简单使用" class="headerlink" title="路由的简单使用"></a>路由的简单使用</h5><p>通过vue.use来注册组件<br>如果是一个函数, 直接调用函数做组件, 如果是对象的话, 会调用对象的install方法来注册插件</p>
+<p><strong>创建路由的步骤</strong><br>1 路由规则<br>2 创建路由对象 传入路由规则<br>3 mainjs引入<br>4 app.vue添加站位<br>5 创建连接</p>
+<p><strong>动态路由</strong><br>懒加载<br>推荐使用props来传参（还有$route.params.id）</p>
+<p><strong>嵌套路由</strong><br>很多时候我们的页面结构决定了我们可能需要嵌套路由，比如当我们进入主页之后有分类，然后当选择其中一个分类之后进入对应的详情，这个时候我们就可以用到嵌套路由；官方文档中给我们提供了一个children属性，这个属性是一个数组类型，里面实际放着一组路由；这个时候父子关系结构就出来了，所以children属性里面的是路由相对来说是children属性外部路由的子路由；</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> routes=[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">path</span>:<span class="string">&#x27;/page1&#x27;</span>,</span><br><span class="line">        <span class="attr">component</span>:page1,</span><br><span class="line">        <span class="attr">children</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">path</span>: <span class="string">&quot;phone&quot;</span>,<span class="comment">// /page1/phone</span></span><br><span class="line">                <span class="attr">component</span>: phone</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">path</span>: <span class="string">&quot;computer&quot;</span>, <span class="comment">// /page1/computer</span></span><br><span class="line">                <span class="attr">component</span>: computer</span><br><span class="line">            &#125;,</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p><strong>路由导航两种方式</strong></p>
+<blockquote>
+<p>标签导航</p>
+</blockquote>
+<p>标签导航<router-link><router-link>是通过转义为<a></a>标签进行跳转，其中router-link标签中的to属性会被转义为a标签中的href属性；</router-link></router-link></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//跳转到名为user路由，并传递参数userId</span><br><span class="line"><span class="tag">&lt;<span class="name">router-link</span> <span class="attr">:to</span>=<span class="string">&quot;&#123; name: &#x27;user&#x27;, params: &#123; userId: 123 &#125;&#125;&quot;</span>&gt;</span>User<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>编程式导航</p>
+</blockquote>
+<p>我们可以通过this.$router.push()这个方法来实现编程式导航，当然也可以实现参数传递，这种编程式导航一般是用于按钮点击之后跳转</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">router.push(&#123; <span class="attr">path</span>: <span class="string">&#x27;/user/:userId&#x27;</span>, <span class="attr">params</span>: &#123; <span class="attr">userId</span>: <span class="number">123</span> &#125;&#125;)</span><br><span class="line"><span class="comment">//push replace go(-2) 等方法</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="hash模式和history模式"><a href="#hash模式和history模式" class="headerlink" title="hash模式和history模式"></a>hash模式和history模式</h5><p>· Hash模式式是基于锚点，以及onhashchange事件, 需要使用问号拼接<br>例: https:/music.163.com/#/playlist?id=3102961863</p>
+<p>· History模式是基于 HTML5 中的 History API（需要服务端配置支持）<br>history.pushState() IE10以后才支持<br>history.replaceState()<br>例: <a target="_blank" rel="noopener" href="https://music.163.com/playlist/3102961863">https://music.163.com/playlist/3102961863</a></p>
+<p><strong>实现原理</strong><br>Hash模式<br>·URL中#后面的内容作为路径地址<br>·监听hashchange 事件<br>·根据当前路由地址找到对应组件重新渲染<br>History模式<br>·通过history.pushState()方法改变地址栏监听popstate事件<br>·根据当前路由地址找到对应组件重新渲染</p>
+<p><strong>模拟实现</strong><br>手写router 参考视频3-1-2  10-19小节 (部分解释以注释的方式写在以下代码块中)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> _Vue = <span class="literal">null</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">VueRouter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> install (vue) &#123;</span><br><span class="line">    <span class="comment">// 1 判断当前插件是否被安装</span></span><br><span class="line">    <span class="keyword">if</span> (VueRouter.install.installed) <span class="keyword">return</span></span><br><span class="line">    VueRouter.install.installed = <span class="literal">true</span></span><br><span class="line">    <span class="comment">// 2 把Vue的构造函数记录在全局</span></span><br><span class="line">    _Vue = vue</span><br><span class="line">    <span class="comment">// 3 把创建Vue的实例传入的router对象注入到Vue实例</span></span><br><span class="line">    <span class="comment">// _Vue.prototype.$router = this.$options.router</span></span><br><span class="line">    _Vue.mixin(&#123;</span><br><span class="line">      beforeCreate () &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.$options.router) &#123;</span><br><span class="line">          _Vue.prototype.$router = <span class="built_in">this</span>.$options.router</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title">constructor</span> (<span class="params">options</span>) &#123;</span><br><span class="line">    <span class="built_in">this</span>.mode = options.mode || <span class="string">&quot;hash&quot;</span></span><br><span class="line">    <span class="built_in">this</span>.routes = options.routes</span><br><span class="line">    <span class="built_in">this</span>.routeMap = &#123;&#125;</span><br><span class="line">    <span class="comment">// observable</span></span><br><span class="line">    <span class="built_in">this</span>.data = _Vue.observable(&#123;</span><br><span class="line">        <span class="comment">//存储当前的路由地址, 默认是/</span></span><br><span class="line">      <span class="attr">current</span>: <span class="string">&#x27;/&#x27;</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="built_in">this</span>.init()</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//包装方法</span></span><br><span class="line">  init () &#123;</span><br><span class="line">    <span class="built_in">this</span>.createRouteMap()</span><br><span class="line">    <span class="built_in">this</span>.initComponents(_Vue)</span><br><span class="line">    <span class="built_in">this</span>.initEvent()</span><br><span class="line">  &#125;</span><br><span class="line">  createRouteMap () &#123;</span><br><span class="line">    <span class="comment">//遍历所有路由信息，把组件和路由的映射记录到 routeMap 对象中</span></span><br><span class="line">    <span class="built_in">this</span>.routes.forEach( <span class="function"><span class="params">route</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">this</span>.routeMap[route.path] = route.component</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">initComponents</span>(<span class="params">Vue</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//创建 router-link 和 router-view 组件</span></span><br><span class="line">    <span class="keyword">const</span> self = <span class="built_in">this</span></span><br><span class="line">    Vue.component(<span class="string">&#x27;router-link&#x27;</span>,&#123;</span><br><span class="line">      <span class="attr">props</span>:&#123;</span><br><span class="line">        <span class="attr">to</span>:<span class="built_in">String</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">//运行时版本的解决办法</span></span><br><span class="line">      <span class="function"><span class="title">render</span>(<span class="params">h</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> h(<span class="string">&quot;a&quot;</span>,&#123;</span><br><span class="line">          <span class="attr">attrs</span>:&#123;</span><br><span class="line">            <span class="attr">href</span>: self.mode === <span class="string">&quot;history&quot;</span> ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;#&quot;</span> + <span class="built_in">this</span>.to</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="comment">//给a标签注册事件</span></span><br><span class="line">          <span class="attr">on</span>:&#123;</span><br><span class="line">            <span class="attr">click</span>:self.mode === <span class="string">&quot;history&quot;</span> ? <span class="built_in">this</span>.clickhander : <span class="built_in">this</span>.hashClickhander</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,[<span class="built_in">this</span>.$slots.default])</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">methods</span>:&#123;</span><br><span class="line">        <span class="function"><span class="title">clickhander</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            <span class="comment">//参数: 事件 网页标题, 地址</span></span><br><span class="line">          history.pushState(&#123;&#125;,<span class="string">&quot;&quot;</span>,<span class="built_in">this</span>.to)</span><br><span class="line">          <span class="built_in">this</span>.$router.data.current = <span class="built_in">this</span>.to</span><br><span class="line">          e.preventDefault()</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="function"><span class="title">hashClickhander</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">          <span class="built_in">this</span>.$router.data.current=<span class="built_in">this</span>.to</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 运行时版本的vue不支持模版</span></span><br><span class="line">      <span class="comment">// template:&quot;&lt;a :href=&#x27;to&#x27;&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/a&gt;&quot;</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    Vue.component(<span class="string">&#x27;router-view&#x27;</span>,&#123;</span><br><span class="line">      <span class="function"><span class="title">render</span>(<span class="params">h</span>)</span>&#123;</span><br><span class="line">          <span class="comment">//获取路由组件 h帮我们转换成虚拟dom</span></span><br><span class="line">        <span class="keyword">let</span> cm = self.routeMap[self.data.current]</span><br><span class="line">        <span class="keyword">return</span> h(cm)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">initEvent</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      </span><br><span class="line">    <span class="comment">//注册 popstate 事件，当路由地址发生变化，重新记录当前的路径</span></span><br><span class="line">    <span class="keyword">const</span> eventType = <span class="built_in">this</span>.mode === <span class="string">&#x27;history&#x27;</span> ? <span class="string">&#x27;popstate&#x27;</span> : <span class="string">&#x27;hashchange&#x27;</span></span><br><span class="line">    <span class="keyword">const</span> handle = <span class="built_in">this</span>.mode === <span class="string">&#x27;history&#x27;</span> ? <span class="built_in">this</span>.getLocation : <span class="built_in">this</span>.getHash</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(eventType,handle.bind(<span class="built_in">this</span>))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">getLocation</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.data.current = <span class="built_in">window</span>.location.pathname</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">getHash</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> href = <span class="built_in">window</span>.location.href</span><br><span class="line">    <span class="keyword">const</span> index = href.indexOf(<span class="string">&#x27;#&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="string">&#x27;/&#x27;</span></span><br><span class="line">    <span class="built_in">this</span>.data.current = href.slice(index + <span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享给小伙伴吧~
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://levxn7.github.io/2021/06/25/vuejc/vuejc/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/12/vuecode/vuecode/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            vue源码琐碎知识点
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/06/07/gulp/gulp/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">实现一个gulp模块并封装成cli</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "V4JzJezdlC8YmlWHNRVsWAJW-gzGzoHsz",
+    app_key: "pae1e1Q7YAqdX8er58Q7G7Cv",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2021-2024
+        <i class="ri-heart-fill heart_icon"></i> levxn7
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/xian.png" alt="就花荫"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/zfb.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wx.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+ 
+<script src="/js/clickLove.js"></script>
+ 
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    <div id="music">
+    
+    
+    
+    <iframe frameborder="no" border="1" marginwidth="0" marginheight="0" width="200" height="52"
+        src="//music.163.com/outchain/player?type=2&id=22707008&auto=1&height=32"></iframe>
+</div>
+
+<style>
+    #music {
+        position: fixed;
+        right: 15px;
+        bottom: 0;
+        z-index: 998;
+    }
+</style>
+    
+  </div>
+</body>
+
+</html>

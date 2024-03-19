@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>实现一个gulp模块并封装成cli |  就花荫</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    <link rel="alternate" href="/atom.xml" title="就花荫" type="application/atom+xml">
+</head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-gulp/gulp"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  实现一个gulp模块并封装成cli
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/06/07/gulp/gulp/" class="article-date">
+  <time datetime="2021-06-07T04:47:14.000Z" itemprop="datePublished">2021-06-07</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.9k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">13 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="一个简单的gulp案例"><a href="#一个简单的gulp案例" class="headerlink" title="一个简单的gulp案例"></a>一个简单的gulp案例</h4><p>接下来我们通过一个实际的案例, 来看如何使用gulp完成一个网页应用自动化构建工作流<br>首先拿到一个需要构建的项目, 打开项目<br>打开项目: code pages-boilerplate<br>安装gulp: yarn add gulp –dev<br>新建gulpfile.js文件<br>导入gulp的api</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; src, dest &#125; = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>注意: public下是不需要构建加工的文件，src是开发阶段的代码 都需要构建，sass es6都需要构建 图片需要压缩</p>
+<h5 id="样式的编译"><a href="#样式的编译" class="headerlink" title="样式的编译"></a>样式的编译</h5><p>定义一个style, 然后导出</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> style = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/assets/styles/*.scss&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;) <span class="comment">//base校准保存路径</span></span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    style,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>yarn gulp style  经过测试可以打包成功</p>
+<p>安装转换流: yarn add gulp-sass –dev（内部会安装node-sass）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sass = <span class="built_in">require</span>(<span class="string">&#x27;gulp-sass&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>使用转换: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> style = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/assets/styles/*.scss&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(sass(&#123; <span class="attr">outputstyle</span>: <span class="string">&#x27;expanded&#x27;</span>&#125;))<span class="comment">//完全展开的形式</span></span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>yarn gulp style  经过测试可以打包成功</p>
+<blockquote>
+<p>注意: sass会认为_开头的文件是被引用的文件 所以不会进行转换<br> sass({ outputstyle: ‘expanded’}) 是完全展开的格式, 否则 } 会在 ；后面 而不是另起一行, 如<br> <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.icon-aperture:before &#123;</span><br><span class="line"> <span class="attr">content</span>: <span class="string">&#x27;\e900&#x27;</span>; &#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h5 id="脚本的编译"><a href="#脚本的编译" class="headerlink" title="脚本的编译"></a>脚本的编译</h5><p>定义一个script 然后导出</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> script = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/assets/scripts/*.js&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    script,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>安装babel环境: yarn add gulp-babel –dev<br>安装转换流: yarn add @babel/core @babel/preset-env –dev</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> babel = <span class="built_in">require</span>(<span class="string">&#x27;gulp-babel&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> script = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/assets/scripts/*.js&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(babel(&#123; <span class="attr">presets</span>: [<span class="string">&#x27;@babel/preset-env&#x27;</span>] &#125;))</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>里面这句话不要丢, babel只是一个平台不做转换, presets才是插件, 是新特性的一个整体的打包, s使用它来做转换, 如果不写这句话输出的文件几乎不会变格式</p>
+</blockquote>
+<p>yarn gulp script</p>
+<h5 id="模板文件的编译"><a href="#模板文件的编译" class="headerlink" title="模板文件的编译"></a>模板文件的编译</h5><p>定义一个page, 然后导出</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> page = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/**/*.html&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;) </span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    page</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>安装转换流: yarn add gulp-swig –dev</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> swig = <span class="built_in">require</span>(<span class="string">&#x27;gulp-swig&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> page = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/**/*.html&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;) <span class="comment">// 通配符可以这样写 &#x27;src/** / * .html&#x27;</span></span><br><span class="line">    .pipe(swig())</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>把数据部分的数组放在data中导入，或使用json文件式导入</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  <span class="attr">menus</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;Home&#x27;</span>,</span><br><span class="line">      <span class="attr">icon</span>: <span class="string">&#x27;aperture&#x27;</span>,</span><br><span class="line">      <span class="attr">link</span>: <span class="string">&#x27;index.html&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;Features&#x27;</span>,</span><br><span class="line">      <span class="attr">link</span>: <span class="string">&#x27;features.html&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;About&#x27;</span>,</span><br><span class="line">      <span class="attr">link</span>: <span class="string">&#x27;about.html&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;Contact&#x27;</span>,</span><br><span class="line">      <span class="attr">link</span>: <span class="string">&#x27;#&#x27;</span>,</span><br><span class="line">      <span class="attr">children</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;Twitter&#x27;</span>,</span><br><span class="line">          <span class="attr">link</span>: <span class="string">&#x27;https://twitter.com/w_zce&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;About&#x27;</span>,</span><br><span class="line">          <span class="attr">link</span>: <span class="string">&#x27;https://weibo.com/zceme&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;divider&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;About&#x27;</span>,</span><br><span class="line">          <span class="attr">link</span>: <span class="string">&#x27;https://github.com/zce&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">pkg</span>: <span class="built_in">require</span>(<span class="string">&#x27;./package.json&#x27;</span>),</span><br><span class="line">  <span class="attr">date</span>: <span class="keyword">new</span> </span><br><span class="line">  <span class="built_in">Date</span>()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> page = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/**/*.html&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(plugins.swig(&#123; data &#125;))</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>yarn gulp page</p>
+<h5 id="组合任务"><a href="#组合任务" class="headerlink" title="组合任务"></a>组合任务</h5><p>因为三者没有任何牵连所以使用并行任务<br>引入parallel模块</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; src, dest, parallel, series, watch &#125; = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> compile = parallel(style, script, page)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    compile</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>yarn gulp compile 完成并行组合任务</p>
+<h5 id="图片和字体文件的处理"><a href="#图片和字体文件的处理" class="headerlink" title="图片和字体文件的处理"></a>图片和字体文件的处理</h5><p>安装依赖: yarn add gulp-imagemin –dev(c++模块下载二进制集会比较慢）<br>这个插件可以处理图片和字体文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> imagemin = <span class="built_in">require</span>(<span class="string">&#x27;gulp-imagemin&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> image = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/assets/images/**&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(imagemin())</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> font = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/assets/fonts/**&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(imagemin())</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    image,</span><br><span class="line">    font,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>yarn gulp image<br>yarn gulp font</p>
+<h5 id="其他文件以及文件清除"><a href="#其他文件以及文件清除" class="headerlink" title="其他文件以及文件清除"></a>其他文件以及文件清除</h5><p>其他文件就直接拷贝, 如不需要压缩的public文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pub = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;public/**&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;public&#x27;</span>&#125;)</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>清除原有的temp文件<br>安装依赖: yarn add del –dev(他不是gulp下的插件, 只不过是可以使用, 是个promise方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> del = <span class="built_in">require</span>(<span class="string">&#x27;del&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> clean = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> del([<span class="string">&#x27;temp&#x27;</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后和build串行, 确保先删除后添加temp文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> build = series(clean, parallel(compile, pub))</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="自动加载插件"><a href="#自动加载插件" class="headerlink" title="自动加载插件"></a>自动加载插件</h5><p>通过插件自动加载插件（禁止套娃喂）<br>安装依赖: yarn add gulp-load-plugins –dev</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// const sass = require(&#x27;gulp-sass&#x27;)</span></span><br><span class="line"><span class="comment">// const babel = require(&#x27;gulp-babel&#x27;)</span></span><br><span class="line"><span class="comment">// const swig = require(&#x27;gulp-swig&#x27;)</span></span><br><span class="line"><span class="comment">// const imagemin = require(&#x27;gulp-imagemin&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> loadPlugins = <span class="built_in">require</span>(<span class="string">&#x27;gulp-load-plugins&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> plugins = loadPlugins()</span><br></pre></td></tr></table></figure>
+<p>此时我们已经不需要引入一些插件了, 将下面的插件名都更换为plugins.xxx 如</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.pipe(plugins.swig())</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="热更新开发服务器"><a href="#热更新开发服务器" class="headerlink" title="热更新开发服务器"></a>热更新开发服务器</h5><p>热更新开发服务器用于去在开发阶段调试应用, 我们可以通过gulp去启动和管理这个服务器, 实现在代码修改过后能自动编译, 刷新页面, 这样可以大大效率<br>这个模块给我提供了一个服务器, 功能比较强大, 支持我们修改代码过后自动更新到浏览器查看效果, 它不是gulp的插件, 只不过是通过gulp管理而已</p>
+<p>安装依赖: yarn add browser-sync –dev</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> browserSync = <span class="built_in">require</span>(<span class="string">&#x27;browser-sync&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> bs = browserSync.create()</span><br></pre></td></tr></table></figure>
+<p>创建一个服务器</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">onst serve = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  bs.init(&#123;</span><br><span class="line">    <span class="attr">notify</span>: <span class="literal">false</span>, <span class="comment">//控制浏览器刚打开时 右上角的小提示</span></span><br><span class="line">    <span class="attr">port</span>: <span class="number">2080</span>, <span class="comment">//端口</span></span><br><span class="line">    <span class="comment">// open: false,  //false不自动打开浏览器</span></span><br><span class="line">    <span class="comment">// files: &#x27;dist/**&#x27;,  //字符串 被监听的文件路径</span></span><br><span class="line">    <span class="attr">server</span>: &#123;</span><br><span class="line">      <span class="attr">baseDir</span>: [<span class="string">&#x27;temp&#x27;</span>, <span class="string">&#x27;src&#x27;</span>, <span class="string">&#x27;public&#x27;</span>],</span><br><span class="line">      <span class="attr">routes</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;/node_modules&#x27;</span>: <span class="string">&#x27;node_modules&#x27;</span> <span class="comment">//配置路由便于查找html中没有转换的地址</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>yarn gulp serve</p>
+<h5 id="监听src变化以及构建过程优化"><a href="#监听src变化以及构建过程优化" class="headerlink" title="监听src变化以及构建过程优化"></a>监听src变化以及构建过程优化</h5><p>引入watch模块</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; src, dest, parallel, series, watch &#125; = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> serve = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  watch(<span class="string">&#x27;src/assets/styles/*.scss&#x27;</span>, style) <span class="comment">//监听, 有变化就执行后面的任务</span></span><br><span class="line">  watch(<span class="string">&#x27;src/assets/scripts/*.js&#x27;</span>, script)</span><br><span class="line">  watch(<span class="string">&#x27;src/*.html&#x27;</span>, page)</span><br><span class="line">  watch(<span class="string">&#x27;src/assets/images/**&#x27;</span>, image)</span><br><span class="line">  watch(<span class="string">&#x27;src/assets/fonts/**&#x27;</span>, font)</span><br><span class="line">  watch(<span class="string">&#x27;public/**&#x27;</span>, extra)</span><br><span class="line"></span><br><span class="line">  bs.init(&#123;</span><br><span class="line">    <span class="attr">notify</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">port</span>: <span class="number">2080</span>,</span><br><span class="line">    <span class="attr">server</span>: &#123;</span><br><span class="line">      <span class="attr">baseDir</span>: [<span class="string">&#x27;temp&#x27;</span>, <span class="string">&#x27;src&#x27;</span>, <span class="string">&#x27;public&#x27;</span>],</span><br><span class="line">      <span class="attr">routes</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;/node_modules&#x27;</span>: <span class="string">&#x27;node_modules&#x27;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>yarn gulp serve</p>
+<blockquote>
+<p>这里可能会因为swig模板引擎缓存的机制导致页面不会变化<br>此时需要额外将swig 选项中的cache设置为false<br>具体参考源代码72行</p>
+</blockquote>
+<h5 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h5><p>图片字体和不变的文件, 在开发阶段不需要一直重构, 会影响效率, 同事删除并行任务中的图片和字体</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//   watch(&#x27;src/assets/images/**&#x27;, image)</span></span><br><span class="line"><span class="comment">//   watch(&#x27;src/assets/fonts/**&#x27;, font)</span></span><br><span class="line"><span class="comment">//   watch(&#x27;public/**&#x27;, extra)</span></span><br></pre></td></tr></table></figure>
+
+<p>但是如果图片字体文件发生变化也要监视到</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">watch([</span><br><span class="line">  <span class="string">&#x27;src/assets/images/**&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;src/assets/fonts/**&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;public/**&#x27;</span></span><br><span class="line">], bs.reload)</span><br></pre></td></tr></table></figure>
+<p>如果给pipe加上reload, 就不需要bs中的files监视了, 如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> page = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> src(<span class="string">&#x27;src/**/*.html&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;src&#x27;</span>&#125;)</span><br><span class="line">    .pipe(plugins.swig(&#123; data &#125;))</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;temp&#x27;</span>))</span><br><span class="line">    .pipe(bs.reload(&#123; <span class="attr">stream</span>: <span class="literal">true</span> &#125;))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="useref文件引用处理"><a href="#useref文件引用处理" class="headerlink" title="useref文件引用处理"></a>useref文件引用处理</h5><p>会自动创建构建注释来处理, 会将路径中的文件打包到某文件中<br>安装依赖: yarn add gulp-useref –dev<br>这里的src接口针对的是temp路径下的文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> useref = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> src(<span class="string">&#x27;temp/*.html&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;temp&#x27;</span> &#125;)</span><br><span class="line">    .pipe(plugins.useref(&#123; <span class="attr">searchPath</span>: [<span class="string">&#x27;temp&#x27;</span>, <span class="string">&#x27;.&#x27;</span>] &#125;))</span><br><span class="line">    <span class="comment">// html js css</span></span><br><span class="line">    .pipe(plugins.if(<span class="regexp">/\.js$/</span>, plugins.uglify()))</span><br><span class="line">    .pipe(plugins.if(<span class="regexp">/\.css$/</span>, plugins.cleanCss()))</span><br><span class="line">    .pipe(plugins.if(<span class="regexp">/\.html$/</span>, plugins.htmlmin(&#123;</span><br><span class="line">      <span class="attr">collapseWhitespace</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">minifyCSS</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">minifyJS</span>: <span class="literal">true</span></span><br><span class="line">    &#125;)))</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;dist&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后对html css js进行压缩<br>安装依赖: yarn add gulp-htmlmin gulp-uglify gulp-clean-css –dev</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> useref = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> src(<span class="string">&#x27;temp/*.html&#x27;</span>, &#123; <span class="attr">base</span>: <span class="string">&#x27;temp&#x27;</span> &#125;)</span><br><span class="line">    .pipe(plugins.useref(&#123; <span class="attr">searchPath</span>: [<span class="string">&#x27;temp&#x27;</span>, <span class="string">&#x27;.&#x27;</span>] &#125;))</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;dist&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>判断是什么文件, 来决定后续的操作<br>安装判断依赖: yarn add gulp-if –dev</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.pipe(plugins.if(<span class="regexp">/\.js$/</span>, plugins.uglify()))</span><br><span class="line">.pipe(plugins.if(<span class="regexp">/\.css$/</span>, plugins.cleanCss()))</span><br><span class="line">.pipe(plugins.if(<span class="regexp">/\.html$/</span>, plugins.htmlmin(&#123;</span><br><span class="line">  <span class="attr">collapseWhitespace</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">minifyCSS</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">minifyJS</span>: <span class="literal">true</span></span><br><span class="line">&#125;))) <span class="comment">//这里是处理html的空白字符 还可以删除空属性 移除注释等 需要自己扩展</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果文件中没有注释, 就useref不成功, 因为useref过后会删除注释，所以第二次需要注意, 先compile再useref, 输入流和输出流不应在同一个目录下</p>
+</blockquote>
+<p>因为useref需要转换到别的文件夹  所以前面所有的转换（除字体图片等）先转换到temp 再useref到dist</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> build = series(clean, parallel(series(compile, useref), extra, image, font))</span><br></pre></td></tr></table></figure>
+
+<h5 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h5><p>构建任务完成后, 需要好好写导出, 让人理解<br>需要放在package.json的scripts里<br>需要在.gitignore中忽略temp dist文件</p>
+<h4 id="封装gulp"><a href="#封装gulp" class="headerlink" title="封装gulp"></a>封装gulp</h4><p>提取一个可复用的自动化构建工作流, 就是创建一个模块, 发布到仓库, 再使用就可以了</p>
+<!-- yarn global add zce-cli
+zce init nm zce-pages
+cd zce-pages
+创建一个git仓库
+新建一个文件（可以使用脚手架）
+git init
+git remote add origin https://xxxx.git
+git push -->
+
+<p>这里就使用我们刚刚建立的简单的gulp</p>
+<p>新建一个项目/仓库<br>提取gulp<br>code . -a(扩展一下）<br>将上面项目的gulpfile中的内容复制给index.js入口文件<br>将原项目中一大串依赖复制过来package.json中的dependencies中, 然后执行 yarn（这个是install）</p>
+<p>回到原项目中把gulpfile清空, 删除node-modules 和 package中的devDepandencies, 这时他就是一个干净的项目了<br>执行 yarn link 和 yarn link “你的模块名字”, 在 gulpfile 中写入导入文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="built_in">require</span>(<span class="string">&#x27;你的模块名字&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>执行 yarn (安装生产依赖）, 安装gulp-cli gulp, 并启动 yarn build, 开始排错</p>
+<p><strong>提取index中的data</strong><br>模块中新建pages.config.js来抽象一些不该被集成的东西, 如原项目中的data, 把数据放在这里面这个文件中<br>模块中修改</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> config = &#123;</span><br><span class="line">  <span class="comment">// default config</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> loadConfig = <span class="built_in">require</span>(<span class="string">`<span class="subst">$&#123;cwd&#125;</span>/pages.config.js`</span>)</span><br><span class="line">  config = <span class="built_in">Object</span>.assign(&#123;&#125;, config, loadConfig)</span><br><span class="line">&#125; <span class="keyword">catch</span> (e) &#123;&#125;</span><br><span class="line">    <span class="comment">//使用data的地方也要修改</span></span><br><span class="line">    .pipe(plugins.swig(&#123; <span class="attr">data</span>: config.data, <span class="attr">defaults</span>: &#123; <span class="attr">cache</span>: <span class="literal">false</span> &#125; &#125;))</span><br><span class="line">    <span class="comment">//找不到依赖时也可以这样引入</span></span><br><span class="line">    .pipe(plugins.babel(&#123; <span class="attr">presets</span>: [<span class="built_in">require</span>(<span class="string">&#x27;@babel/preset-env&#x27;</span>)] &#125;))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>yarn build可以成功, 基本完成</p>
+<p><strong>抽象路径配置</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> config = &#123;</span><br><span class="line">  <span class="comment">// default config</span></span><br><span class="line">  <span class="comment">//这个build也要复制到配置文件pages.config.js一份</span></span><br><span class="line">  <span class="attr">build</span>: &#123;</span><br><span class="line">    <span class="attr">src</span>: <span class="string">&#x27;src&#x27;</span>,</span><br><span class="line">    <span class="attr">dist</span>: <span class="string">&#x27;dist&#x27;</span>,</span><br><span class="line">    <span class="attr">temp</span>: <span class="string">&#x27;temp&#x27;</span>,</span><br><span class="line">    <span class="attr">public</span>: <span class="string">&#x27;public&#x27;</span>,</span><br><span class="line">    <span class="attr">paths</span>: &#123;</span><br><span class="line">      <span class="attr">styles</span>: <span class="string">&#x27;assets/styles/*.scss&#x27;</span>,</span><br><span class="line">      <span class="attr">scripts</span>: <span class="string">&#x27;assets/scripts/*.js&#x27;</span>,</span><br><span class="line">      <span class="attr">pages</span>: <span class="string">&#x27;*.html&#x27;</span>,</span><br><span class="line">      <span class="attr">images</span>: <span class="string">&#x27;assets/images/**&#x27;</span>,</span><br><span class="line">      <span class="attr">fonts</span>: <span class="string">&#x27;assets/fonts/**&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">    <span class="comment">//下面的路径全都修改为这种</span></span><br><span class="line">    .pipe(dest(config.build.temp))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>包装gulp cli, 就可以删除gulpfile了</p>
+<p>在bin下的js中写入这些是为了提取命令行中的很长的重复部分, 这样提取之后就可以直接使用 ‘你的cli名’ build来启动了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env node</span></span><br><span class="line"></span><br><span class="line">process.argv.push(<span class="string">&#x27;--cwd&#x27;</span>)</span><br><span class="line">process.argv.push(process.cwd())</span><br><span class="line">process.argv.push(<span class="string">&#x27;--gulpfile&#x27;</span>)</span><br><span class="line">process.argv.push(<span class="built_in">require</span>.resolve(<span class="string">&#x27;..&#x27;</span>))</span><br><span class="line"></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;gulp/bin/gulp&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>要在packsge.json中记得引入这个文件作为cli的入口文件: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;bin&quot;</span>: <span class="string">&quot;bin/你的文件名.js&quot;</span>,</span><br><span class="line"><span class="string">&quot;files&quot;</span>: [</span><br><span class="line">  <span class="string">&quot;lib&quot;</span>,</span><br><span class="line">  <span class="string">&quot;bin&quot;</span></span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+<p><strong>发布并使用模块</strong><br>发布<br>首先使用git提交代码,<br>执行yarn publish 时, 淘宝镜像源是只读的所以publish不上去, 可以使用原镜像</p>
+<blockquote>
+<p>yarn publish –registry<a target="_blank" rel="noopener" href="https://registry.yarnpkg.com/">https://registry.yarnpkg.com</a></p>
+</blockquote>
+<p>使用<br>先新建一个空项目<br>yarn add zce-pages –dev</p>
+<p>yarn zce-pages build, 可以看到package中已有这些cli</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">  <span class="string">&quot;clean&quot;</span>: <span class="string">&quot;zce-pages clean&quot;</span>,</span><br><span class="line">  <span class="string">&quot;build&quot;</span>: <span class="string">&quot;zce-pages build&quot;</span>,</span><br><span class="line">  <span class="string">&quot;develop&quot;</span>: <span class="string">&quot;zce-pages develop&quot;</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注: 官方镜像同步到淘宝镜像是有时间差的, 不要publish完马上就去下载, 可以先去官网查看版本</p>
+</blockquote>
+<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享给小伙伴吧~
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://levxn7.github.io/2021/06/07/gulp/gulp/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gulp/" rel="tag">gulp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E6%A1%88%E4%BE%8B/" rel="tag">自动化构建案例</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/06/25/vuejc/vuejc/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            vue基础
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/05/28/TypeScript/TypeScript/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">TypeScript</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "V4JzJezdlC8YmlWHNRVsWAJW-gzGzoHsz",
+    app_key: "pae1e1Q7YAqdX8er58Q7G7Cv",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2021-2024
+        <i class="ri-heart-fill heart_icon"></i> levxn7
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/xian.png" alt="就花荫"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/zfb.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wx.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+ 
+<script src="/js/clickLove.js"></script>
+ 
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    <div id="music">
+    
+    
+    
+    <iframe frameborder="no" border="1" marginwidth="0" marginheight="0" width="200" height="52"
+        src="//music.163.com/outchain/player?type=2&id=22707008&auto=1&height=32"></iframe>
+</div>
+
+<style>
+    #music {
+        position: fixed;
+        right: 15px;
+        bottom: 0;
+        z-index: 998;
+    }
+</style>
+    
+  </div>
+</body>
+
+</html>
