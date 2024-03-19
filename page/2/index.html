@@ -140,6 +140,139 @@
     
     
     <article
+  id="post-functionalProgramming"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/12/24/functionalProgramming/"
+    >函数式编程</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/12/24/functionalProgramming/" class="article-date">
+  <time datetime="2021-12-24T02:09:22.000Z" itemprop="datePublished">2021-12-24</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h4><p><strong>函数式编程是—种编程范式</strong>，我们常见的编程范式有命令式编程(lmperative<br>programming)，函数式编程，逻辑式编程，<em>常见的面向对象编程是也是一种命令式编程</em>。</p>
+<p>命令式编程是面向计算机硬件的抽象，有变量(对应着存储单元)，赋值语句(获取，存储指令)，表达式(内存引用和算术运算）和控制语句（跳转指令)。<br>而函数式编程是面向数学的抽象，将计算描述为一种表达式求值，一句话，函数式程序就是一个表达式。</p>
+<p>函数式编程中的函数这个术语不是指计算机中的函数(实际上是Subroutine)，而是指<strong>数学中的函数</strong>，即自<strong>变量的映射</strong>。也就是说一个函数的值仅决定于函数参数的值，不依赖其他状态。比如sqrt(x)函数计算x的平方根，只要x不变，不论什么时候调用，调用几次，值都是不变的。<br>在函数式语言中，<strong>函数作为一等公民</strong>，可以在任何地方定义，在函数内或函数外，可以作为函数的参数和返回值，可以对函数进行组合。</p>
+<p>函数式运算的核心，就是把运算过程抽象成函数，合成的过程就是抽象的过程。函数式运算可以最大程度的重用。<br>函数的名字要有实际性的意义，这对函数式编程来说非常重要。函数式编程经常会使用箭头函数，会使代码更简洁。</p>
+<h5 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h5><p>高阶函数的英文名叫 Higher-Order Function，是函数式编程的基本技术。<strong>把函数作为参数传入，这样的函数称为高阶函数</strong>，编写高阶函数，就是让函数的参数能够接收别的函数。函数式编程就是指这种高度抽象的编程范式。</p>
+<p>因为在JS中函数是一等公民，即函数可以被赋值给变量，被变量引用，这便使得函数可以作为参数，在其他函数间相互传递。这是JS作为一门“一切皆为对象”的语言，也能拥有函数式编程的能力</p>
+<p>闭包（可以判定有基准值的问题）</p>
+<h5 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h5><blockquote>
+<p><strong>函数的副作用</strong><br>函数的副作用会让函数变得不纯（函数如果依赖外部变量，就会产生副作用，既是不纯函数）。副作用会使函数通用性下降，不适合扩展和重用，会给程序带来安全隐患。副作用不能完全禁止，只能尽量控制。<br>副作用来源：全局变量，配置文件，数据库，用户输入等所有的外部交互</p>
+</blockquote>
+<p>纯函数始终有输入和输出，相同的输入一定是相同的输出，没有可观察的副作用。纯函数不会调用外部作用域的变量。使得函数与外部解耦，函数的使用更加安全。</p>
+<p>纯函数的好处有：</p>
+<ul>
+<li>可缓存 可以提高程序的性能</li>
+<li>可测试</li>
+<li>并行处理（对比多线程并行操作共享内存数据的意外）</li>
+</ul>
+<h5 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h5><blockquote>
+<p>维基百科：Currying，是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。</p>
+</blockquote>
+<p>当函数有多个参数时，可以分解函数，先传递一部分（不变）的参数，然后返回新的函数接收剩余的参数，然后返回结果。</p>
+<blockquote>
+<p>示例</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通的add函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Currying后</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curryingAdd</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">y</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x + y</span><br><span class="line">    &#125;&#125;</span><br><span class="line"></span><br><span class="line">add(<span class="number">1</span>, <span class="number">2</span>)           <span class="comment">// 3</span></span><br><span class="line">curryingAdd(<span class="number">1</span>)(<span class="number">2</span>)   <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+
+<p>实际上就是把add函数的x，y两个参数变成了先用一个函数接收x然后返回一个函数去处理y参数。现在思路应该就比较清晰了，就是只传递给函数一部分参数来调用它，让它返回一个函数去处理剩下的参数。</p>
+<p>lodash中的柯里化 _.curry(func)，可以帮我们把多元函数转化为一元函数<br>如果传入所有参数就返回结果，如果传入部分参数就返回一个函数，使之可以继续传入参数<br>图12/10-12</p>
+<p><strong>总结</strong></p>
+<ul>
+<li>柯里化可以先传递一些函数并返回一个已有某些固定参数的新函数</li>
+<li>是对函数参数的一种‘缓存’，让参数可以复用</li>
+<li>让函数变得灵活，颗粒更小 </li>
+<li>把多远函数变为一元函数，可以组合使用，产生强大的功效</li>
+</ul>
+<p>可参考资料<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2975c25e4d71">https://www.jianshu.com/p/2975c25e4d71</a></p>
+<h5 id="函数的组合compose"><a href="#函数的组合compose" class="headerlink" title="函数的组合compose"></a>函数的组合compose</h5><p>其思想为将数据依次经过几个函数处理（函数的嵌套），最终输出结果数据。</p>
+<p>函数组合默认是从右到左执行。大函数拆分成小函数，可以容易debug。函数的组合要满足结合律（数学意义上的结合律）</p>
+<p>Lodash的_.flow 提供了 compose 的功能，且可读性更强。_.flow()从左往右执行 _.flowRight()从右往左执行</p>
+<p>调试函数组合时可以定义一个内含打印和返回的辅助函数</p>
+<h6 id="lodash中的fp模块"><a href="#lodash中的fp模块" class="headerlink" title="lodash中的fp模块"></a>lodash中的fp模块</h6><p>fp模块提供的方法都是经过柯里化的</p>
+<ul>
+<li>提供了实用的对函数式编程友好的方法</li>
+<li>函数优先  数据之后</li>
+</ul>
+<p>_.map有个小问题，它会给第二个参数（函数a）传递三个参数(item, index, array)，这就有可能会影响到函数a的运作,而fp中的map函数可以解决这个问题</p>
+<blockquote>
+<p>示例</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> _ = <span class="built_in">require</span>(<span class="string">&#x27;lodash&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fp = <span class="built_in">require</span>(<span class="string">&#x27;lodash/fp&#x27;</span>);</span><br><span class="line"><span class="keyword">let</span> arr1 = [<span class="string">&#x27;10&#x27;</span>, <span class="string">&#x27;20&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;40&#x27;</span>];</span><br><span class="line"><span class="built_in">console</span>.log(_.map(arr1, <span class="built_in">parseInt</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//执行结果[ 10, NaN, NaN, NaN ]</span></span><br><span class="line"><span class="comment">//parseInt 执行顺序</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;10&#x27;,0,array) 10</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;20&#x27;,1,array) NAN</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;30&#x27;,2,array) NAN</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;40&#x27;,3,array) NAN</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//解决这个问题使用lodash/fp模块</span></span><br><span class="line"><span class="built_in">console</span>.log(fp.map(<span class="built_in">parseInt</span>, arr1));</span><br><span class="line"><span class="comment">//[ 10, 20, 30, 40 ]</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="pointfree模式"><a href="#pointfree模式" class="headerlink" title="pointfree模式"></a>pointfree模式</h5><p>pointFree：我们可以把数据处理的过程定义成与数据无关的合成运算，不需要用到代表数据的那个参数，只要把简单的运算步骤合成到一起，在使用这种模式之前我们需要定义一些辅助的基本运算函数。</p>
+<ul>
+<li>不需要指明处理的数据</li>
+<li>只需要合成运算过程</li>
+<li>需要定义一些辅助的基本运算函数</li>
+</ul>
+<h4 id="函子Functor"><a href="#函子Functor" class="headerlink" title="函子Functor"></a>函子Functor</h4><p>我们学习函子是为了在函数式编程中把副作用控制在可控范围内、作异常处理、异步操作等。我们可以把函子想象成一个盒子，里面有map方法，传进一个值，对值进行处理。<br>函子是一个特殊的容器（包含值和值的变形关系（函数）），通过一个普通的对象来实现。函子是一个对象，对外提供map方法，永远不取值出来，只在map里对值进行操作。（以_开头的值是私有值，不对外公布。）</p>
+<p>总结：</p>
+<ul>
+<li>函数式编程的运算不直接操作值，而是由函子完成。</li>
+<li>函子就是一个实现了map契约的对象</li>
+<li>我们可以把函子想象成一个盒子，这个盒子里封装了一个值</li>
+<li>想要处理盒子中的值，我们需要给盒子的map方法传递一个处理值的函数（纯函数)，由这个函数来对值进行处理</li>
+<li>最终map方法返回一个包含新值的盒子(函子)</li>
+</ul>
+<p><strong>maybe函子</strong><br>maybe函子为了避免函子传入空值（null/undefined）情况的发生，它作用就是可以对外部的空值情况做处理（控制副作用在允许的范围）</p>
+<p><strong>either函子</strong><br> 异常会让函数变的不纯，通过either函子去处理异常，可以记录错误信息。类似于 if…else…的处理。</p>
+<p><strong>IO函子</strong><br>IO函子中的_value是一个函数，这里把函数当做值来处理。IO函子把不纯的操作存储到_value中交给调用者去处理，延迟不纯的操作，包装当前的纯操作。缺点是嵌套函子很不方便。</p>
+<p><strong>task函子</strong><br>task用于解决异步任务，和promise非常像，返回方法是resolver.resolve、resolver.reject，调用方法有.run()、.listen({onRejected/onResolved)}等。</p>
+<blockquote>
+<p>folktale是一个标准的函数式编程库，和lodash、ramda不同的是，他没有提供很多功能函数，只提供了一些函数式处理的操作，例如: compose、curry等，一些函子Task、Either、MayBe等<br>folktale的基本使用<a target="_blank" rel="noopener" href="https://folktale.origamitower.com/">https://folktale.origamitower.com/</a></p>
+</blockquote>
+<p><strong>pointed函子</strong><br>pointed函子只是一个概念而已，是实现了 of 静态方法的函子</p>
+<p><strong>monad函子</strong><br>monad函子是可以变扁的pointed函子，一个函子如果具有join和of两个方法并遵守一些定律就是一个monad。</p>
+<ul>
+<li>处理值用map</li>
+<li>处理函数用flatMap</li>
+</ul>
+<h4 id="函数式编程总结"><a href="#函数式编程总结" class="headerlink" title="函数式编程总结"></a>函数式编程总结</h4><p>1，可读性强：声明式(Declarative)使得代码即使没有注释也有很高的可读性(这也是 React 的一大卖点)。<br>2，代码量少：项目越大，越节省代码量(大量的函数被复用)。<br>3，代码稳定可靠：纯函数的功劳。<br>4，容易维护性：符合「单一职能原则」，使得代码的维护与迭代更加容易。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/" rel="tag">lodash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9F%AF%E9%87%8C%E5%8C%96/" rel="tag">柯里化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/" rel="tag">高阶函数</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-myPromise/myPromise"
   class="article article-type-post"
   itemscope
@@ -1177,65 +1310,6 @@
 
     
     <article
-  id="post-813problem"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/08/20/813problem/"
-    >关于8月13日Github改版,hexo受到影响的总结</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/08/20/813problem/" class="article-date">
-  <time datetime="2021-08-20T02:31:18.000Z" itemprop="datePublished">2021-08-20</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>关于8月13日Github改版,hexo受到影响的总结</p>
-<p>众所周知,2021年8月13日Github的改版影响了不少项目,Github以密码不安全为由建议用户改用秘钥.</p>
-<p>当时的提交报错为:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">remote: Support <span class="keyword">for</span> password authentication was removed on August <span class="number">13</span>, <span class="number">2021.</span> Please use a personal access token instead.</span><br></pre></td></tr></table></figure>
-<p>这个问题其实很好解决,网上有很多人分享了解决过程,解决完上述报错,一般还会引起一系列报错,国内网络上都有很多人分享解决办法,这里不多赘述.<br>参考<a target="_blank" rel="noopener" href="https://www.codepeople.cn/2021/09/02/github-problem/">https://www.codepeople.cn/2021/09/02/github-problem/</a></p>
-<p>但是修改之后hexo编译后也是犹豫8.13的问题同步不到github.io上面去,怎么办呢</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com<span class="comment">//验证key 如果验证失败执行下列命令</span></span><br><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;xxx@qq.com&quot;</span><span class="comment">//一路回车即可</span></span><br><span class="line">ssh -v git@github.com</span><br><span class="line"><span class="comment">//　　最后两句会出现：</span></span><br><span class="line"><span class="comment">//　　No more authentication methods to try.</span></span><br><span class="line"><span class="comment">//　　Permission denied (publickey).</span></span><br><span class="line"><span class="comment">//　　这时候再输入</span></span><br><span class="line">ssh-agent -s</span><br><span class="line"><span class="comment">/*然后会提示类似的信息：　　</span></span><br><span class="line"><span class="comment">SSH_AUTH_SOCK=/tmp/ssh-GTpABX1a05qH/agent.404; export SSH_AUTH_SOCK;  　　</span></span><br><span class="line"><span class="comment">SSH_AGENT_PID=13144; export SSH_AGENT_PID;  　　</span></span><br><span class="line"><span class="comment">echo Agent pid 13144;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">ssh-add ~<span class="regexp">/.ssh/i</span>d_rsa</span><br><span class="line"><span class="comment">/*这时候应该会提示：　　Identity added: ...（这里是一些ssh key文件路径的信息）　　</span></span><br><span class="line"><span class="comment">（注意）如果出现错误提示：　　Could not open a connection to your authentication agent.　　</span></span><br><span class="line"><span class="comment">请执行命令：eval `ssh-agent -s`后继续执行命令 ssh-add ~/.ssh/id_rsa，这时候一般没问题啦。</span></span><br><span class="line"><span class="comment">将里面的内容复制，进入你的github账号，在settings下，SSH and GPG keys下new SSH key，</span></span><br><span class="line"><span class="comment">title随便取一个名字，然后将id_rsa.pub里的内容复制到Key中，完成后Add SSH Key。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">ssh -T git@github.com</span><br><span class="line"><span class="comment">/*提示：Hi xxx! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span></span><br><span class="line"><span class="comment">　　这时候你的问题就解决啦</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure> 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%85%B6%E4%BB%96/" rel="tag">其他</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
   id="post-snabbdom/snabbdom"
   class="article article-type-post"
   itemscope
@@ -1281,7 +1355,7 @@
 
 
 
-<p>npm install <a href="mailto:&#x73;&#110;&#97;&#98;&#x62;&#100;&#x6f;&#x6d;&#x40;&#50;&#46;&#49;&#x2e;&#48;">&#x73;&#110;&#97;&#98;&#x62;&#100;&#x6f;&#x6d;&#x40;&#50;&#46;&#49;&#x2e;&#48;</a></p>
+<p>npm install <a href="mailto:&#115;&#110;&#97;&#98;&#x62;&#x64;&#111;&#x6d;&#64;&#50;&#46;&#49;&#46;&#48;">&#115;&#110;&#97;&#98;&#x62;&#x64;&#111;&#x6d;&#64;&#50;&#46;&#49;&#46;&#48;</a></p>
 <p>h(‘!’) //这是 一个空的节点</p>
 <h4 id="snabbdom模块的使用"><a href="#snabbdom模块的使用" class="headerlink" title="snabbdom模块的使用"></a>snabbdom模块的使用</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 导入模块</span></span><br><span class="line"><span class="keyword">import</span> &#123; styleModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/style&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; eventListenersModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/eventlisteners&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 注册模块</span></span><br><span class="line"><span class="keyword">const</span> patch = init([</span><br><span class="line">  styleModule,</span><br><span class="line">  eventListenersModule</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 使用h() 函数的第二个参数传入模块中使用的数据（对象）</span></span><br><span class="line"><span class="keyword">let</span> vnode = h(<span class="string">&#x27;div&#x27;</span>, [</span><br><span class="line">  h(<span class="string">&#x27;h1&#x27;</span>, &#123; <span class="attr">style</span>: &#123; <span class="attr">backgroundColor</span>: <span class="string">&#x27;red&#x27;</span> &#125; &#125;, <span class="string">&#x27;Hello World&#x27;</span>),</span><br><span class="line">  h(<span class="string">&#x27;p&#x27;</span>, &#123; <span class="attr">on</span>: &#123; <span class="attr">click</span>: eventHandler &#125; &#125;, <span class="string">&#x27;Hello P&#x27;</span>)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">eventHandler</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;别点我，疼&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> app = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#app&#x27;</span>)</span><br><span class="line"><span class="comment">// 生成虚拟dom 根据diff算法更新dom</span></span><br><span class="line">patch(app, vnode)</span><br></pre></td></tr></table></figure>
 
@@ -1332,7 +1406,7 @@
     <ul>
       <li>
         Copyrights &copy;
-        2021-2022
+        2021-2024
         <i class="ri-heart-fill heart_icon"></i> levxn7
       </li>
     </ul>

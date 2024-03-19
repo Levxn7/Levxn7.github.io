@@ -94,23 +94,6 @@
       </tags>
   </entry>
   <entry>
-    <title>关于8月13日Github改版,hexo受到影响的总结</title>
-    <url>/2021/08/20/813problem/</url>
-    <content><![CDATA[<p>关于8月13日Github改版,hexo受到影响的总结</p>
-<p>众所周知,2021年8月13日Github的改版影响了不少项目,Github以密码不安全为由建议用户改用秘钥.</p>
-<p>当时的提交报错为:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">remote: Support <span class="keyword">for</span> password authentication was removed on August <span class="number">13</span>, <span class="number">2021.</span> Please use a personal access token instead.</span><br></pre></td></tr></table></figure>
-<p>这个问题其实很好解决,网上有很多人分享了解决过程,解决完上述报错,一般还会引起一系列报错,国内网络上都有很多人分享解决办法,这里不多赘述.<br>参考<a href="https://www.codepeople.cn/2021/09/02/github-problem/">https://www.codepeople.cn/2021/09/02/github-problem/</a></p>
-<p>但是修改之后hexo编译后也是犹豫8.13的问题同步不到github.io上面去,怎么办呢</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">ssh -T git@github.com<span class="comment">//验证key 如果验证失败执行下列命令</span></span><br><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;xxx@qq.com&quot;</span><span class="comment">//一路回车即可</span></span><br><span class="line">ssh -v git@github.com</span><br><span class="line"><span class="comment">//　　最后两句会出现：</span></span><br><span class="line"><span class="comment">//　　No more authentication methods to try.</span></span><br><span class="line"><span class="comment">//　　Permission denied (publickey).</span></span><br><span class="line"><span class="comment">//　　这时候再输入</span></span><br><span class="line">ssh-agent -s</span><br><span class="line"><span class="comment">/*然后会提示类似的信息：　　</span></span><br><span class="line"><span class="comment">SSH_AUTH_SOCK=/tmp/ssh-GTpABX1a05qH/agent.404; export SSH_AUTH_SOCK;  　　</span></span><br><span class="line"><span class="comment">SSH_AGENT_PID=13144; export SSH_AGENT_PID;  　　</span></span><br><span class="line"><span class="comment">echo Agent pid 13144;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">ssh-add ~<span class="regexp">/.ssh/i</span>d_rsa</span><br><span class="line"><span class="comment">/*这时候应该会提示：　　Identity added: ...（这里是一些ssh key文件路径的信息）　　</span></span><br><span class="line"><span class="comment">（注意）如果出现错误提示：　　Could not open a connection to your authentication agent.　　</span></span><br><span class="line"><span class="comment">请执行命令：eval `ssh-agent -s`后继续执行命令 ssh-add ~/.ssh/id_rsa，这时候一般没问题啦。</span></span><br><span class="line"><span class="comment">将里面的内容复制，进入你的github账号，在settings下，SSH and GPG keys下new SSH key，</span></span><br><span class="line"><span class="comment">title随便取一个名字，然后将id_rsa.pub里的内容复制到Key中，完成后Add SSH Key。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">ssh -T git@github.com</span><br><span class="line"><span class="comment">/*提示：Hi xxx! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span></span><br><span class="line"><span class="comment">　　这时候你的问题就解决啦</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>前端进阶笔记</category>
-      </categories>
-      <tags>
-        <tag>其他</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>事件循环</title>
     <url>/2021/12/04/eventloop/</url>
     <content><![CDATA[<h4 id="一、主题"><a href="#一、主题" class="headerlink" title="一、主题"></a>一、主题</h4><p>JS执行中的堆栈（浏览器平台下）<br>系统的梳理一些底层的知识</p>
@@ -224,7 +207,7 @@
       </tags>
   </entry>
   <entry>
-    <title>vue源码复习(首次渲染e)</title>
+    <title>vue源码复习(首次渲染)</title>
     <url>/2022/03/01/vueymfx/vueymfx/</url>
     <content><![CDATA[<h4 id="基础结构"><a href="#基础结构" class="headerlink" title="基础结构"></a>基础结构</h4><p>第一种： 创建实例时，传入el和data选项，vue内部会把data数据传到el所对应的模板中，并把模板渲染到浏览器<br>第二种： render方法接受一个h函数，h函数的作用是创建一个虚拟dom，render函数把h创建的虚拟dom返回。$mount的作用是把虚拟dom转化为真实dom，渲染到浏览器。<br><img src="/2022/03/01/vueymfx/vueymfx/E8F7BCFC-02FA-4B11-A113-16A25255BC33.png" alt="bd52306c3a68ee0dfc0386b158fc99c3"></p>
 <h4 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h4><p>vue生命周期分为8个阶段，即分别是创建前<br>beforeCreate、创建后created、载入前beforeMount、载入后mounted、更新前beforeUpdate、更新后updated、销毁前beforeDestroy、销毁后destroyed。<br><img src="/2022/03/01/vueymfx/vueymfx/4AE06B6F-6BA5-4829-9066-00019FEE3763.png" alt="2765e8b954d15199b8ca4966defe94d2"></p>
@@ -689,14 +672,14 @@ git push -->
   </entry>
   <entry>
     <title>潮汐</title>
-    <url>/2021/05/26/heis/heis/</url>
+    <url>/2022/05/14/heis/heis/</url>
     <content><![CDATA[<p>路很长,</p>
 <p>走着走着,总能遇到一个和你相似的人.</p>
 <p>你们兴趣相近,有着共同的爱好,</p>
 <p>一个眼神,一个动作,就知道对方想要做什么.</p>
 <p>一个人时,也不会枯燥,两个人呢,也不会觉得吵.</p>
 <p>好像他就该在那里,若他不在,那就插一束花,等着他来.</p>
-<p><img src="/2021/05/26/heis/heis/WechatIMG13.jpeg" alt="恩"></p>
+<p><img src="/2022/05/14/heis/heis/WechatIMG13.jpeg" alt="恩"></p>
 ]]></content>
       <categories>
         <category>和潮汐一样可靠</category>
@@ -1104,7 +1087,7 @@ git push -->
 
 
 
-<p>npm install <a href="mailto:&#x73;&#110;&#97;&#98;&#x62;&#100;&#x6f;&#x6d;&#x40;&#50;&#46;&#49;&#x2e;&#48;">&#x73;&#110;&#97;&#98;&#x62;&#100;&#x6f;&#x6d;&#x40;&#50;&#46;&#49;&#x2e;&#48;</a></p>
+<p>npm install <a href="mailto:&#115;&#110;&#97;&#98;&#x62;&#x64;&#111;&#x6d;&#64;&#50;&#46;&#49;&#46;&#48;">&#115;&#110;&#97;&#98;&#x62;&#x64;&#111;&#x6d;&#64;&#50;&#46;&#49;&#46;&#48;</a></p>
 <p>h(‘!’) //这是 一个空的节点</p>
 <h4 id="snabbdom模块的使用"><a href="#snabbdom模块的使用" class="headerlink" title="snabbdom模块的使用"></a>snabbdom模块的使用</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1. 导入模块</span></span><br><span class="line"><span class="keyword">import</span> &#123; styleModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/style&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; eventListenersModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/eventlisteners&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 注册模块</span></span><br><span class="line"><span class="keyword">const</span> patch = init([</span><br><span class="line">  styleModule,</span><br><span class="line">  eventListenersModule</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 使用h() 函数的第二个参数传入模块中使用的数据（对象）</span></span><br><span class="line"><span class="keyword">let</span> vnode = h(<span class="string">&#x27;div&#x27;</span>, [</span><br><span class="line">  h(<span class="string">&#x27;h1&#x27;</span>, &#123; <span class="attr">style</span>: &#123; <span class="attr">backgroundColor</span>: <span class="string">&#x27;red&#x27;</span> &#125; &#125;, <span class="string">&#x27;Hello World&#x27;</span>),</span><br><span class="line">  h(<span class="string">&#x27;p&#x27;</span>, &#123; <span class="attr">on</span>: &#123; <span class="attr">click</span>: eventHandler &#125; &#125;, <span class="string">&#x27;Hello P&#x27;</span>)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">eventHandler</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;别点我，疼&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> app = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#app&#x27;</span>)</span><br><span class="line"><span class="comment">// 生成虚拟dom 根据diff算法更新dom</span></span><br><span class="line">patch(app, vnode)</span><br></pre></td></tr></table></figure>
 
