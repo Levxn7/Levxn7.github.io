@@ -140,7 +140,7 @@
     
     
     <article
-  id="post-vueymfx/vueymfx2"
+  id="post-aid1jqxxgs/aid1jqxxgs"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -151,8 +151,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2022/03/07/vueymfx/vueymfx2/"
-    >vue源码复习(数据响应式)</a> 
+  <a class="article-title" href="/2023/10/16/aid1jqxxgs/aid1jqxxgs/"
+    >机器学习概述</a> 
 </h2>
  
 
@@ -160,33 +160,943 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2022/03/07/vueymfx/vueymfx2/" class="article-date">
-  <time datetime="2022-03-07T04:58:56.000Z" itemprop="datePublished">2022-03-07</time>
+      <a href="/2023/10/16/aid1jqxxgs/aid1jqxxgs/" class="article-date">
+  <time datetime="2023-10-16T02:31:18.000Z" itemprop="datePublished">2023-10-16</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+    <a class="article-category-link" href="/categories/AID%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">AID学习笔记</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <h4 id="数据响应式原理"><a href="#数据响应式原理" class="headerlink" title="数据响应式原理"></a>数据响应式原理</h4><p>响应式的意思是，当数据发生改变，视图会跟着改变，无需我们操作dom，响应式处理的入口是instance\init.js</p>
-<p>响应式是从vue实例的_init()方法开始的，在_init()方法中先调用initState()方法初始化vue实例的状态，在其中调用了initData()，这个方法是把data属性注入到vue实例上，并且调用observe()把data对象转换成响应式的对象，observe()就是响应式的入口。</p>
-<p>observe(value)接受一个参数，这个参数就是响应式要处理的对象，observe()在src/core/observer/index.js中，先判断value是否是对象，如果不是对象就直接返回。</p>
-<p>然后判断value对象是否有__ob__属性，,如果有就说明这个对象已经做过响应式处理，也直接返回。如果没有，就为这个对象创建observer对象，然后把这个observer对象返回。<br><img src="/2022/03/07/vueymfx/vueymfx2/1646185395364.jpg" alt="3828aebf462cc43da6dc120bc960e503"></p>
-<p>Observe类会给value对象定义一个不可枚举的__ob__属性，并把当前的observer对象记录到枚举__ob__里面来，然后进行数组和对象的响应式处理。<br><img src="/2022/03/07/vueymfx/vueymfx2/56737F2A-8FF5-475B-AC0F-BFA25015690F.png" alt="3828aebf462cc43da6dc120bc960e503"></p>
-<p>数组的处理就是设置数组那几个特殊的方法，这些方法会改变数组，所以当这些方法被调用的时候，我们要发送通知，找到数组对应的__ob__，也就是observer对象，再找到observer对象中的dep方法调用，调用dep当中的notify方法。处理完这些方法后，遍历成员，对每一个成员调用observe，如果这个成员是对象的话，也会被转换为响应式的对象。 </p>
-<p>对象的处理会调用walk方法，遍历对象所有属性，给每个属性调用defineReactive方法。<br>defineReactive会给每个属性创建dep对象，让dep去收集依赖，如果当前属性的值是对象，就调用observe，要把这个对象变成响应式。</p>
-<p>defineReactive的核心就是定义getter和setter。<br>定义getter为每一个属性收集依赖，包括对象的子对象。<br>定义setter保存新值，如果新值是对象，就调用observe也转换成响应式，发送通知，就是调用dep.notify方法。<br><img src="/2022/03/07/vueymfx/vueymfx2/3A65CD6C-0740-42ED-9185-19234C239D9E.png" alt="266f9d19cdafcf66b22a546c361fd9ae"></p>
-<p>依赖收集：首先执行watcher对象中的get方法，在get中调用pushTarget，在pushTarget中会把watcher对象记录到dep.target属性中。<br>在访问data中的成员的时候收集依赖，在访问值时就会触发defineReactive中的getter收集依赖，把属性对应的watcher添加到dep的subs数组中，也就是为属性收集依赖，如果属性的值是个对象，就创建一个childOb为这个子对象收集依赖，目的是子对象添加和删除成员时发送通知<br><img src="/2022/03/07/vueymfx/vueymfx2/E9D9E42D-6D38-4EDF-AE3B-69D7B782008A.png" alt="2d155fa9c0aa9b61d97d6488e0b84e85"></p>
-<p>watcher：当数据发生变化的时候通过dep.notify发送通知，他会调用watcher的update方法，在update方法中会调用queueWatcher函数，来判断watcher是否被处理了，如果没有就添加到queue队列，并调用flushSchedulerQueue刷新队列</p>
-<p>flushSchedulerQueue会触发beforeUpdata钩子函数，然后调用watcher.run()函数，在其中调用get()–&gt;getter()–&gt;updateComponent</p>
-<p>调用run方法之后，就可以在页面上看到最新的数据了</p>
-<p>然后就会清空上一次的依赖，重置watcher的状态，然后触发actived钩子函数，然后触发updated钩子函数<br><img src="/2022/03/07/vueymfx/vueymfx2/6733F301-2725-441A-AD21-4C54011B6FE2.png" alt="2b9b14348506a056db1f6d3d2846069e"></p>
-<h5 id="异步更新队列"><a href="#异步更新队列" class="headerlink" title="异步更新队列"></a>异步更新队列</h5><p>nexTick是在dom行程后获取内容，本身是一个微任务，运行环境不支持时降级为宏任务。数据更新到dom上之后，才会去执行nextTick中的回调函数。</p>
-<p>nextTick静态方法是在global-api的index.js中被定义的，实例方法在instance下面的index.js中，在renderMixin()这个函数中，定义了nextTick。nextTick的核心，其实就是timerFunc()的处理。</p>
-<p>在timerFunc()源码中我们可以得知：<br>如果支持 Promise 就用 Promise。如果不支持Promise<br>就用MutationObserver，MutationObserver 它会在指定的DOM发生变化时被调用。<br>如果不支持 MutationObserver 的话就用 setImmediate，但是这个特性只有最新版IE和node支持。<br>如果这些都不支持的话就用setTimeout。</p>
+  <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>关于人工智能我想学蛮久了的，各种各样的原因加持下 ，我终于还是来赶了晚班车。我始终相信，人工智能是人类的未来。这里借用吴恩达的一句话：“我认为AGI被过度炒作了，我们离这个目标还有很长的路要走，他可能花费50年、500年，甚至更久”。但我愿意等，并为之付出。</p>
+<h4 id="机器学习概述"><a href="#机器学习概述" class="headerlink" title="机器学习概述"></a>机器学习概述</h4><blockquote>
+<p>监督学习</p>
+</blockquote>
+<p>在已知数据输出（经过标注的）的情况下对模型进行训练，根据输出进行调整、优化的学习方式称为有监督学习.</p>
+<blockquote>
+<p>无监督学习</p>
+</blockquote>
+<p>没有已知输出的情况下，仅仅根据输入信息的相关性，进行类别的划分. </p>
+<blockquote>
+<p>半监督学习</p>
+</blockquote>
+<p>先通过无监督学习划分类别，再人工标记通过有监督学习方式来预测输出.例如先对相似的水果进行聚类，再识别是哪个类别. </p>
+<h4 id="脚手架工具"><a href="#脚手架工具" class="headerlink" title="脚手架工具"></a>脚手架工具</h4><p>脚手架工具是帮我们自动创建基础文件的工具<br>脚手架的本质作用就是创建项目基础结构、提供项目规范和约定, 相同的组织结构, 相同的开发范式, 相同的模块依赖, 相同的工具配置, 相同的基础代码都应该被自动化创建</p>
+<p><strong>内容概要:</strong></p>
+<ul>
+<li>脚手架的作用</li>
+<li>常用的脚手架工具</li>
+<li>通用脚手架工具剖析</li>
+<li>开发一款脚手架</li>
+</ul>
+<p><strong>常用的脚手架工具</strong><br>根据信息创建对应的项目基础结构有create-react-app, vue-cli, angular-cli等<br>例如创建一个组件/模块所需要的文件就可以用到plop</p>
+<h5 id="Yeoman"><a href="#Yeoman" class="headerlink" title="Yeoman"></a>Yeoman</h5><p>The web’s scaffolding tool for modern webapps<br>可以搭配不同的generator去创建任何类型项目, 可以使用其搭建自己的脚手架<br>缺点是过于通用, 不够专注</p>
+<p><strong>基本使用</strong><br>先安装基础模块: node, npm 或 yarn, 以下举例中我们使用yarn</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yarn <span class="built_in">global</span> add yo <span class="comment">//全局安装Yeoman</span></span><br><span class="line">yarn <span class="built_in">global</span> add generator-node <span class="comment">// 一个node模块</span></span><br><span class="line">mkdir my-<span class="built_in">module</span></span><br><span class="line">cd my-<span class="built_in">module</span></span><br><span class="line">yo node <span class="comment">//input something...</span></span><br></pre></td></tr></table></figure>
+
+<p>执行yo node后的命令行如下(做个例子)</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-math/lsqd"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/05/17/math/lsqd/"
+    >数学-链式求导</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/05/17/math/lsqd/" class="article-date">
+  <time datetime="2023-05-17T02:31:18.000Z" itemprop="datePublished">2023-05-17</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/AID%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">AID学习笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="链式求导"><a href="#链式求导" class="headerlink" title="链式求导"></a>链式求导</h4><p><strong>求导链式法则（Chain Rule）是微积分中的一个重要概念，用于计算复合函数(Composite Functions)的导数。<br>拓展知识：</strong></p>
+<p><strong>一、链式法则的基本概念：</strong></p>
+<p><strong>复合函数</strong>: 以另一种方式将两个函数组合起来的函数。正式定义：<br>令f 和g 分别为两个函数，函数(f。g)(x) = f (g(x))称为f 与g 的复合函数。复合函数 f。g 的定义域为所有g 的定义域中使得g(x) 在f 的定义域中的所有x 的集合。即，复合函数的定义域中的自变量，首先必须满足是位于g 的定义域中，同时，这个自变量也必须满足使其函数g 的值位于f 的定义域中，满足这两个限制的所有x 的值，构成复合函数的定义域。</p>
+<p><strong>链式法则适用于复合函数，即一个函数中包含了另一个函数</strong>。假如 y = f (u)是一个u 的可微函数，u = g (x)是一个x 的可微函数，则 y = f (g(x)) 是一个x 的可微函数，则链式法则描述了如何计算y关于x的导数dy/dx。链式法则的一般形式如下：<img src="/2023/05/17/math/lsqd/0f851c998b97de73e58d052d32485d19.png" alt="0f851c998b97de73e58d052d32485d19">(即y 对x 的导数，等于y 对u 的导数，乘以u 对x 的导数。)</p>
+<p>这个公式表明，要计算复合函数y=f(g(x))的导数，首先计算f关于中间变量u=g(x)的导数，然后计算u关于自变量x的导数，并将它们相乘。</p>
+<p>当然，复合函数还可以继续复合，组成更复杂的函数。也就是说，复合函数是两套以上的映射法则。一般来讲，f与g 的复合函数，与g 与f 的复合函数，是不一样的复合函数。</p>
+<h4 id="二、示例："><a href="#二、示例：" class="headerlink" title="二、示例："></a>二、示例：</h4><p><img src="/2023/05/17/math/lsqd/5b0f965dec10074a1f78dd550d0a5416.png" alt="5b0f965dec10074a1f78dd550d0a5416.png"></p>
+<h4 id="三、应用领域："><a href="#三、应用领域：" class="headerlink" title="三、应用领域："></a>三、应用领域：</h4><p>链式法则在物理学、工程学、计算机科学等领域广泛应用。在机器学习和深度学习中，链式法则是计算梯度（导数）的基本工具，用于训练神经网络和优化模型参数。它也在控制理论、信号处理和优化问题中发挥关键作用。</p>
+<h4 id="四、总结："><a href="#四、总结：" class="headerlink" title="四、总结："></a>四、总结：</h4><p>链式法则是微积分中的一项重要技巧，用于计算复合函数的导数。它允许我们在分析和解决问题时处理包含多个函数的复杂情况，是许多科学和工程领域的基础工具之一。深入理解链式法则有助于更好地理解和应用微积分知识。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag">数学</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-math/xxds"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/04/02/math/xxds/"
+    >数学-线性代数</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/04/02/math/xxds/" class="article-date">
+  <time datetime="2023-04-02T02:31:18.000Z" itemprop="datePublished">2023-04-02</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/AID%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">AID学习笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>线性代数是代数学的一个分支，主要处理线性关系问题。线性关系意即数学对象之间的关系是以一次形式来表达的。线性代数是一个伟大的学科，这里不做细述，推荐细看B站3blue1brown的视频，解释的非常详细。</p>
+<h5 id="一、基本概念："><a href="#一、基本概念：" class="headerlink" title="一、基本概念："></a>一、基本概念：</h5><p>线性（linear）指量与量之间按比例、成直线的关系，在数学上可以理解为一阶导数为常数的函数<br>非线性（non-linear）则指不按比例、不成直线的关系，一阶导数不为常数。</p>
+<p><strong>一、向量是什么？</strong><br>1、物理学眼中（空间中的箭头）<br>2、计算机学眼中（有序的数字列表）<br>3、数学眼中（只要能玩向量加法和数字乘法就行）<br><strong>二、计算方法</strong><br>1、向量加法（两个向量内部数字对应起来相加即可）<br>2、向量乘法（向量内部数字直接乘外部数字即可）<br><strong>三、线性代数的意义</strong><br>1、为数据分析提供了列表概念化和可视化的方法<br>2、看起来简洁易懂，也会帮助人理解某些特殊运算的意义。<br>3、为物理学家和计算机图形程序员提供了一个更好的描述并操纵空间的形式。</p>
+<p><strong>链式法则适用于复合函数，即一个函数中包含了另一个函数</strong>。假如 y = f (u)是一个u 的可微函数，u = g (x)是一个x 的可微函数，则 y = f (g(x)) 是一个x 的可微函数，则链式法则描述了如何计算y关于x的导数dy/dx。链式法则的一般形式如下：<img src="/2023/04/02/math/xxds/0f851c998b97de73e58d052d32485d19.png" alt="0f851c998b97de73e58d052d32485d19">(即y 对x 的导数，等于y 对u 的导数，乘以u 对x 的导数。)</p>
+<p>这个公式表明，要计算复合函数y=f(g(x))的导数，首先计算f关于中间变量u=g(x)的导数，然后计算u关于自变量x的导数，并将它们相乘。</p>
+<p>当然，复合函数还可以继续复合，组成更复杂的函数。也就是说，复合函数是两套以上的映射法则。一般来讲，f与g 的复合函数，与g 与f 的复合函数，是不一样的复合函数。</p>
+<h4 id="二、示例："><a href="#二、示例：" class="headerlink" title="二、示例："></a>二、示例：</h4><p><img src="/2023/04/02/math/xxds/5b0f965dec10074a1f78dd550d0a5416.png" alt="5b0f965dec10074a1f78dd550d0a5416.png"></p>
+<h4 id="三、应用领域："><a href="#三、应用领域：" class="headerlink" title="三、应用领域："></a>三、应用领域：</h4><p>链式法则在物理学、工程学、计算机科学等领域广泛应用。在机器学习和深度学习中，链式法则是计算梯度（导数）的基本工具，用于训练神经网络和优化模型参数。它也在控制理论、信号处理和优化问题中发挥关键作用。</p>
+<h4 id="四、总结："><a href="#四、总结：" class="headerlink" title="四、总结："></a>四、总结：</h4><p>链式法则是微积分中的一项重要技巧，用于计算复合函数的导数。它允许我们在分析和解决问题时处理包含多个函数的复杂情况，是许多科学和工程领域的基础工具之一。深入理解链式法则有助于更好地理解和应用微积分知识。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag">数学</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-python/python"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2023/03/10/python/python/"
+    >python入门语法速查手册</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/03/10/python/python/" class="article-date">
+  <time datetime="2023-03-10T02:31:18.000Z" itemprop="datePublished">2023-03-10</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/AID%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">AID学习笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <hr>
+<h4 id="语法速查手册"><a href="#语法速查手册" class="headerlink" title="语法速查手册"></a>语法速查手册</h4><h5 id="数据基本运算"><a href="#数据基本运算" class="headerlink" title="数据基本运算"></a>数据基本运算</h5><ul>
+<li><p>变量</p>
+<pre><code>  变量名 = 数据
+</code></pre>
+</li>
+<li><p>人机交互</p>
+<pre><code>  变量名 = input(提示信息)
+  print(结果)
+</code></pre>
+</li>
+<li><p>数据类型</p>
+<pre><code>  整数int
+  小数float
+  字符串str
+  转换
+  变量名 = 目标类型(待转数据)
+</code></pre>
+</li>
+<li><p>数学运算</p>
+<ol>
+<li><p>算数运算符</p>
+<pre><code> + - *
+ 幂运算**
+ 小数商/
+ 整数商//
+ 余数%
+</code></pre>
+</li>
+<li><p>增强运算符</p>
+<pre><code> +=  -=  *=
+ 幂运算**=
+ 小数商/=
+ 整数//=
+ 余数%=
+</code></pre>
+</li>
+</ol>
+<ul>
+<li><p>布尔运算</p>
+<pre><code>  * bool类型
+      True条件满足
+      False条件不满足
+  * 比较运算符
+      \&gt; &lt; &gt;= &lt;=
+      等于==
+      不等于!=
+  * 逻辑运算符
+      并且and
+      或者or
+      取反not
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="流程控制语句"><a href="#流程控制语句" class="headerlink" title="流程控制语句"></a>流程控制语句</h5><ul>
+<li><p>选择语句</p>
+<pre><code>  if 条件1:
+      满足条件1执行的代码
+  elif 条件2:
+      不满足条件1,但满足条件2执行的代码
+  else:
+      不满足条件执行的代码
+</code></pre>
+</li>
+<li><p>循环语句</p>
+<pre><code>  while 循环
+  while True:
+        循环体
+        if 退出条件:
+              break
+  计时器 = 开始
+  while 计数器 &lt; 结束值:
+         循环体
+         计时器 += 间隔
+</code></pre>
+</li>
+<li><p>for 计数器 in range(开始,结束,间隔):</p>
+</li>
+<li><p>跳转语句</p>
+<pre><code>  break
+  continue
+</code></pre>
+</li>
+</ul>
+<h5 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h5><ul>
+<li><p>列表list</p>
+<pre><code>  适用性:存储多个有顺序的数据
+</code></pre>
+</li>
+<li><p>基础操作</p>
+<pre><code>  创建
+  列表名 = [数据1,数据2]
+  添加
+  列表名.append(数据)
+  列表名.insert(索引,数据)
+  定位
+  列表名[整数]
+  列表名[开始:结束:间隔]
+  删除
+  del 列表名[整数]
+  del 列表名[开始:结束:间隔]
+  列表名.remove(元素)
+  遍历
+  for item in 列表名:
+  for i in range(len(列表名)):
+</code></pre>
+</li>
+<li><p>深浅拷贝</p>
+<pre><code>  深拷贝:复制所有层
+  import copy
+  新列表 = copy.deepcopy(旧列表)
+  浅拷贝:只复制一层,共享深层
+  新列表 = 旧列表[:]
+</code></pre>
+</li>
+<li><p>列表推导式</p>
+<pre><code>  新列表 = []
+  for item in 可迭代对象:
+        if 条件:
+              新列表.append(item)
+  新列表 = [item for item in 可迭代对象 if 条件]
+</code></pre>
+</li>
+<li><p>元组tuple</p>
+<pre><code>  适用性:存储无需改变的有序数据,比列表节省内存空间
+  基础操作
+  创建
+  元组名 = (数据1,数据2)
+  元组名 = 数据1,数据2
+  元组名 = (数据1,)
+  定位
+  元组名[整数]
+  元组名[开始:结束:间隔]
+  遍历
+  for item in 元组名:
+</code></pre>
+</li>
+<li><p>字符串str</p>
+<pre><code>  转义符:换行\n  \&quot;  \&#39;    \\
+  格式化字符串
+  语法:&quot;格式&quot;%(变量)
+  占位符
+  %s原样输出
+  %.2f四舍五入
+  %.2d整数位数
+</code></pre>
+</li>
+<li><p>字典dict</p>
+<pre><code>  适用性:存储有多个维度的数据
+  基础操作
+  创建
+  字典名 = &#123;键1:值,键2:值&#125;
+  添加
+  字典名[键] = 值
+  定位
+  字典名[键]
+  删除
+  del 字典名[键]
+  遍历
+  for key in 字典名:
+  for value in 字典名.values():
+  for key,value in 字典名.items():
+  
+  字典推导式
+  
+  新字典= &#123;&#125;
+  for 变量 in 可迭代对象:
+        if 条件:
+              新字典[键] = 值
+  新字典 = &#123;键:值 for 变量 in 可迭代对象 if 条件&#125;
+</code></pre>
+</li>
+<li><p>容器嵌套</p>
+<pre><code>  列表内嵌字典
+  列表名 = [
+        &#123;键1:值,键2:值&#125;,
+        &#123;键1:值,键2:值&#125;,
+  ]
+  列表名[索引][键]
+  列表内嵌列表
+  列表名 = [
+        [元素1,元素2],
+        [元素1,元素2],
+  ]
+  列表名[索引][索引]]
+</code></pre>
+</li>
+</ul>
+<h5 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h5><ul>
+<li><p>作用:将功能的做法与用法分离</p>
+</li>
+<li><p>语法</p>
+<pre><code>  def 函数名(参数):
+        某个功能的做法
+        return 结果
+  变量名 = 函数名(数据)
+</code></pre>
+</li>
+<li><p>函数将结果存储在传入的可变对象中</p>
+<pre><code>  而不使用返回值return
+  def 函数名(参数):
+       参数[0] = 结果
+  可变对象 = []
+  函数名(可变对象)
+  print(可变对象[0])
+</code></pre>
+</li>
+<li><p>作用域</p>
+<pre><code>  局部变量:函数内部创建,只能函数内部使用
+  def 函数名(参数):
+        局部变量名 = 数据
+  全局变量:在文件中创建,整个文件都可使用
+  全局变量名1 = 数据
+  def 函数名():
+        print(全局变量名1)
+        global 全局变量名2
+        全局变量名2 = 新数据
+  全局变量名2 = 数据
+</code></pre>
+</li>
+<li><p>参数</p>
+<pre><code>  形式参数:限制实参
+  def 函数名(参数1,参数2)
+  def 函数名(参数1=数据,参数2=数据)
+  def 函数名(*args):
+  def 函数名(**kwargs):
+  def 函数名(*args,参数):
+  def 函数名(*,参数):
+  实际参数:如何与形参进行对应
+  函数名(数据1,数据2)
+  函数名(参数2=数据2)
+  函数名(*序列)
+  函数名(**字典)
+</code></pre>
+</li>
+</ul>
+<h5 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h5><ul>
+<li><p>类和对象</p>
+<pre><code>  类:由变量和函数组成的新数据类型
+  class 类名:
+       def __init__(self,参数):
+             self.实例变量 = 参数
+       def 函数名(self,参数):
+             语句组
+  对象名 = 类名(数据)
+  对象名.实例变量
+  对象名.函数名(数据)
+  跨类调用
+  class A:
+       def a(self):
+           变量名 = B()
+           变量名.b()
+
+  class B:
+       def b(self):
+            pass
+  class A:
+       def __init__(self):
+            self.变量名 = B()
+       def a(self):
+           self.变量名.b()
+
+  class B:
+       def b(self):
+            pass
+  class A:
+       def a(self,参数):
+           参数.b()
+
+  class B:
+       def b(self):
+            pass
+  变量 = A()
+  变量.a(B())
+  继承
+  class 爸爸:
+       def __init__(self,爸爸参数):
+              self.爸爸的实例变量 = 爸爸参数
+       def 爸爸的函数(self):
+  class 儿子(爸爸):
+       def __init__(self,爸爸参数,儿子参数):
+              super().__init__(爸爸参数)
+              self.儿子的实例变量 =  儿子参数
+       def 儿子的函数(self):
+           self.爸爸的函数()
+  多态
+  class Model:
+       # print时自动调用
+       def __str__():
+       # remove时自动调用
+       def __eq__():
+       # sort时自动调用
+       def __gt__():
+</code></pre>
+</li>
+</ul>
+<h5 id="高级语法"><a href="#高级语法" class="headerlink" title="高级语法"></a>高级语法</h5><ul>
+<li><p>导入模块</p>
+<pre><code>  import 包.模块名
+  包.模块名.成员
+  from 包.模块名 import 成员名
+  直接使用成员名
+</code></pre>
+</li>
+<li><p>time模块</p>
+<pre><code>  时间
+  时间戳 = time.time()
+  时间元组 = time.localtime()
+  转换
+  时间元组 = time.localtime(时间戳)
+  时间戳 = time.mktime(时间元组)
+  格式化
+  字符串 = time.strftime(格式, 时间元组)
+  时间元组 = time.strptime(字符串,格式)
+</code></pre>
+</li>
+<li><p>异常处理</p>
+<pre><code>  处理
+  try:
+      可能出错的语句
+  except 异常类型:
+      处理逻辑
+  except Exception:
+      处理逻辑
+  finally:
+      一定执行的逻辑
+  发送
+  raise 异常类型()
+</code></pre>
+</li>
+<li><p>生成器</p>
+<pre><code>  函数
+  定义
+  def 函数名():
+       函数体
+       yield 数据
+  调用
+  生成器对象 = 函数名()    # 调用函数不执行  
+  for item in 生成器对象:
+  生成器对象 =函数名()
+  容器类型(生成器对象)
+  内置生成器
+  for i,item in enumerate(容器):
+  for item in zip(容器1,容器2)
+  表达式
+  生成器对象 = (变量 for 变量 in 可迭代对象)
+</code></pre>
+</li>
+<li><p>函数式编程</p>
+<pre><code>  函数作为参数
+  高阶函数
+  def 通用函数(容器,条件):
+       for item in 容器:
+           if 条件(item):
+               return item
+  lambda 表达式
+  结果 = 通用函数(容器,lambda 参数:函数体)
+  函数作为返回值
+  装饰器
+  def 装饰器名称(func):
+      def wrapper(*args,**kwargs):
+          新功能&quot;
+          result = func(*args,**kwargs)
+          return result
+      return wrapper
+  @装饰器名称
+  def 旧功能():
+</code></pre>
+</li>
+</ul>
+<h5 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h5><ul>
+<li><p>文件管理</p>
+<pre><code>  创建路径
+  对象名 = Path(目录1,目录2)
+  对象名 = Path.cwd().joinpath(&quot;目录1&quot;,&quot;目录2&quot;)
+  路径信息
+  对象名.absolute()  # 绝对路径(路径类型)
+  对象名.name  # 带后缀的完整文件名(str类型)
+  对象名.stem  # 文件名不带后缀(str类型)
+  对象名.suffix # 文件后缀(str类型)
+  对象名.parent  # 上一级路径(路径类型)
+  对象名.parts  # 分割路径(tuple类型)
+  对象名.exists()  # 路径是否存在(bool类型)
+  对象名.is_file()  # 是否文件(bool类型)
+  对象名.is_dir()  # 是否目录(bool类型)
+  对象名.is_absolute() # 是否绝对路径(bool类型)
+  对象名.stat().st_ctime  # 创建时间(时间戳)
+  对象名.stat().st_atime  # 访问时间(时间戳)
+  对象名.stat().st_mtime  # 修改的时间(时间戳)
+  对象名.stat().st_size  # 文件大小(字节Bete)
+  搜索目录
+  # 搜索当前目录所有路径(一层)
+  生成器 = 对象名.iterdir():
+  # 根据通配符搜索当前目录所有路径(一层)
+  生成器 = path.glob(&quot;通配符&quot;):
+  # 根据通配符递归搜索当前目录所有路径(多层)
+  生成器 = 对象名.rglob(&quot;通配符&quot;)
+  新建路径
+  # 新建文件
+  对象名.touch()
+  # 新建目录
+  对象名.mkdir()
+  # 忽略目录存在时的报错
+  对象名.mkdir(exist_ok=True)
+  重命名
+  对象名.rename(新路径对象)
+  删除路径
+  # 删除文件(永久删除，回收站不存在)
+  对象名.unlink()
+  # 删除目录(目录必须为空)
+  对象名.rmdir()
+</code></pre>
+</li>
+<li><p>文件读写</p>
+<pre><code>  文本文件
+  打开
+  with open(文件路径,&quot;操作模式&quot;,encoding=&quot;编码方式&quot;) as 对象名:
+      通过对象名操作文件
+  操作
+  # 读取指定数量字符
+  字符串 = 对象名.read(字符数)
+  列表 = 对象名.readlines()
+  # 读取文件每行字符
+  for 行 in 对象名:
+  # 将字符串写入到文件
+  字符数 = 对象名.write(字符串)
+  二进制文件
+  打开
+  with open(文件路径,&quot;操作模式&quot;) as 对象名:
+      通过对象名操作文件
+  操作
+  # 读取文件中指定数量字节
+  字节串 = 对象名.read(字节数)
+  # 将字节串写入到文件
+  字节数 = 对象名.write(字节串)
+</code></pre>
+</li>
+</ul>
+<h5 id="数据库基础操作"><a href="#数据库基础操作" class="headerlink" title="数据库基础操作"></a>数据库基础操作</h5><ul>
+<li><p>DDL</p>
+<pre><code>  create database 数据库名称;
+  use 数据库名称;
+  create table 表名 (
+      列名 数据类型 约束 comment &#39;注释&#39;,
+      列名 数据类型 约束 comment &#39;注释&#39;
+  ) comment=&#39;注释&#39;;
+  数据类型
+  int
+  float
+  char(字符数)
+  varchar(字符数)
+  约束
+  primay key
+  auto_increment
+  not null
+  check(条件)
+  default(默认值)
+</code></pre>
+</li>
+<li><p>DML</p>
+<pre><code>  insert into 表名(列名) values(数据);
+  update 表名 set 列名 = 值,列名 = 值 where 条件;
+  delete from 表名 where 条件;
+</code></pre>
+</li>
+<li><p>DQL(单条语句)</p>
+<pre><code>  select 列名1,列名2 from 表名;
+  select 列名1,列名2 from 表名 where 条件;
+  select 聚合函数(列名) from 表名 where 条件;
+  select 聚合函数(列名) from 表名 where 条件 group by 列名;
+  select
+  case
+        when 条件 then 结果
+        else 结果
+  end
+  from 表名;
+  select
+  聚合函数(列名),
+  case
+        when 条件 then 结果
+        else 结果
+  end as 别名
+  from 表名
+  group by 别名;
+  select 聚合函数(列名) from 表名 where 条件 group by 列名
+  having 对聚合结果处理的条件;
+  select 列名 from 表名 where 条件 group by 列名
+  having 对聚合结果处理的条件
+  order by 列名 desc;
+  select 列名 from 表名 where 条件
+  group by 列名 having 对聚合结果处理的条件
+  order by 列名 desc
+  limit 查询的行数 offset 跳过的行数;
+  select 列名 from 表名 ...
+  union all
+  select 列名 from 表名 ...
+</code></pre>
+</li>
+<li><p>多表查询</p>
+<pre><code>  连接查询
+  select 列名 from 表1 join 表2 on 表1.共同列 = 表2.共同列...;
+  select 列名 from 表1 left join 表2 on 表1.共同列 = 表2.共同列...;
+  select 列名 from 表1 right join 表2 on 表1.共同列 = 表2.共同列...;
+  子查询
+  # 第一步:
+  select ....
+  # 第二步:
+  select ....
+  # 第三步:
+  select .... (
+      select ....
+  )
+</code></pre>
+</li>
+<li><p>数据库优化</p>
+<ol>
+<li><p>数据库设计三大范式</p>
+<pre><code>     第一范式:表中每列数据，不可再被拆分，不允许多个数据存储在一列中
+     第二范式:每行必须可以被唯一区分，所有列依赖于主键列
+     第三范式:非主键列不能依赖其他非主键列
+</code></pre>
+</li>
+<li><p>索引</p>
+<pre><code>     定义:加快数据库查询速度的一种数据结构
+</code></pre>
+</li>
+<li><p>B+树</p>
+</li>
+<li><p>分类</p>
+<pre><code>     create index 索引名 on 表名(列名);
+     create unique index 索引名 on 表名(列名);
+     create index 索引名 on 表名(列名1,列名2);
+     create unique index 索引名 on 表名(列名1,列名2);
+</code></pre>
+</li>
+<li><p>SQL语句优化</p>
+<pre><code>     何时用索引
+     1.为经常用于查询的列创建索引
+     2.尽量选择区分度高的列作为索引，区分度越高索引效率越高
+     3. 尽量避免使用select *，用具体列名代替*，可减少回表查询
+     4. 建立外键会自动建立索引，在关联查询时建议使用外键作为关联条件
+     会导致索引失效的操作
+     1.在索引列上使用like模糊匹配，如果以通配符开头，会导致索引失效
+     2. 在索引列上进行运算操作，会导致索引失效
+     3.or两边的列有一个没索引，就会导致另一个索引失效
+     联合索引注意事项
+     1. 联合索引要遵守最左前缀法则，即查询从索引的最左列开始
+     2. 联合索引,范围查询时（&gt; &lt; !=），右侧引索列失效
+     按效率：count(*) ≈ count(1) &gt; count(主键) &gt; count(列名)
+</code></pre>
+</li>
+<li><p>事务四大特征</p>
+<pre><code>     原子性 + 一致性
+     原理
+     - 回滚日志undolog：
+       - 记录数据被修改前的信息，供回滚到事务开始前
+     - 每行的2个隐藏列：
+       - 事务ID：最近操作当前行的事务编号
+       - 回滚指针：指向undolog中该行修改前的信息
+     隔离性
+     持久性
+     原理
+     重做日志redolog：
+     - 记录对数据的修改，供系统故障后能够恢复
+</code></pre>
+</li>
+<li><p>隔离级别</p>
+<pre><code>     可重复读repeatable read
+     原理：第一次select时获取一个视图快照，在事务执行期间，其他事务对数据的修改不影响当前事务的视图快照，保持了事务开始时的一致性。
+     串行化serializable
+     多个事务排队执行，每个事务在执行完之前，下一个事务无法执行
+     读已提交read committed
+     能够读取其他事务已提交的数据，不读取未提交的数据
+     读未提交read uncommitted
+     可以读取其他事务未提交的数据
+</code></pre>
+</li>
+</ol>
+</li>
+</ul>
+<h5 id="pymysql"><a href="#pymysql" class="headerlink" title="pymysql"></a>pymysql</h5><ol>
+<li><p>原生写法</p>
+<pre><code> 导入
+ from pymysql import Connection
+ 创建连接
+ conn = Connection(
+             host=地址, port=端口号,
+             user=用户名, password=密码,
+             database=数据库名, autocommit=True
+         )
+ 执行增删改
+ try:
+         with conn.cursor() as cursor:
+                 cursor.execute(sql语句, 参数)
+                 return cursor.lastrowid
+ except Exception as e:
+     print(f&quot;发生错误: &#123;e&#125;&quot;)
+     return -1
+ 查询
+ try:
+       with conn.cursor() as cursor:
+                 cursor.execute(sql, params)
+                 return cursor.fetchall() # 或者 fetchone()
+ except Exception as e:
+             print(f&quot;发生错误: &#123;e&#125;&quot;)
+ 事务
+ try:
+             conn.begin()
+             with conn.cursor() as cursor:
+                 count = 0
+                 for sql, params in sql_params:
+                     count += cursor.execute(sql, params)
+                 conn.commit()
+                 return count
+ except Exception as e:
+             conn.rollback()
+             print(f&quot;发生错误: &#123;e&#125;&quot;)
+             return -1
+ 关闭
+ conn.close()
+</code></pre>
+</li>
+</ol>
+<ul>
+<li><p>自定义MySqlHelper</p>
+<pre><code>  导入
+  from common.sql_tools import MySqlHelper
+  创建对象
+  helper = MySqlHelper(数据库名)
+  执行增删改
+  结果 = helper.execute(SQL语句,参数)
+  执行查询
+  结果 = helper.fetch_one(SQL语句,参数)
+  结果 = helper.fetch_all(SQL语句,参数)
+  执行事务
+  结果 = helper.execute_transaction(
+        (SQL语句,元组类型的参数),
+        (SQL语句,元组类型的参数)
+  )
+  关闭
+  helper.close()
+</code></pre>
+</li>
+<li><p>存储过程</p>
+<pre><code>  创建
+  delimiter $$
+  create procedure 存储过程名(参数名 数据类型)
+  begin
+      语句组
+      select 结果;
+  end$$
+  调用
+  call 存储过程名(参数);
+</code></pre>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/" rel="tag">语言学习</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-vueymfx/vueymfx3"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/05/02/vueymfx/vueymfx3/"
+    >vue源码复习(虚拟DOM)</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/05/02/vueymfx/vueymfx3/" class="article-date">
+  <time datetime="2022-05-02T04:58:56.000Z" itemprop="datePublished">2022-05-02</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%AB%98%E7%BA%A7%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0/">高级前端笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h4><p>vue中的虚拟dom的实现借鉴了snabdom这个虚拟dom库，如模块机制、钩子函数、diff算法，在此基础上额外添加了指令和组件等。虚拟dom是使用JS对象来描述真实dom，虚拟dom就是js对象。</p>
+<p>为什么要使用虚拟dom：<br>避免直接操作真实dom，提高开发效率。可以作为一个中间层来跨平台。在复杂试图的情况下可以提高渲染性能，简单视图的情况下可能会增加开销。</p>
+<p>在v-for的时候可以给每个节点增加key属性，key只能是原始值，不能是对象。因新老节点对比顺序不同，设置key会比不设置key的dom操作少很多。</p>
+<h5 id="源码部分"><a href="#源码部分" class="headerlink" title="源码部分"></a>源码部分</h5><p><strong>虚拟dom创建的整体过程</strong><br>这个过程是接着vue的首次渲染过程来讲的，在updateComponent()中我们调用了render()函数和_update()函数。</p>
+<p>在render中我们调用了用户传入的render函数或者是模板编译成的render函数，如果是用户传入的render函数的话，就调用vm.$createElement()方法，如果是模板编译成的render的话，调用的是vm._c()方法。不管vm.$createElement()还是vm._c(),他最后都会执行createElement方法。在createElement中处理了参数的差异，最终调用了_createElement()方法。在这个方法中创建了vnode对象，最终返回vnode。<br><img src="/2022/05/02/vueymfx/vueymfx3/D36D403B-B738-4A3A-A620-8EA128A49D54.png" alt="0295fbf3548dfa0579eecb29a23f05b2"></p>
+<p>在update函数是负责把虚拟dom渲染成真实dom，在update里边会调用__patch__方法。如果是首次执行，patch的第一个参数是$el，也就是一个真实dom。如果是数据更新那就传入两个vnode，第一个prevVnode也就是上次保存下来的vnode。<br>patch函数是在runtime下的index.js中初始化的，他是给vue原型上挂载了__patch__这个方法，所有的vue实例都可以访问到，他其实就是runtime下的patch.js模块中导出的patch函数。在这个函数中设置了moudles和nodeOps两个对象，moudles中存储的是一些模块，nodeOps是用来操作dom的。设置好后会把这两个对象传递给createPatchFunction()函数，这个函数最终返回的是我们需要的patch函数。<br><img src="/2022/05/02/vueymfx/vueymfx3/D3317FFA-E67E-47BD-B87B-FB3A7070CF97.png" alt="6cb8377bdd89d8d0cfa09019b227d13f"></p>
+<p>patch是vdom/patch.js中的createPatchFunction()返回的函数，在createPatchFunction中首先做了初始化的事情，她里面有很多的辅助函数，特别定义了cbs对象。在cbs对象中存储了所有模块中定义的那些钩子函数，这些钩子函数是为了处理节点的属性、事件、样式等。<br>在patch中还会判断第一个参数是不是真实dom，如果是真实dom的话说明是首次加载。这时会把真实dom转化为vnode，然后去调用createElm，把newVnode转换为真实dom，挂载到dom树上来。如果是数据更新的时候，就要通过sameVnode函数判断新旧vnode是否是相同的节点。如果不是相同节点的话，就执行其中的patchVnode，也就是diff算法。patch执行结束之后，删除旧节点。<br><img src="/2022/05/02/vueymfx/vueymfx3/96EE883B-C1B1-431A-8A07-163D7BC713E4.png" alt="c193a5cb93662967e61d92f5bd7f38cb"></p>
+<p>createElm函数是用来把虚拟节点转换为真实dom，并挂载到dom树上。他也会把虚拟节点的子节点children，转换为真实节点，挂载到dom树上。<br>patchVnode是用来对比新旧vnode，以及新旧vnode的子节点，然后更新他们的差异。如果新旧vnode都有子节点，并且子节点不同的话，还会调用updateChildren去对比子节点的差异。<br>updateChildren会去处理新旧子节点，在处理的过程中优化了这个操作。他会先去把新旧节点的头和尾取出来进行比较，总共有4种比较方式。在比较的过程中，如果我们的节点是sameVnode，那就会调用patchVnode打补丁。如果这4种比较的方式都不满足的话，就会在老节点的子节点种查找newStartVnode，也就是新的开始节点在老的节点中是否存在，并进行处理。如果新节点比老节点多，会把新增的节点插入到dom中，如果老节点比较多，就把多余的老节点删除。<br><img src="/2022/05/02/vueymfx/vueymfx3/5DA71656-C1C3-4A04-B539-B1287BE68A6B.png" alt="cfa4cb62a5b1b3adb9e1cffdcccf6a08"></p>
+<h4 id="模板编译和组件化"><a href="#模板编译和组件化" class="headerlink" title="模板编译和组件化"></a>模板编译和组件化</h4><p>模板编译的作用，就是把模板中的内容（html）转换为渲染函数。.vue文件是webpack通过vue-loader在构建的过程中转换成render函数的。</p>
+<p>compileToFunctions()是模板编译的入口函数，他的内部先从缓存加载编译好的render渲染函数，如果缓存中没有，就调用compile开始编译。<br>在compile中先合并选项（options），然后调用baseCompile编译模板。compile的核心是合并选项，真正的处理是在baseCompile中完成的。<br>把模板和合并好的选项传递给baseCompile，他做了三件事情。一、使用parse函数把template模板转换成AST tree（抽象语法树）。二、使用optimze函数对AST tree进行优化：标记所有AST tree中的sub trees（静态根节点），sub trees不需要每次被重绘，patch的过程会跳过sub trees。三、将优化过的AST tree生成字符串形式的js代码。<br>当compile执行完毕以后，会回到入口函数compileToFunctions中，他继续把字符串形式的代码转换为函数的形式，通过执行createFunction，当render和staticRenderFuns创建完毕，最终他们都会被挂载到vue实例中的options选项对应的属性上。<br>注：<br>模板编译的过程中，会标记静态根节点，对静态根节点进行优化处理，重新渲染的时候不需要渲染静态根节点，因为他们不会发生改变。另外在模板中不要多写无意义的空格和换行，生成AST对象时会保留这些空格和换行，他们都会被存储到内存中。<br><img src="/2022/05/02/vueymfx/vueymfx3/967222E7-DF80-458C-AF98-6F5A4CF032BD.png" alt="a28ffcef5fccd93a5778d8f185793c20"></p>
+<h5 id="组件化"><a href="#组件化" class="headerlink" title="组件化"></a>组件化</h5><p>一个vue组件就是一个拥有预定义选项的一个vue实例。<br>一个组件可以组成页面上一个功能完备的区域，组件可以包含脚本、样式、模板</p>
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
  
       <!-- reward -->
@@ -210,7 +1120,7 @@
 
     
     <article
-  id="post-vueymfx/vueymfx3"
+  id="post-vueymfx/vueymfx2"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -221,8 +1131,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2022/03/02/vueymfx/vueymfx3/"
-    >vue源码复习(虚拟DOM)</a> 
+  <a class="article-title" href="/2022/04/07/vueymfx/vueymfx2/"
+    >vue源码复习(数据响应式)</a> 
 </h2>
  
 
@@ -230,28 +1140,33 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2022/03/02/vueymfx/vueymfx3/" class="article-date">
-  <time datetime="2022-03-02T04:58:56.000Z" itemprop="datePublished">2022-03-02</time>
+      <a href="/2022/04/07/vueymfx/vueymfx2/" class="article-date">
+  <time datetime="2022-04-07T04:58:56.000Z" itemprop="datePublished">2022-04-07</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+    <a class="article-category-link" href="/categories/%E9%AB%98%E7%BA%A7%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0/">高级前端笔记</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <h4 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h4><p>vue中的虚拟dom的实现借鉴了snabdom这个虚拟dom库，如模块机制、钩子函数、diff算法，在此基础上额外添加了指令和组件等。虚拟dom是使用JS对象来描述真实dom，虚拟dom就是js对象。</p>
-<p>为什么要使用虚拟dom：<br>避免直接操作真实dom，提高开发效率。可以作为一个中间层来跨平台。在复杂试图的情况下可以提高渲染性能，简单视图的情况下可能会增加开销。</p>
-<p>在v-for的时候可以给每个节点增加key属性，key只能是原始值，不能是对象。因新老节点对比顺序不同，设置key会比不设置key的dom操作少很多。</p>
-<h5 id="源码部分"><a href="#源码部分" class="headerlink" title="源码部分"></a>源码部分</h5><p><strong>虚拟dom创建的整体过程</strong><br>这个过程是接着vue的首次渲染过程来讲的，在updateComponent()中我们调用了render()函数和_update()函数。</p>
-<p>在render中我们调用了用户传入的render函数或者是模板编译成的render函数，如果是用户传入的render函数的话，就调用vm.$createElement()方法，如果是模板编译成的render的话，调用的是vm._c()方法。不管vm.$createElement()还是vm._c(),他最后都会执行createElement方法。在createElement中处理了参数的差异，最终调用了_createElement()方法。在这个方法中创建了vnode对象，最终返回vnode。<br><img src="/2022/03/02/vueymfx/vueymfx3/D36D403B-B738-4A3A-A620-8EA128A49D54.png" alt="0295fbf3548dfa0579eecb29a23f05b2"></p>
-<p>在update函数是负责把虚拟dom渲染成真实dom，在update里边会调用__patch__方法。如果是首次执行，patch的第一个参数是$el，也就是一个真实dom。如果是数据更新那就传入两个vnode，第一个prevVnode也就是上次保存下来的vnode。<br>patch函数是在runtime下的index.js中初始化的，他是给vue原型上挂载了__patch__这个方法，所有的vue实例都可以访问到，他其实就是runtime下的patch.js模块中导出的patch函数。在这个函数中设置了moudles和nodeOps两个对象，moudles中存储的是一些模块，nodeOps是用来操作dom的。设置好后会把这两个对象传递给createPatchFunction()函数，这个函数最终返回的是我们需要的patch函数。<br><img src="/2022/03/02/vueymfx/vueymfx3/D3317FFA-E67E-47BD-B87B-FB3A7070CF97.png" alt="6cb8377bdd89d8d0cfa09019b227d13f"></p>
-<p>patch是vdom/patch.js中的createPatchFunction()返回的函数，在createPatchFunction中首先做了初始化的事情，她里面有很多的辅助函数，特别定义了cbs对象。在cbs对象中存储了所有模块中定义的那些钩子函数，这些钩子函数是为了处理节点的属性、事件、样式等。<br>在patch中还会判断第一个参数是不是真实dom，如果是真实dom的话说明是首次加载。这时会把真实dom转化为vnode，然后去调用createElm，把newVnode转换为真实dom，挂载到dom树上来。如果是数据更新的时候，就要通过sameVnode函数判断新旧vnode是否是相同的节点。如果不是相同节点的话，就执行其中的patchVnode，也就是diff算法。patch执行结束之后，删除旧节点。<br><img src="/2022/03/02/vueymfx/vueymfx3/96EE883B-C1B1-431A-8A07-163D7BC713E4.png" alt="c193a5cb93662967e61d92f5bd7f38cb"></p>
-<p>createElm函数是用来把虚拟节点转换为真实dom，并挂载到dom树上。他也会把虚拟节点的子节点children，转换为真实节点，挂载到dom树上。<br>patchVnode是用来对比新旧vnode，以及新旧vnode的子节点，然后更新他们的差异。如果新旧vnode都有子节点，并且子节点不同的话，还会调用updateChildren去对比子节点的差异。<br>updateChildren会去处理新旧子节点，在处理的过程中优化了这个操作。他会先去把新旧节点的头和尾取出来进行比较，总共有4种比较方式。在比较的过程中，如果我们的节点是sameVnode，那就会调用patchVnode打补丁。如果这4种比较的方式都不满足的话，就会在老节点的子节点种查找newStartVnode，也就是新的开始节点在老的节点中是否存在，并进行处理。如果新节点比老节点多，会把新增的节点插入到dom中，如果老节点比较多，就把多余的老节点删除。<br><img src="/2022/03/02/vueymfx/vueymfx3/5DA71656-C1C3-4A04-B539-B1287BE68A6B.png" alt="cfa4cb62a5b1b3adb9e1cffdcccf6a08"></p>
-<h4 id="模板编译和组件化"><a href="#模板编译和组件化" class="headerlink" title="模板编译和组件化"></a>模板编译和组件化</h4><p>模板编译的作用，就是把模板中的内容（html）转换为渲染函数。.vue文件是webpack通过vue-loader在构建的过程中转换成render函数的。</p>
-<p>compileToFunctions()是模板编译的入口函数，他的内部先从缓存加载编译好的render渲染函数，如果缓存中没有，就调用compile开始编译。<br>在compile中先合并选项（options），然后调用baseCompile编译模板。compile的核心是合并选项，真正的处理是在baseCompile中完成的。<br>把模板和合并好的选项传递给baseCompile，他做了三件事情。一、使用parse函数把template模板转换成AST tree（抽象语法树）。二、使用optimze函数对AST tree进行优化：标记所有AST tree中的sub trees（静态根节点），sub trees不需要每次被重绘，patch的过程会跳过sub trees。三、将优化过的AST tree生成字符串形式的js代码。<br>当compile执行完毕以后，会回到入口函数compileToFunctions中，他继续把字符串形式的代码转换为函数的形式，通过执行createFunction，当render和staticRenderFuns创建完毕，最终他们都会被挂载到vue实例中的options选项对应的属性上。<br>注：<br>模板编译的过程中，会标记静态根节点，对静态根节点进行优化处理，重新渲染的时候不需要渲染静态根节点，因为他们不会发生改变。另外在模板中不要多写无意义的空格和换行，生成AST对象时会保留这些空格和换行，他们都会被存储到内存中。<br><img src="/2022/03/02/vueymfx/vueymfx3/967222E7-DF80-458C-AF98-6F5A4CF032BD.png" alt="a28ffcef5fccd93a5778d8f185793c20"></p>
-<h5 id="组件化"><a href="#组件化" class="headerlink" title="组件化"></a>组件化</h5><p>一个vue组件就是一个拥有预定义选项的一个vue实例。<br>一个组件可以组成页面上一个功能完备的区域，组件可以包含脚本、样式、模板</p>
+  <h4 id="数据响应式原理"><a href="#数据响应式原理" class="headerlink" title="数据响应式原理"></a>数据响应式原理</h4><p>响应式的意思是，当数据发生改变，视图会跟着改变，无需我们操作dom，响应式处理的入口是instance\init.js</p>
+<p>响应式是从vue实例的_init()方法开始的，在_init()方法中先调用initState()方法初始化vue实例的状态，在其中调用了initData()，这个方法是把data属性注入到vue实例上，并且调用observe()把data对象转换成响应式的对象，observe()就是响应式的入口。</p>
+<p>observe(value)接受一个参数，这个参数就是响应式要处理的对象，observe()在src/core/observer/index.js中，先判断value是否是对象，如果不是对象就直接返回。</p>
+<p>然后判断value对象是否有__ob__属性，,如果有就说明这个对象已经做过响应式处理，也直接返回。如果没有，就为这个对象创建observer对象，然后把这个observer对象返回。<br><img src="/2022/04/07/vueymfx/vueymfx2/1646185395364.jpg" alt="3828aebf462cc43da6dc120bc960e503"></p>
+<p>Observe类会给value对象定义一个不可枚举的__ob__属性，并把当前的observer对象记录到枚举__ob__里面来，然后进行数组和对象的响应式处理。<br><img src="/2022/04/07/vueymfx/vueymfx2/56737F2A-8FF5-475B-AC0F-BFA25015690F.png" alt="3828aebf462cc43da6dc120bc960e503"></p>
+<p>数组的处理就是设置数组那几个特殊的方法，这些方法会改变数组，所以当这些方法被调用的时候，我们要发送通知，找到数组对应的__ob__，也就是observer对象，再找到observer对象中的dep方法调用，调用dep当中的notify方法。处理完这些方法后，遍历成员，对每一个成员调用observe，如果这个成员是对象的话，也会被转换为响应式的对象。 </p>
+<p>对象的处理会调用walk方法，遍历对象所有属性，给每个属性调用defineReactive方法。<br>defineReactive会给每个属性创建dep对象，让dep去收集依赖，如果当前属性的值是对象，就调用observe，要把这个对象变成响应式。</p>
+<p>defineReactive的核心就是定义getter和setter。<br>定义getter为每一个属性收集依赖，包括对象的子对象。<br>定义setter保存新值，如果新值是对象，就调用observe也转换成响应式，发送通知，就是调用dep.notify方法。<br><img src="/2022/04/07/vueymfx/vueymfx2/3A65CD6C-0740-42ED-9185-19234C239D9E.png" alt="266f9d19cdafcf66b22a546c361fd9ae"></p>
+<p>依赖收集：首先执行watcher对象中的get方法，在get中调用pushTarget，在pushTarget中会把watcher对象记录到dep.target属性中。<br>在访问data中的成员的时候收集依赖，在访问值时就会触发defineReactive中的getter收集依赖，把属性对应的watcher添加到dep的subs数组中，也就是为属性收集依赖，如果属性的值是个对象，就创建一个childOb为这个子对象收集依赖，目的是子对象添加和删除成员时发送通知<br><img src="/2022/04/07/vueymfx/vueymfx2/E9D9E42D-6D38-4EDF-AE3B-69D7B782008A.png" alt="2d155fa9c0aa9b61d97d6488e0b84e85"></p>
+<p>watcher：当数据发生变化的时候通过dep.notify发送通知，他会调用watcher的update方法，在update方法中会调用queueWatcher函数，来判断watcher是否被处理了，如果没有就添加到queue队列，并调用flushSchedulerQueue刷新队列</p>
+<p>flushSchedulerQueue会触发beforeUpdata钩子函数，然后调用watcher.run()函数，在其中调用get()–&gt;getter()–&gt;updateComponent</p>
+<p>调用run方法之后，就可以在页面上看到最新的数据了</p>
+<p>然后就会清空上一次的依赖，重置watcher的状态，然后触发actived钩子函数，然后触发updated钩子函数<br><img src="/2022/04/07/vueymfx/vueymfx2/6733F301-2725-441A-AD21-4C54011B6FE2.png" alt="2b9b14348506a056db1f6d3d2846069e"></p>
+<h5 id="异步更新队列"><a href="#异步更新队列" class="headerlink" title="异步更新队列"></a>异步更新队列</h5><p>nexTick是在dom行程后获取内容，本身是一个微任务，运行环境不支持时降级为宏任务。数据更新到dom上之后，才会去执行nextTick中的回调函数。</p>
+<p>nextTick静态方法是在global-api的index.js中被定义的，实例方法在instance下面的index.js中，在renderMixin()这个函数中，定义了nextTick。nextTick的核心，其实就是timerFunc()的处理。</p>
+<p>在timerFunc()源码中我们可以得知：<br>如果支持 Promise 就用 Promise。如果不支持Promise<br>就用MutationObserver，MutationObserver 它会在指定的DOM发生变化时被调用。<br>如果不支持 MutationObserver 的话就用 setImmediate，但是这个特性只有最新版IE和node支持。<br>如果这些都不支持的话就用setTimeout。</p>
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
  
       <!-- reward -->
@@ -287,7 +1202,7 @@
        
 <h2 itemprop="name">
   <a class="article-title" href="/2022/03/01/vueymfx/vueymfx/"
-    >vue源码复习(首次渲染e)</a> 
+    >vue源码复习(首次渲染)</a> 
 </h2>
  
 
@@ -299,7 +1214,7 @@
   <time datetime="2022-03-01T04:58:56.000Z" itemprop="datePublished">2022-03-01</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+    <a class="article-category-link" href="/categories/%E9%AB%98%E7%BA%A7%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0/">高级前端笔记</a>
   </div>
    
     </div>
@@ -379,7 +1294,7 @@
   <time datetime="2022-02-24T02:52:05.000Z" itemprop="datePublished">2022-02-24</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+    <a class="article-category-link" href="/categories/%E9%AB%98%E7%BA%A7%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0/">高级前端笔记</a>
   </div>
    
     </div>
@@ -459,7 +1374,7 @@
   <time datetime="2022-02-16T02:52:05.000Z" itemprop="datePublished">2022-02-16</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+    <a class="article-category-link" href="/categories/%E9%AB%98%E7%BA%A7%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0/">高级前端笔记</a>
   </div>
    
     </div>
@@ -554,7 +1469,7 @@
   <time datetime="2022-02-13T02:52:05.000Z" itemprop="datePublished">2022-02-13</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
+    <a class="article-category-link" href="/categories/%E9%AB%98%E7%BA%A7%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0/">高级前端笔记</a>
   </div>
    
     </div>
@@ -603,541 +1518,6 @@
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-eslint/eslint"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/26/eslint/eslint/"
-    >eslint</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/26/eslint/eslint/" class="article-date">
-  <time datetime="2022-01-26T04:14:11.000Z" itemprop="datePublished">2022-01-26</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="规范化"><a href="#规范化" class="headerlink" title="规范化"></a>规范化</h4><p>为什么要有规范化标准<br>·软件开发需要多人协同<br>·不同开发者具有不同的编码习惯和喜好。<br>·不同的喜好增加项目维护成本<br>·每个项目或者团队需要明确统一的标准</p>
-<h4 id="eslint介绍"><a href="#eslint介绍" class="headerlink" title="eslint介绍"></a>eslint介绍</h4><p>Lint 是检验代码格式工具的一个统称，具体的工具有 Jslint 、 Eslint 等, 最为主流的 Jslint 工具监测JS代码质量<br>ESLint很容易统一开发者的编码风格, 可以帮助开发者提升编码能力, 是基于node开发的npm模块, 现代化项目集成eslint, 会让人不拘泥于格式错误, 更专注于开发<br>首先我们初始化一个package</p>
-<blockquote>
-<p>npm install eslint –save-dev //带有cli命令<br>npx eslint –version //运行</p>
-</blockquote>
-<p>–save-dev 会把 eslint 安装到 package.json 文件中的 devDependencies 属性中，意思是只是开发阶段用到这个包，上线时就不需要这个包了。</p>
-<p><strong>快速上手</strong></p>
-<blockquote>
-<p>npx eslint –init //初始化一个配置文件, 如果要检查ts文件, 需要再问答时选择yes<br>npx eslint 路径 –fix //–fix会自动修复错误</p>
-</blockquote>
-<p>一个简单的配置文件.eslintrc.js, 该文件导出一个对象，对象包含属性 env、extends、parserOptions、globals、rules 五个属性, 在根目录下创建 src/index.js 文件, 引入 const lint = ‘eslint’ 来检验代码是否符合规范</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="attr">env</span>: &#123;</span><br><span class="line">        <span class="attr">browser</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">es6</span>: <span class="literal">false</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">extends</span>: [</span><br><span class="line">        <span class="string">&#x27;standard&#x27;</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">parserOptions</span>: &#123;</span><br><span class="line">        <span class="attr">ecmaVersion</span>: <span class="number">2015</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rules</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;no-alert&#x27;</span>: <span class="string">&quot;error&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">globals</span>: &#123;</span><br><span class="line">        <span class="string">&quot;jQuery&quot;</span>: <span class="string">&quot;readonly&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>env、parserOptions、plugins<br>我的程序里要用到 ES6 、React 、JSX 语法，这几个属性就是让 Eslint 能够检验到这些语法的</p>
-<p>extends<br>值为 “eslint:recommended” 的 extends 属性启用一系列核心规则，这些规则是经过前人验证的最佳实践（所谓最佳实践，就是大家伙都觉得应该遵循的编码规范），想知道最佳实践具体有哪些编码规范，可以在 eslint规则表 中查看被标记为 √ 的规则项。<br>关于 “airbnb” 编码规范说两句，在接触到大多数开源项目中，大多数的作者都会使用 “airbnb” 编码规范而不是 官方的 “extends”: “eslint:recommended” 编码规范。<br>如果我们觉得 eslint-config-airbnb 规则配置中个别规则并不符合当前项目的要求，可以直接在 .eslintrc.js 配置 rules 属性，优先级高于共享规则 airbnb</p>
-<p>ESLint 附带有大量的规则，修改规则应遵循如下要求：<br>“off” 或 0 - 关闭规则<br>“warn” 或 1 - 开启规则，使用警告级别的错误：warn (不会导致程序退出)<br>“error” 或 2 - 开启规则，使用错误级别的错误：error (当被触发的时候，程序会退出)<br>有的规则没有属性，只需控制是开启还是关闭，像这样：”eqeqeq”: “off”，有的规则有自己的属性，使用起来像这样：”quotes”: [“error”, “double”]，具体有没有自带属性，可查看 eslint规则表。</p>
-<p>几个常用的规则</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;quotes&quot;</span>: [<span class="number">1</span>, <span class="string">&quot;single&quot;</span>],            # 单引号</span><br><span class="line"><span class="string">&quot;quote-props&quot;</span>:[<span class="number">2</span>, <span class="string">&quot;as-needed&quot;</span>],     # 双引号自动变单引号</span><br><span class="line"><span class="string">&quot;semi&quot;</span>: [<span class="number">2</span>, <span class="string">&quot;never&quot;</span>],               # 一行结尾不要写分号</span><br><span class="line"><span class="string">&quot;comma-dangle&quot;</span>: [<span class="number">1</span>,<span class="string">&quot;always-multiline&quot;</span>]  # 对象或数组多行写法时，最后一个值加逗号</span><br></pre></td></tr></table></figure>
-
-<p><strong>配置注释</strong><br>注释规则参考: <a target="_blank" rel="noopener" href="http://eslint.cn/docs/user-guide/configuring#configuring-rules">http://eslint.cn/docs/user-guide/configuring#configuring-rules</a></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> str1 = <span class="string">&quot;$&#123;name&#125; is a coder&quot;</span> <span class="comment">// eslint-disable-line no-template-curly-in-string</span></span><br></pre></td></tr></table></figure>
-<p><strong>结合自动化gulp</strong><br>集成之后，ESLint 一定会工作,  这样做会与项目统一，管理更加方便</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.pipe(plugins.eslint())</span><br><span class="line">.pipe(plugins.eslint.format())</span><br><span class="line">.pipe(plugins.eslint.failAfterErrorO)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>结合webpack</strong><br>前置工作<br>·安装对应模块<br>·安装eslint模块<br>·安装eslint-loader模块<br>·初始化.eslintrc.js配置文件</p>
-<p>关于react引入却没使用的问题 npm install eslint-plugin-react</p>
-<p><strong>stylelint的认识</strong><br>使用方法基本可以参考eslint, 二者几乎是一样的</p>
-<blockquote>
-<p>npm install stylelint -D //安装<br>npx stylelint ./index.css //运行</p>
-</blockquote>
-<p>配置文件为.stylelintsrc.js, 需在文件中继承 standard (安装 npm install stylelint-config-standard)</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports =&#123;</span><br><span class="line">    <span class="attr">extends</span>: <span class="string">&quot;stylelint-config-standard&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>检查sass需要安装 npm install stylelint-config-sass-guidelines -D, 然后继承</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports =&#123;</span><br><span class="line">    <span class="attr">extends</span>: [</span><br><span class="line">        <span class="string">&quot;stylelint-config-standard&quot;</span></span><br><span class="line">        <span class="string">&quot;stylelint-config-sass-guidelines&quot;</span></span><br><span class="line">        ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>prettier的使用</strong></p>
-<blockquote>
-<p>npm install prettier -D //安装<br>npx prettier . –write</p>
-</blockquote>
-<p>不要完全依赖工具来格式化, 自己要写出良好的代码</p>
-<p><strong>git hooks</strong><br>它的工作机制就是个钩子</p>
-<p>eslint 结合git hooks, 使用hushy模块来实现</p>
-<blockquote>
-<p>npm intsall hushy -D //安装</p>
-</blockquote>
-<p>在package中添加一个husky对象</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;husky&quot;</span> : &#123;<span class="string">&quot; hooks&quot;</span> :&#123;</span><br><span class="line">    pre-commit<span class="string">&quot; : &quot;</span>npm run test<span class="string">&quot;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>安装 npm intsall lint-staged -D</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;scripts&quot;</span> :&#123;</span><br><span class="line">    <span class="string">&quot;test&quot;</span> : <span class="string">&quot;eslint ./index.js&quot;</span>,</span><br><span class="line">    <span class="string">&quot;precommit&quot;</span> :<span class="string">&quot;lint-staged&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="string">&quot;lint-staged&quot;</span> : &#123;</span><br><span class="line">    <span class="string">&quot;*.js&quot;</span>:[</span><br><span class="line">        <span class="string">&quot;eslint&quot;</span>,</span><br><span class="line">        <span class="string">&quot;git add&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>其中部分内容参考简书: <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ad1e46faaea2">https://www.jianshu.com/p/ad1e46faaea2</a></p>
-<p>原创博文, 如有错误, 敬请指导!</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/eslint/" rel="tag">eslint</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%A7%84%E8%8C%83%E5%8C%96/" rel="tag">规范化</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-mkh/mkh"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/15/mkh/mkh/"
-    >模块化工具</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/15/mkh/mkh/" class="article-date">
-  <time datetime="2022-01-15T03:23:22.000Z" itemprop="datePublished">2022-01-15</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="模块打包工具由来"><a href="#模块打包工具由来" class="headerlink" title="模块打包工具由来"></a>模块打包工具由来</h4><p>由于 ES Modules 存在环境兼容问题, 又模块文件较多, 网络请求比较频繁, 前端资源都需要模块化<br>新特性代码编译, 编译就是把es6编译成es5, 然后打包, 模块化JavaScript打包, 支持不同类型的资源模块</p>
-<p>打包工具：解决的不只是js的模块化，而是前端整体的模块化</p>
-<ul>
-<li>webpack 模块加载器  代码拆分 资源模块</li>
-<li>rollup</li>
-<li>parcel</li>
-</ul>
-<h4 id="webpack"><a href="#webpack" class="headerlink" title="webpack"></a>webpack</h4><p><strong>webpack的基本使用</strong><br>webpack比较先进, 非常受欢迎</p>
-<blockquote>
-<p>yarn init --yes<br>yarn add webpack webpack-cli --dev<br>yarn webpack --version<br>yarn webpack (会从index.js开始打包</p>
-</blockquote>
-<p><strong>配置文件</strong><br>支持0配置<br>一般来说会将 src/index.js 作为打包入口, 将结果存入 dist/main.js 中, 但是也可以自己在 webpack.config.js 中设置</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>)</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="attr">mode</span>: <span class="string">&#x27;none&#x27;</span>,</span><br><span class="line">    <span class="attr">entry</span>: <span class="string">&#x27;./src/main.js&#x27;</span>, <span class="comment">//设置输入</span></span><br><span class="line">    <span class="attr">output</span>: &#123; <span class="comment">//设置输出</span></span><br><span class="line">        <span class="attr">filename</span>: <span class="string">&#x27;bundle.js&#x27;</span>,</span><br><span class="line">        <span class="attr">path</span>: path.join(__dirname, <span class="string">&#x27;output&#x27;</span>) <span class="comment">//必须是绝对路径</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>打包模式</strong><br>使用cli设置打包模式 </p>
-<blockquote>
-<p>yarn webpack --mode development //优化速度模式<br>yarn webpack --mode none //普通模式</p>
-</blockquote>
-<p><strong>资源模块加载</strong><br>webpack内部默认只会打包js文件, 如果打包css需要安装loader来操作, webpack可将任何资源模块导入js一起打包</p>
-<blockquote>
-<p>yarn add css-loader --dev //来打包<br>yarn add style-loader --dev //来调用</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line"><span class="attr">rules</span>: [ <span class="comment">//加载规则</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">test</span>: <span class="regexp">/.css$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">            <span class="string">&#x27;style-loader&#x27;</span>, <span class="comment">//会从后往前执行</span></span><br><span class="line">            <span class="string">&#x27;css-loader&#x27;</span></span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>文件资源加载器</strong></p>
-<blockquote>
-<p>yarn add file-loader --dev //文件操作</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">publicPath: <span class="string">&#x27;dist/&#x27;</span> <span class="comment">//output</span></span><br><span class="line"></span><br><span class="line">&#123; <span class="comment">//rules</span></span><br><span class="line">    <span class="attr">test</span>: <span class="regexp">/.png$/</span>,</span><br><span class="line">    use: <span class="string">&#x27;file-loader&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>data url</strong></p>
-<blockquote>
-<p>yarn add url-loader --dev //路径操作</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123; <span class="comment">//rules</span></span><br><span class="line">    <span class="attr">test</span>: <span class="regexp">/.png$/</span>,</span><br><span class="line">    use: &#123;</span><br><span class="line">        <span class="attr">loader</span>: <span class="string">&#x27;url-loader&#x27;</span>,</span><br><span class="line">        <span class="attr">options</span>: &#123;</span><br><span class="line">            <span class="attr">limit</span>: <span class="number">10</span> * <span class="number">1024</span> <span class="comment">// 10 KB</span></span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>小文件可以使用 Data URLs，可以减少请求次数, 大文件尽量单独提取存放, 可以提高加载速度</p>
-<blockquote>
-<p>常用加载器分类<br>编译转换类<br>文件操作类<br>代码检查类</p>
-</blockquote>
-<p><strong>处理es6</strong><br>因为模块打包需要，所以处理 import 和 export</p>
-<blockquote>
-<p>yarn add babel-loader @babel/core @babel/preset-env --dev</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123; <span class="comment">//rules</span></span><br><span class="line">    <span class="attr">test</span>: <span class="regexp">/.js$/</span>,</span><br><span class="line">    use: &#123;</span><br><span class="line">        <span class="attr">loader</span>: <span class="string">&#x27;babel-loader&#x27;</span>,</span><br><span class="line">        <span class="attr">options</span>: &#123;</span><br><span class="line">            <span class="attr">presets</span>: [<span class="string">&#x27;@babel/preset-env&#x27;</span>]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<p>Webpack只是打包工具, 加载器可以用来编译转换代码</p>
-<p>兼容的模块加载方式有 import , require , define , 但是不要一个项目里写这么多种</p>
-<p><strong>html-loader</strong><br>默认只会处理img中的src属性, 所以处理options</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">test</span>: <span class="regexp">/.html$/</span>,</span><br><span class="line">    use: &#123;</span><br><span class="line">        <span class="attr">loader</span>: <span class="string">&#x27;html-loader&#x27;</span>,</span><br><span class="line">        <span class="attr">options</span>: &#123;</span><br><span class="line">            <span class="attr">attrs</span>: [<span class="string">&#x27;img:src&#x27;</span>, <span class="string">&#x27;a:href&#x27;</span>]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Webpack模块加载方式</strong><br>·遵循ES Modules标准的import声明<br>·遵循CommonJS标准的require函数<br>·遵循AMD标准的define函数和require函数<br>·样式代码中的@import指令和url函数。<br>·HTML代码中图片标签的src属性</p>
-<p><strong>核心工作原理</strong><br>根据打包入口, 分析模块, 递归依赖树, 解析模块, 把结果放入bundle.js<br>Loader的机制是Webpack的核心</p>
-<h5 id="Loader"><a href="#Loader" class="headerlink" title="Loader"></a>Loader</h5><p><strong>Loader工作原理</strong><br>例如我们可以自己编写一个markdown文件的Loader<br>创建markdown-loader.js<br>export 一个函数, 返回结果必须是js代码<br>rules引用<br>安装marked模块解析<br>yarn add marked --dev<br>可以自己处理成js返回<br>或html-loader来处理</p>
-<p>Loader负责资源文件从输入到输出的转换, 它其实是一个管道的概念, 可以拼接使用</p>
-<p><strong>插件机制</strong><br>plugin来解决除资源加载外, 其他自动化工作, 如清除, 拷贝, 压缩</p>
-<blockquote>
-<p>yarn add clean-webpack-plugin --dev //清理<br>yarn add html-webpack-plugin --dev //生成html<br>yarn add copy-webpack-plugin --dev //不编译直接复制过去</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注意删除publicpath</span></span><br><span class="line"><span class="keyword">const</span> &#123; CleanWebpackPlugin &#125; = <span class="built_in">require</span>(<span class="string">&#x27;clean-webpack-plugin&#x27;</span>) <span class="comment">//解构</span></span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">&#x27;html-webpack-plugin&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> CopyWebpackPlugin = <span class="built_in">require</span>(<span class="string">&#x27;copy-webpack-plugin&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="attr">plugins</span>: [</span><br><span class="line">    <span class="keyword">new</span> webpack.ProgressPlugin(),</span><br><span class="line">    <span class="keyword">new</span> CleanWebpackPlugin(),</span><br><span class="line">    <span class="comment">//用于生成index.html</span></span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">        title</span><br><span class="line">        meta</span><br><span class="line">        template</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">//用于生成iabout.html</span></span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">        <span class="attr">filename</span>: <span class="string">&#x27;about.html&#x27;</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> CopyWebpackPlugin([</span><br><span class="line">        <span class="comment">// &#x27;public/**&#x27; 路径 通配符</span></span><br><span class="line">        <span class="string">&#x27;public&#x27;</span></span><br><span class="line">    ])</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-
-<h5 id="开发一个插件"><a href="#开发一个插件" class="headerlink" title="开发一个插件"></a>开发一个插件</h5><p>Plugin通过钩子机制实现<br>插件必须一个函数或者是一个包含apply方法的对象，所以一般是新建一个class，然后在class里构建一个apply方法</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyPlugin</span> </span>&#123;</span><br><span class="line">    apply (compiler) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;MyPlugin 启动&#x27;</span>)</span><br><span class="line">        compiler.hooks.emit.tap(<span class="string">&#x27;MyPlugin&#x27;</span>, <span class="function"><span class="params">compilation</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// compilation =&gt; 可以理解为此次打包的上下文</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> name <span class="keyword">in</span> compilation.assets) &#123;</span><br><span class="line">        <span class="comment">// console.log(name)</span></span><br><span class="line">        <span class="comment">// console.log(compilation.assets[name].source())</span></span><br><span class="line">        <span class="keyword">if</span> (name.endsWith(<span class="string">&#x27;.js&#x27;</span>)) &#123;</span><br><span class="line">        <span class="keyword">const</span> contents = compilation.assets[name].source()</span><br><span class="line">        <span class="keyword">const</span> withoutComments = contents.replace(<span class="regexp">/\/\*\*+\*\//g</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        compilation.assets[name] = &#123;</span><br><span class="line">        <span class="attr">source</span>: <span class="function">() =&gt;</span> withoutComments,</span><br><span class="line">        <span class="attr">size</span>: <span class="function">() =&gt;</span> withoutComments.length</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>plugins中调用 new MyPlugin()<br>插件是通过在生命周期的钩子中挂载函数实现扩展</p>
-<p><strong>如何增强webpack开发体验</strong></p>
-<blockquote>
-<p>yarn webpack --watch //实现自动编译 -- watch监听<br>自动刷新浏览器, 如果用browersync启动再监听, 会比较麻烦, 所以用 webpack-dev-server, 需注意该命令没有自动打包<br>yarn add webpack-dev-server --dev //是个cli<br>yarn webpack-dev-server --open //自动打开浏览器<br>注意: webpack-dev-server 访问静态资源需另外配置devServer</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">devServer: &#123;</span><br><span class="line">    <span class="attr">contentBase</span>: <span class="string">&#x27;./public&#x27;</span>,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<p>webpack-dev-server 支持代理配置</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">proxy: &#123;</span><br><span class="line">    <span class="string">&#x27;/api&#x27;</span>: &#123;</span><br><span class="line">    <span class="comment">// http://localhost:8080/api/users -&gt; https://api.github.com/api/users</span></span><br><span class="line">    <span class="attr">target</span>: <span class="string">&#x27;https://api.github.com&#x27;</span>,</span><br><span class="line">    <span class="comment">// http://localhost:8080/api/users -&gt; https://api.github.com/users</span></span><br><span class="line">    <span class="attr">pathRewrite</span>: &#123;</span><br><span class="line">    <span class="string">&#x27;^/api&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 不能使用 localhost:8080 作为请求 GitHub 的主机名</span></span><br><span class="line">    <span class="attr">changeOrigin</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Source Map (.map后缀名）</strong><br>靠在结尾添加注释来引入Source Map, Source Map解决了源代码与运行代码不一致所产生的问题, webpack也可以通过配置属性devtool生成.map文件 </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">devtool: <span class="string">&#x27;source-map&#x27;</span>,</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/01/15/mkh/mkh/1623729629215.jpg" alt="1623729629215.jpg"><br>选择合适的source-map<br>开发环境选择c-m-e-s-m<br>我的代码每行不会超过80个字符<br>我的代码经过 Loader转换过后的差异较大<br>首次打包速度慢无所谓，重写打包相对较快</p>
-<p>生产模式选择none, 因为source map会暴露源代码, 毕竟调试是开发阶段的事, 如果没有信心就nosources-s-m</p>
-<p><strong>开启hmr热更新</strong><br>自动刷新导致的页面状态丢失<br>HMR 热更新体验非常友好<br>HMR是Webpack中最强大的功能之一<br>极大程度的提高了开发者的工作效率</p>
-<p>hmr已经集成在 webpack-dev-server中 不需要安装</p>
-<blockquote>
-<p>yarn webpack-dev-server --hot //使用命令行或通过配置开启</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">&#x27;webpack&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="attr">devServer</span>: &#123;</span><br><span class="line">    <span class="attr">hot</span>: <span class="literal">true</span></span><br><span class="line">    <span class="comment">// hotOnly: true // 只使用 HMR，不会 fallback 到 live reloading</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="attr">plugins</span>: [</span><br><span class="line">    <span class="keyword">new</span> webpack.HotModuleReplacementPlugin()</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<p>这样只能自动更新样式, 而样式是因为style-loader来操作的, hmr没有通用的js替换方案<br>hmr注意事项</p>
-<p>生产环境优化 不同环境下的配置<br>1.配置文件根据环境不同导出不同配置 （适用于中小型项目）<br>2.一个环境对应一个配置文件 yarn add webpack-merge</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;build&quot;</span>: <span class="string">&quot;webpack --config webpack.prod.js&quot;</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-
-<p>内置插件 definePlugin 可以为代码注入一些可能会变化的值 如api</p>
-<p><strong>tree-shaking</strong><br>摇掉未引用代码, 会在生产模式下自动开启, 使用如下</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">optimization: &#123;</span><br><span class="line">    <span class="comment">// 模块只导出被使用的成员 导出 但不引用（标记枯树枝）</span></span><br><span class="line">    <span class="attr">usedExports</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="comment">// 尽可能合并每一个模块到一个函数中 （作用域提升）</span></span><br><span class="line">    <span class="attr">concatenateModules</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="comment">// 压缩输出结果 删除未引用成员 （摇掉枯树枝）</span></span><br><span class="line">    <span class="comment">// minimize: true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>tree-shaking 的前提是必须使用 ES Modules 的代码, 最新版本的babel不会导致树摇失效, 如果不确定就写入这些↓</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">options: &#123;</span><br><span class="line">    <span class="attr">presets</span>: [</span><br><span class="line">    <span class="comment">// 如果 Babel 加载模块时已经转换了 ESM，则会导致 Tree Shaking 失效</span></span><br><span class="line">    <span class="comment">// [&#x27;@babel/preset-env&#x27;, &#123; modules: &#x27;commonjs&#x27; &#125;]</span></span><br><span class="line">    <span class="comment">// [&#x27;@babel/preset-env&#x27;, &#123; modules: false &#125;]</span></span><br><span class="line">    <span class="comment">// 也可以使用默认配置，也就是 auto，这样 babel-loader 会自动关闭 ESM 转换</span></span><br><span class="line">    [<span class="string">&#x27;@babel/preset-env&#x27;</span>, &#123; <span class="attr">modules</span>: <span class="string">&#x27;false&#x27;</span> &#125;]</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>sideEffects</strong><br>标记副作用, 生产环境自动开启</p>
-<p><strong>代码分割</strong><br>代码分割就是分包, 如果bundle体积过大会浪费流量和带宽, 但分割时资源不要太大也不要太碎</p>
-<p><strong>多入口打包</strong><br>适用于多页面程序, 把entry改成对象</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">entry: &#123;</span><br><span class="line">    <span class="attr">index</span>: <span class="string">&#x27;./src/index.js&#x27;</span>,</span><br><span class="line">    <span class="attr">album</span>: <span class="string">&#x27;./src/album.js&#x27;</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="attr">output</span>: &#123;</span><br><span class="line">    <span class="attr">filename</span>: <span class="string">&#x27;[name].bundle.js&#x27;</span></span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line"><span class="attr">optimization</span>: &#123;</span><br><span class="line">    <span class="attr">splitChunks</span>: &#123;</span><br><span class="line">        <span class="comment">// 自动提取所有公共模块到单独 bundle</span></span><br><span class="line">        <span class="attr">chunks</span>: <span class="string">&#x27;all&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line"><span class="attr">plugins</span>: [</span><br><span class="line">    <span class="keyword">new</span> CleanWebpackPlugin(),</span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">        <span class="attr">title</span>: <span class="string">&#x27;Multi Entry&#x27;</span>,</span><br><span class="line">        <span class="attr">template</span>: <span class="string">&#x27;./src/index.html&#x27;</span>,</span><br><span class="line">        <span class="attr">filename</span>: <span class="string">&#x27;index.html&#x27;</span>,</span><br><span class="line">        <span class="attr">chunks</span>: [<span class="string">&#x27;index&#x27;</span>]</span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">        <span class="attr">title</span>: <span class="string">&#x27;Multi Entry&#x27;</span>,</span><br><span class="line">        <span class="attr">template</span>: <span class="string">&#x27;./src/album.html&#x27;</span>,</span><br><span class="line">        <span class="attr">filename</span>: <span class="string">&#x27;album.html&#x27;</span>,</span><br><span class="line">        <span class="attr">chunks</span>: [<span class="string">&#x27;album&#x27;</span>]</span><br><span class="line">    &#125;)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p><strong>动态导入</strong><br>动态导入的模块会被自动分包, 是按需加载的, 如果是vue或者react单页面开发的话, 就可以在路由映射组件实现这种按需加载</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// import posts from &#x27;./posts/posts&#x27; 不再用这种方式导入</span></span><br><span class="line"><span class="comment">// import album from &#x27;./album/album&#x27;</span></span><br><span class="line"><span class="keyword">const</span> render = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> hash = <span class="built_in">window</span>.location.hash || <span class="string">&#x27;#posts&#x27;</span></span><br><span class="line">    <span class="keyword">const</span> mainElement = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;.main&#x27;</span>)</span><br><span class="line">    mainElement.innerHTML = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> (hash === <span class="string">&#x27;#posts&#x27;</span>) &#123;</span><br><span class="line">        <span class="comment">// mainElement.appendChild(posts()) </span></span><br><span class="line">        <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &#x27;components&#x27; */</span><span class="string">&#x27;./posts/posts&#x27;</span>).then(<span class="function">(<span class="params">&#123; <span class="keyword">default</span>: posts &#125;</span>) =&gt;</span> &#123; <span class="comment">//魔法注释</span></span><br><span class="line">        mainElement.appendChild(posts())</span><br><span class="line">    &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (hash === <span class="string">&#x27;#album&#x27;</span>) &#123;</span><br><span class="line">        <span class="comment">// mainElement.appendChild(album())</span></span><br><span class="line">        <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &#x27;components&#x27; */</span><span class="string">&#x27;./album/album&#x27;</span>).then(<span class="function">(<span class="params">&#123; <span class="keyword">default</span>: album &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">        mainElement.appendChild(album())</span><br><span class="line">    &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>提取css到单个文件</strong><br>超过150kb才会考虑单独提取</p>
-<blockquote>
-<p>yarn add mini-css-extract-plugin --dev<br>yarn add optimize-css-assets-webpack-plugin --dev</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MiniCssExtractPlugin = <span class="built_in">require</span>(<span class="string">&#x27;mini-css-extract-plugin&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> OptimizeCssAssetsWebpackPlugin = <span class="built_in">require</span>(<span class="string">&#x27;optimize-css-assets-webpack-plugin&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> TerserWebpackPlugin = <span class="built_in">require</span>(<span class="string">&#x27;terser-webpack-plugin&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="attr">optimization</span>: &#123;</span><br><span class="line">    <span class="attr">minimizer</span>: [</span><br><span class="line">        <span class="keyword">new</span> TerserWebpackPlugin(),</span><br><span class="line">        <span class="keyword">new</span> OptimizeCssAssetsWebpackPlugin()</span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line"><span class="attr">module</span>: &#123;</span><br><span class="line">    <span class="attr">rules</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">        <span class="attr">test</span>: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">            <span class="comment">// &#x27;style-loader&#x27;, // 将样式通过 style 标签注入</span></span><br><span class="line">            MiniCssExtractPlugin.loader,</span><br><span class="line">            <span class="string">&#x27;css-loader&#x27;</span></span><br><span class="line">        ]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line"><span class="attr">plugins</span>: [</span><br><span class="line">    <span class="keyword">new</span> MiniCssExtractPlugin()</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p><strong>输出文件名hash</strong><br>[hash] //整体hash<br>[chunkhash] //文件hash<br>[contenthash:8] //hash位数</p>
-<h4 id="rollup"><a href="#rollup" class="headerlink" title="rollup"></a>rollup</h4><p>rollup 也是 ES Modules 的打包器, 但仅仅是ES Modules打包器. 与webpack非常类似, 但小巧的多, 它不支持hmr这种高级功能, 会默认开启树摇</p>
-<blockquote>
-<p>yarn add rollup --dev  //可以提供一个cli<br>yarn rollup ./src/index.js --format iife(自调用函数） --file dist/bundle.js</p>
-</blockquote>
-<p><strong>配置文件</strong><br>rollup.config.js , 导出的是一个对象</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="attr">input</span>: <span class="string">&#x27;src/index.js&#x27;</span>,</span><br><span class="line">    <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="attr">file</span>: <span class="string">&#x27;dist/bundle.js&#x27;</span>,</span><br><span class="line">        <span class="attr">format</span>: <span class="string">&#x27;iife&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>yarn rollup --config //启动打包</p>
-<p><strong>扩展途径</strong><br>插件是 Rollup唯一扩展途径</p>
-<blockquote>
-<p>yarn add rollup-plugin-json --dev</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json <span class="keyword">from</span> <span class="string">&#x27;rollup-plugin-json&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="attr">plugins</span>: [</span><br><span class="line">        json() <span class="comment">//放入的是调用结果</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>加载npm模块</strong></p>
-<blockquote>
-<p>yarn add rollup-plugin-node-resolve --dev</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> resolve <span class="keyword">from</span> <span class="string">&#x27;rollup-plugin-node-resolve&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="attr">plugins</span>: [</span><br><span class="line">        resolve()</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>加载common.js</strong></p>
-<blockquote>
-<p>yarn add rollup-plugin-commonjs --dev</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> commonjs <span class="keyword">from</span> <span class="string">&#x27;rollup-plugin-node-resolve&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="attr">plugins</span>: [     </span><br><span class="line">        commonjs()</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>代码拆分</strong><br>使用的方式是动态导入</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(<span class="string">&#x27;./logger&#x27;</span>).then(<span class="function">(<span class="params">&#123; log &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">    log(<span class="string">&#x27;code splitting~&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="attr">input</span>: <span class="string">&#x27;src/index.js&#x27;</span>,</span><br><span class="line">    <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="comment">// file: &#x27;dist/bundle.js&#x27;,</span></span><br><span class="line">        <span class="comment">// format: &#x27;iife&#x27;</span></span><br><span class="line">        <span class="attr">dir</span>: <span class="string">&#x27;dist&#x27;</span>,</span><br><span class="line">        <span class="attr">format</span>: <span class="string">&#x27;amd&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>多入口打包</strong><br>公共部分会自动提取, 将input修改为数组或对象就可以了</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="comment">// input: [&#x27;src/index.js&#x27;, &#x27;src/album.js&#x27;],</span></span><br><span class="line">    <span class="attr">input</span>: &#123;</span><br><span class="line">        <span class="attr">foo</span>: <span class="string">&#x27;src/index.js&#x27;</span>,</span><br><span class="line">        <span class="attr">bar</span>: <span class="string">&#x27;src/album.js&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="attr">dir</span>: <span class="string">&#x27;dist&#x27;</span>,</span><br><span class="line">        <span class="attr">format</span>: <span class="string">&#x27;amd&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>页面不能直接引用amd格式的输出文件，要用require来引用</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- AMD 标准格式的输出 bundle 不能直接引用 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- &lt;script src=&quot;foo.js&quot;&gt;&lt;/script&gt; --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 需要 Require.js 这样的库 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://unpkg.com/requirejs@2.3.6/require.js&quot;</span> <span class="attr">data-main</span>=<span class="string">&quot;foo.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-<p><strong>rollup与webpack</strong><br>优点<br>·输出结果更加扁平<br>·自动移除未引用代码<br>·打包结果依然完全可读</p>
-<p>缺点<br>·加载非 ESM的第三方模块比较复杂<br>·模块最终都被打包到一个函数中，无法实现 HMR<br>·浏览器环境中,代码拆分功能依赖AMD库</p>
-<p>Webpack 大而全，Rollup 小而美<br>应用开发使用建议 Webpack<br>库/框架开发使用建议 Rollup</p>
-<h4 id="parcel"><a href="#parcel" class="headerlink" title="parcel"></a>parcel</h4><p>parcel 是零配置前端应用打包器, 官方建议使用html作为打包的入口文件</p>
-<blockquote>
-<p>yarn add parcel-bundler --dev<br>yarn parcel src/index.html<br>yarn parcel build src/index.html</p>
-</blockquote>
-<p>优点:<br>打包同时会启动服务器<br>支持热特换<br>支持自动安装依赖<br>支持动态导入<br>构建速度非常快（多进程）</p>
-<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/parcel/" rel="tag">parcel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rollup/" rel="tag">rollup</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/" rel="tag">webpack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-modules/modules"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/01/11/modules/modules/"
-    >模块化</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/01/11/modules/modules/" class="article-date">
-  <time datetime="2022-01-11T04:01:47.000Z" itemprop="datePublished">2022-01-11</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h4><p>内容概要<br>·模块化演变过程<br>·模块化规范<br>·常用的模块化打包工具<br>·基于模块化工具构建现代Web应用</p>
-<h5 id="演变过程"><a href="#演变过程" class="headerlink" title="演变过程"></a>演变过程</h5><p>1: 文件划分方式<br>没有私人空间<br>污染全局作用域<br>命名冲突问题<br>无法管理模块依赖关系</p>
-<p>2: 命名空间方式<br>包裹全局对象中<br>私有变量不安全</p>
-<p>3: lIFE<br>闭包 私有变量安全</p>
-<p>以上是在早期没有工具和规范的情况下, 对模块化的落地方式</p>
-<p><strong>模块化规范的出现</strong><br>模块化标准＋模块加载器</p>
-<p>commonjs规范: CommonJS是以同步模式加载模块<br>·一个文件就是一个模块<br>·每个模块都有单独的作用域<br>·通过module.exports导出成员<br>·通过require函数载入模块</p>
-<p>AMD (Asynchronous Module Definition) 异步模块定义规范<br>.AMD使用起来相对复杂<br>·模块JS文件请求频繁</p>
-<p>require.js: 使用define定义模块, 使用require加载模块, 我理解为它和早期的angularjs很像</p>
-<p>Sea.is + CMD 后被require兼容了</p>
-<h5 id="模块化标准规范"><a href="#模块化标准规范" class="headerlink" title="模块化标准规范"></a>模块化标准规范</h5><p>浏览器使用ES Modules标准规范, nodejs使用commonJs标准来规范<br>ES Modules是当下最主流的规范了</p>
-<p>ES Modules基本特性<br>自动采用严格模式，忽略’use strict’, 每个ES Modules模块都是单独的私有作用域, ES Modules是通过CORS去请求外部JS模块的, ES Modules的 script标签会延迟执行脚本</p>
-<p><strong>导入导出</strong><br>使用export导出, 使用import导入, 使用as输出重命名, 如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> &#123;</span><br><span class="line">    hello <span class="keyword">as</span> fooHello</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意<br>虽然长得一样, 但导出的不是字面量, 导入的不是解构<br>导出的是引用关系, 不是值<br>导入的成员是只读, 不能更改</p>
-</blockquote>
-<p><strong>import用法</strong><br>引入不能省略后面的扩展名<br>相对路径以./开头, 绝对路径以/开头, 或者使用完整的url<br>{}为空时就只加载那个模块, 不需要引用进来<br>* as mod引入所有成员<br>不能from变量, 只能写在最上面<br>动态加载模块</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(<span class="string">&#x27;./module.js&#x27;</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params"><span class="built_in">module</span></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">module</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>提取默认成员</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; name, age, <span class="keyword">default</span> <span class="keyword">as</span> title &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br><span class="line"><span class="keyword">import</span> abc, &#123; name, age &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br></pre></td></tr></table></figure>
-<p>直接导出导入的成员</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> &#123; foo, bar &#125; <span class="keyword">from</span> <span class="string">&#x27;./module.js&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>polyfill</strong><br>IE不能兼容ES Modules, 就只能引入unpkg的js地址<br>nomodule属性只在不支持ES Modules环境中运行, 所以可以拿nomodule来引入unpkg, 否则就会在能兼容ES Modules的环境里执行两次</p>
-<p><strong>node中使用ES Modules的实验</strong><br>node版本&gt;8.5就可以使用ES Modules, 需要把文件后缀的.js换成.mjs<br>使用命令&gt;node –experimental-modules index.mjs 来执行</p>
-<p><strong>ES Modules与CommonJS</strong><br>ES Modules中可以导入CommonJS模块, 但CommonJS中不能导入ES Modules模块, CommonJS 始终只会导出一个默认成员</p>
-<p>ES Modules与CommonJS差异</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//因ES Modules没有直接获取路径的方法, 所以用以下方法获取路径</span></span><br><span class="line"><span class="keyword">import</span> &#123; fileURLToPath &#125; <span class="keyword">from</span> <span class="string">&#x27;url&#x27;</span><span class="keyword">import</span> &#123; dirname &#125; <span class="keyword">from</span> <span class="string">&#x27;path&#x27;</span></span><br><span class="line"><span class="keyword">const</span> _filename = fileURLToPath( <span class="keyword">import</span>.meta.url)<span class="built_in">console</span>.log(__filename)</span><br><span class="line"><span class="keyword">const</span> _dirname = dirname(__filename)<span class="built_in">console</span>.log(_dirname)</span><br></pre></td></tr></table></figure>
-
-<p>如果我们在package.json中写入type: ‘modules’ 就可以不用mjs的扩展名了, 修改回.js扩展名<br>不过这样的话, ES Modules中的CommonJS需要后缀名修改为.cjs才能运行</p>
-<p>早期的node可以使用babel支持ES Modules</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;yarn add ababel/node ababel/core ababel/preset-env --dev</span><br><span class="line">&gt;yarn babel-node</span><br><span class="line">&gt;yarn babel-node index.js --presets=ababel/preset-env</span><br></pre></td></tr></table></figure>
-<p>或在.babelrc 中写入</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&quot; presets&quot;</span> : [<span class="string">&quot;@babel/preset-env&quot;</span> ]&#125;</span><br></pre></td></tr></table></figure>
-<p>就可以&gt;yarn babel-node index.js执行了</p>
-<p>还可以单独安装插件, 然后在 .babelrc 中引入</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">&quot;plugins&quot;</span>:[</span><br><span class="line">    <span class="string">&quot;@babel/plugin-transform-modules-commonjs&quot;</span><span class="number">1</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后&gt;yarn babel-node index.js 就可以直接执行上面那一长串命令了</p>
-<h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CommonJS/" rel="tag">CommonJS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES-Modules/" rel="tag">ES Modules</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-functionalProgramming"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/12/24/functionalProgramming/"
-    >函数式编程</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/12/24/functionalProgramming/" class="article-date">
-  <time datetime="2021-12-24T02:09:22.000Z" itemprop="datePublished">2021-12-24</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%BF%9B%E9%98%B6%E7%AC%94%E8%AE%B0/">前端进阶笔记</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h4><p><strong>函数式编程是—种编程范式</strong>，我们常见的编程范式有命令式编程(lmperative<br>programming)，函数式编程，逻辑式编程，<em>常见的面向对象编程是也是一种命令式编程</em>。</p>
-<p>命令式编程是面向计算机硬件的抽象，有变量(对应着存储单元)，赋值语句(获取，存储指令)，表达式(内存引用和算术运算）和控制语句（跳转指令)。<br>而函数式编程是面向数学的抽象，将计算描述为一种表达式求值，一句话，函数式程序就是一个表达式。</p>
-<p>函数式编程中的函数这个术语不是指计算机中的函数(实际上是Subroutine)，而是指<strong>数学中的函数</strong>，即自<strong>变量的映射</strong>。也就是说一个函数的值仅决定于函数参数的值，不依赖其他状态。比如sqrt(x)函数计算x的平方根，只要x不变，不论什么时候调用，调用几次，值都是不变的。<br>在函数式语言中，<strong>函数作为一等公民</strong>，可以在任何地方定义，在函数内或函数外，可以作为函数的参数和返回值，可以对函数进行组合。</p>
-<p>函数式运算的核心，就是把运算过程抽象成函数，合成的过程就是抽象的过程。函数式运算可以最大程度的重用。<br>函数的名字要有实际性的意义，这对函数式编程来说非常重要。函数式编程经常会使用箭头函数，会使代码更简洁。</p>
-<h5 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h5><p>高阶函数的英文名叫 Higher-Order Function，是函数式编程的基本技术。<strong>把函数作为参数传入，这样的函数称为高阶函数</strong>，编写高阶函数，就是让函数的参数能够接收别的函数。函数式编程就是指这种高度抽象的编程范式。</p>
-<p>因为在JS中函数是一等公民，即函数可以被赋值给变量，被变量引用，这便使得函数可以作为参数，在其他函数间相互传递。这是JS作为一门“一切皆为对象”的语言，也能拥有函数式编程的能力</p>
-<p>闭包（可以判定有基准值的问题）</p>
-<h5 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h5><blockquote>
-<p><strong>函数的副作用</strong><br>函数的副作用会让函数变得不纯（函数如果依赖外部变量，就会产生副作用，既是不纯函数）。副作用会使函数通用性下降，不适合扩展和重用，会给程序带来安全隐患。副作用不能完全禁止，只能尽量控制。<br>副作用来源：全局变量，配置文件，数据库，用户输入等所有的外部交互</p>
-</blockquote>
-<p>纯函数始终有输入和输出，相同的输入一定是相同的输出，没有可观察的副作用。纯函数不会调用外部作用域的变量。使得函数与外部解耦，函数的使用更加安全。</p>
-<p>纯函数的好处有：</p>
-<ul>
-<li>可缓存 可以提高程序的性能</li>
-<li>可测试</li>
-<li>并行处理（对比多线程并行操作共享内存数据的意外）</li>
-</ul>
-<h5 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h5><blockquote>
-<p>维基百科：Currying，是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。</p>
-</blockquote>
-<p>当函数有多个参数时，可以分解函数，先传递一部分（不变）的参数，然后返回新的函数接收剩余的参数，然后返回结果。</p>
-<blockquote>
-<p>示例</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通的add函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Currying后</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curryingAdd</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">y</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x + y</span><br><span class="line">    &#125;&#125;</span><br><span class="line"></span><br><span class="line">add(<span class="number">1</span>, <span class="number">2</span>)           <span class="comment">// 3</span></span><br><span class="line">curryingAdd(<span class="number">1</span>)(<span class="number">2</span>)   <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
-
-<p>实际上就是把add函数的x，y两个参数变成了先用一个函数接收x然后返回一个函数去处理y参数。现在思路应该就比较清晰了，就是只传递给函数一部分参数来调用它，让它返回一个函数去处理剩下的参数。</p>
-<p>lodash中的柯里化 _.curry(func)，可以帮我们把多元函数转化为一元函数<br>如果传入所有参数就返回结果，如果传入部分参数就返回一个函数，使之可以继续传入参数<br>图12/10-12</p>
-<p><strong>总结</strong></p>
-<ul>
-<li>柯里化可以先传递一些函数并返回一个已有某些固定参数的新函数</li>
-<li>是对函数参数的一种‘缓存’，让参数可以复用</li>
-<li>让函数变得灵活，颗粒更小 </li>
-<li>把多远函数变为一元函数，可以组合使用，产生强大的功效</li>
-</ul>
-<p>可参考资料<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2975c25e4d71">https://www.jianshu.com/p/2975c25e4d71</a></p>
-<h5 id="函数的组合compose"><a href="#函数的组合compose" class="headerlink" title="函数的组合compose"></a>函数的组合compose</h5><p>其思想为将数据依次经过几个函数处理（函数的嵌套），最终输出结果数据。</p>
-<p>函数组合默认是从右到左执行。大函数拆分成小函数，可以容易debug。函数的组合要满足结合律（数学意义上的结合律）</p>
-<p>Lodash的_.flow 提供了 compose 的功能，且可读性更强。_.flow()从左往右执行 _.flowRight()从右往左执行</p>
-<p>调试函数组合时可以定义一个内含打印和返回的辅助函数</p>
-<h6 id="lodash中的fp模块"><a href="#lodash中的fp模块" class="headerlink" title="lodash中的fp模块"></a>lodash中的fp模块</h6><p>fp模块提供的方法都是经过柯里化的</p>
-<ul>
-<li>提供了实用的对函数式编程友好的方法</li>
-<li>函数优先  数据之后</li>
-</ul>
-<p>_.map有个小问题，它会给第二个参数（函数a）传递三个参数(item, index, array)，这就有可能会影响到函数a的运作,而fp中的map函数可以解决这个问题</p>
-<blockquote>
-<p>示例</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> _ = <span class="built_in">require</span>(<span class="string">&#x27;lodash&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fp = <span class="built_in">require</span>(<span class="string">&#x27;lodash/fp&#x27;</span>);</span><br><span class="line"><span class="keyword">let</span> arr1 = [<span class="string">&#x27;10&#x27;</span>, <span class="string">&#x27;20&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;40&#x27;</span>];</span><br><span class="line"><span class="built_in">console</span>.log(_.map(arr1, <span class="built_in">parseInt</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//执行结果[ 10, NaN, NaN, NaN ]</span></span><br><span class="line"><span class="comment">//parseInt 执行顺序</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;10&#x27;,0,array) 10</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;20&#x27;,1,array) NAN</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;30&#x27;,2,array) NAN</span></span><br><span class="line"><span class="comment">//parseInt(&#x27;40&#x27;,3,array) NAN</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//解决这个问题使用lodash/fp模块</span></span><br><span class="line"><span class="built_in">console</span>.log(fp.map(<span class="built_in">parseInt</span>, arr1));</span><br><span class="line"><span class="comment">//[ 10, 20, 30, 40 ]</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="pointfree模式"><a href="#pointfree模式" class="headerlink" title="pointfree模式"></a>pointfree模式</h5><p>pointFree：我们可以把数据处理的过程定义成与数据无关的合成运算，不需要用到代表数据的那个参数，只要把简单的运算步骤合成到一起，在使用这种模式之前我们需要定义一些辅助的基本运算函数。</p>
-<ul>
-<li>不需要指明处理的数据</li>
-<li>只需要合成运算过程</li>
-<li>需要定义一些辅助的基本运算函数</li>
-</ul>
-<h4 id="函子Functor"><a href="#函子Functor" class="headerlink" title="函子Functor"></a>函子Functor</h4><p>我们学习函子是为了在函数式编程中把副作用控制在可控范围内、作异常处理、异步操作等。我们可以把函子想象成一个盒子，里面有map方法，传进一个值，对值进行处理。<br>函子是一个特殊的容器（包含值和值的变形关系（函数）），通过一个普通的对象来实现。函子是一个对象，对外提供map方法，永远不取值出来，只在map里对值进行操作。（以_开头的值是私有值，不对外公布。）</p>
-<p>总结：</p>
-<ul>
-<li>函数式编程的运算不直接操作值，而是由函子完成。</li>
-<li>函子就是一个实现了map契约的对象</li>
-<li>我们可以把函子想象成一个盒子，这个盒子里封装了一个值</li>
-<li>想要处理盒子中的值，我们需要给盒子的map方法传递一个处理值的函数（纯函数)，由这个函数来对值进行处理</li>
-<li>最终map方法返回一个包含新值的盒子(函子)</li>
-</ul>
-<p><strong>maybe函子</strong><br>maybe函子为了避免函子传入空值（null/undefined）情况的发生，它作用就是可以对外部的空值情况做处理（控制副作用在允许的范围）</p>
-<p><strong>either函子</strong><br> 异常会让函数变的不纯，通过either函子去处理异常，可以记录错误信息。类似于 if…else…的处理。</p>
-<p><strong>IO函子</strong><br>IO函子中的_value是一个函数，这里把函数当做值来处理。IO函子把不纯的操作存储到_value中交给调用者去处理，延迟不纯的操作，包装当前的纯操作。缺点是嵌套函子很不方便。</p>
-<p><strong>task函子</strong><br>task用于解决异步任务，和promise非常像，返回方法是resolver.resolve、resolver.reject，调用方法有.run()、.listen({onRejected/onResolved)}等。</p>
-<blockquote>
-<p>folktale是一个标准的函数式编程库，和lodash、ramda不同的是，他没有提供很多功能函数，只提供了一些函数式处理的操作，例如: compose、curry等，一些函子Task、Either、MayBe等<br>folktale的基本使用<a target="_blank" rel="noopener" href="https://folktale.origamitower.com/">https://folktale.origamitower.com/</a></p>
-</blockquote>
-<p><strong>pointed函子</strong><br>pointed函子只是一个概念而已，是实现了 of 静态方法的函子</p>
-<p><strong>monad函子</strong><br>monad函子是可以变扁的pointed函子，一个函子如果具有join和of两个方法并遵守一些定律就是一个monad。</p>
-<ul>
-<li>处理值用map</li>
-<li>处理函数用flatMap</li>
-</ul>
-<h4 id="函数式编程总结"><a href="#函数式编程总结" class="headerlink" title="函数式编程总结"></a>函数式编程总结</h4><p>1，可读性强：声明式(Declarative)使得代码即使没有注释也有很高的可读性(这也是 React 的一大卖点)。<br>2，代码量少：项目越大，越节省代码量(大量的函数被复用)。<br>3，代码稳定可靠：纯函数的功劳。<br>4，容易维护性：符合「单一职能原则」，使得代码的维护与迭代更加容易。</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/" rel="tag">lodash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9F%AF%E9%87%8C%E5%8C%96/" rel="tag">柯里化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/" rel="tag">高阶函数</a></li></ul>
 
     </footer>
   </div>
