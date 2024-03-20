@@ -2,7 +2,7 @@
 title: TypeScript
 date: 2021-05-28 12:42:30
 categories: 
-- 前端进阶笔记
+- 高级前端笔记
 tags: 
 - TypeScript
 - 类

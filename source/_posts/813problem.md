@@ -2,7 +2,7 @@
 title: 关于8月13日Github改版,hexo受到影响的总结
 date: 2021-08-20 10:31:18
 categories: 
-- 前端进阶笔记
+- 高级前端笔记
 tags: 
 - 其他
 ---

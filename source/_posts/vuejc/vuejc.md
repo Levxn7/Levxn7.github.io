@@ -2,7 +2,7 @@
 title: vue基础
 date: 2021-06-25 12:58:56
 categories: 
-- 前端进阶笔记
+- 高级前端笔记
 tags: 
 - vue
 ---

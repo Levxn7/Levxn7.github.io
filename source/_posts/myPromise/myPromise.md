@@ -2,7 +2,7 @@
 title: 手写一个Promise的内部基本实现
 date: 2021-12-06 15:53:41
 categories: 
-- 前端进阶笔记
+- 高级前端笔记
 tags: 
 - Promise
 ---

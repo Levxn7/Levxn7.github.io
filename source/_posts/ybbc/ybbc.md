@@ -2,7 +2,7 @@
 title: 异步编程
 date: 2021-11-20 17:21:33
 categories: 
-- 前端进阶笔记
+- 高级前端笔记
 tags: 
 - 异步编程
 - Promise

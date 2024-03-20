@@ -2,7 +2,7 @@
 title: snabbdom
 date: 2021-07-15 15:37:29
 categories: 
-- 前端进阶笔记
+- 高级前端笔记
 tags: 
 - snabbdom
 ---

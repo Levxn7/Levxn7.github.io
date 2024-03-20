@@ -2,7 +2,7 @@
 title: ECMAScript新特性
 date: 2021-11-28 11:58:46
 categories: 
-- 前端进阶笔记
+- 高级前端笔记
 tags: 
 - es6
 ---

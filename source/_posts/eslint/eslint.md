@@ -2,7 +2,7 @@
 title: eslint
 date: 2022-01-26 12:14:11
 categories: 
-- 前端进阶笔记
+- 高级前端笔记
 tags: 
 - 规范化
 - eslint

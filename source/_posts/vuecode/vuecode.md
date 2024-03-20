@@ -2,7 +2,7 @@
 title: vue源码琐碎知识点
 date: 2021-07-12 14:20:26
 categories: 
-- 前端进阶笔记
+- 高级前端笔记
 tags: 
 - vue
 ---

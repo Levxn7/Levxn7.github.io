@@ -1,8 +1,8 @@
 ---
-title: vue源码复习(首次渲染e)
+title: vue源码复习(首次渲染)
 date: 2022-03-01 12:58:56
 categories: 
-- 前端进阶笔记
+- 高级前端笔记
 tags: 
 - vue
 ---

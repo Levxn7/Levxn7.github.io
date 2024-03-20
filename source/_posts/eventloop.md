@@ -2,7 +2,7 @@
 title: 事件循环
 date: 2021-12-04 12:14:11
 categories: 
-- 前端进阶笔记
+- 高级前端笔记
 tags: 
 - eventloop
 ---
