@@ -1957,44 +1957,6 @@ git push -->
       </tags>
   </entry>
   <entry>
-    <title>机器学习概述</title>
-    <url>/2023/10/16/aid1jqxxgs/aid1jqxxgs/</url>
-    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>关于人工智能我想学蛮久了的，各种各样的原因加持下 ，我终于还是来赶了晚班车。我始终相信，人工智能是人类的未来。这里借用吴恩达的一句话：“我认为AGI被过度炒作了，我们离这个目标还有很长的路要走，他可能花费50年、500年，甚至更久”。但我愿意等，并为之付出。</p>
-<h4 id="机器学习概述"><a href="#机器学习概述" class="headerlink" title="机器学习概述"></a>机器学习概述</h4><blockquote>
-<p>监督学习</p>
-</blockquote>
-<p>在已知数据输出（经过标注的）的情况下对模型进行训练，根据输出进行调整、优化的学习方式称为有监督学习.</p>
-<blockquote>
-<p>无监督学习</p>
-</blockquote>
-<p>没有已知输出的情况下，仅仅根据输入信息的相关性，进行类别的划分. </p>
-<blockquote>
-<p>半监督学习</p>
-</blockquote>
-<p>先通过无监督学习划分类别，再人工标记通过有监督学习方式来预测输出.例如先对相似的水果进行聚类，再识别是哪个类别. </p>
-<h4 id="脚手架工具"><a href="#脚手架工具" class="headerlink" title="脚手架工具"></a>脚手架工具</h4><p>脚手架工具是帮我们自动创建基础文件的工具<br>脚手架的本质作用就是创建项目基础结构、提供项目规范和约定, 相同的组织结构, 相同的开发范式, 相同的模块依赖, 相同的工具配置, 相同的基础代码都应该被自动化创建</p>
-<p><strong>内容概要:</strong></p>
-<ul>
-<li>脚手架的作用</li>
-<li>常用的脚手架工具</li>
-<li>通用脚手架工具剖析</li>
-<li>开发一款脚手架</li>
-</ul>
-<p><strong>常用的脚手架工具</strong><br>根据信息创建对应的项目基础结构有create-react-app, vue-cli, angular-cli等<br>例如创建一个组件/模块所需要的文件就可以用到plop</p>
-<h5 id="Yeoman"><a href="#Yeoman" class="headerlink" title="Yeoman"></a>Yeoman</h5><p>The web’s scaffolding tool for modern webapps<br>可以搭配不同的generator去创建任何类型项目, 可以使用其搭建自己的脚手架<br>缺点是过于通用, 不够专注</p>
-<p><strong>基本使用</strong><br>先安装基础模块: node, npm 或 yarn, 以下举例中我们使用yarn</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">yarn <span class="built_in">global</span> add yo <span class="comment">//全局安装Yeoman</span></span><br><span class="line">yarn <span class="built_in">global</span> add generator-node <span class="comment">// 一个node模块</span></span><br><span class="line">mkdir my-<span class="built_in">module</span></span><br><span class="line">cd my-<span class="built_in">module</span></span><br><span class="line">yo node <span class="comment">//input something...</span></span><br></pre></td></tr></table></figure>
-
-<p>执行yo node后的命令行如下(做个例子)</p>
-]]></content>
-      <categories>
-        <category>AID学习笔记</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数学-线性代数</title>
     <url>/2023/04/02/math/xxds/</url>
     <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>线性代数是代数学的一个分支，主要处理线性关系问题。线性关系意即数学对象之间的关系是以一次形式来表达的。线性代数是一个伟大的学科，这里不做细述，推荐细看B站3blue1brown的视频，解释的非常详细。</p>
@@ -2703,5 +2665,138 @@ git push -->
         <tag>python</tag>
         <tag>语言学习</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>机器学习概述</title>
+    <url>/2023/10/16/aid/aid1jqxxgs/</url>
+    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>关于人工智能我想学蛮久了的，各种各样的原因加持下 ，我终于还是来赶了晚班车。我始终相信，人工智能是人类的未来。这里借用吴恩达的一句话：“我认为AGI被过度炒作了，我们离这个目标还有很长的路要走，他可能花费50年、500年，甚至更久”。但我愿意等，并为之付出。</p>
+<h4 id="机器学习概述"><a href="#机器学习概述" class="headerlink" title="机器学习概述"></a>机器学习概述</h4><blockquote>
+<p>监督学习</p>
+</blockquote>
+<p>在已知数据输出（经过标注的）的情况下对模型进行训练，根据输出进行调整、优化的学习方式称为有监督学习.</p>
+<blockquote>
+<p>无监督学习</p>
+</blockquote>
+<p>没有已知输出的情况下，仅仅根据输入信息的相关性，进行类别的划分. </p>
+<blockquote>
+<p>半监督学习</p>
+</blockquote>
+<p>先通过无监督学习划分类别，再人工标记通过有监督学习方式来预测输出.例如先对相似的水果进行聚类，再识别是哪个类别. </p>
+<h4 id="脚手架工具"><a href="#脚手架工具" class="headerlink" title="脚手架工具"></a>脚手架工具</h4><p>脚手架工具是帮我们自动创建基础文件的工具<br>脚手架的本质作用就是创建项目基础结构、提供项目规范和约定, 相同的组织结构, 相同的开发范式, 相同的模块依赖, 相同的工具配置, 相同的基础代码都应该被自动化创建</p>
+<p><strong>内容概要:</strong></p>
+<ul>
+<li>脚手架的作用</li>
+<li>常用的脚手架工具</li>
+<li>通用脚手架工具剖析</li>
+<li>开发一款脚手架</li>
+</ul>
+<p><strong>常用的脚手架工具</strong><br>根据信息创建对应的项目基础结构有create-react-app, vue-cli, angular-cli等<br>例如创建一个组件/模块所需要的文件就可以用到plop</p>
+<h5 id="Yeoman"><a href="#Yeoman" class="headerlink" title="Yeoman"></a>Yeoman</h5><p>The web’s scaffolding tool for modern webapps<br>可以搭配不同的generator去创建任何类型项目, 可以使用其搭建自己的脚手架<br>缺点是过于通用, 不够专注</p>
+<p><strong>基本使用</strong><br>先安装基础模块: node, npm 或 yarn, 以下举例中我们使用yarn</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">yarn <span class="built_in">global</span> add yo <span class="comment">//全局安装Yeoman</span></span><br><span class="line">yarn <span class="built_in">global</span> add generator-node <span class="comment">// 一个node模块</span></span><br><span class="line">mkdir my-<span class="built_in">module</span></span><br><span class="line">cd my-<span class="built_in">module</span></span><br><span class="line">yo node <span class="comment">//input something...</span></span><br></pre></td></tr></table></figure>
+
+<p>执行yo node后的命令行如下(做个例子)</p>
+]]></content>
+      <categories>
+        <category>AID学习笔记</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>批量归一化 Batch Normalization</title>
+    <url>/2024/04/02/aid/bn/</url>
+    <content><![CDATA[<p>神经网络中的批量归一化方法,通过对一批样本进行归一化处理,使得每一层网络的输入分布相似,从而避免了分布差异过大导致网络无法收敛的问题。</p>
+<p>为了让网络可以正常训练，Batch Normalization 批量归一化方法可以加速神经网络的收敛。使训练过程中对学习率和参数初始化更加鲁棒</p>
+<p>但它也有一些缺陷,如对循环神经网络等序列形式数据性能较差,以及在分布式训练中额外的数据同步会影响并行效率等。</p>
+<p>神经网络中的批量归一化方法，通过对样本进行归一化处理，使网络能够正常训练。</p>
+<p>需要注意批量归一化方法中额外引入的两个参数，需要反向传播更新</p>
+<p>仅在Batch中包含样本数量较多时有效。对循环网络(RNN)或序列数据(Sequence)性能较差分布式运算时影响效率。</p>
+<p>BN算法仅在BH中包含样本，对于循环神经网络等数据性能较差</p>
+<p>后续提出了类似于layer normalization等改进方法</p>
+<p><img src="/2024/04/02/aid/bn/93968aee8b1f72101a7f5ff44788f110.png" alt="93968aee8b1f72101a7f5ff44788f110.png"></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>三种插值法</title>
+    <url>/2024/04/02/aid/chazhifa/</url>
+    <content><![CDATA[<p>插值算法的应用,其中包括<strong>最邻近插值和双线性插值</strong>。插值算法一般被用于图像的上采样或下采样。最邻近插值是最简单的插值算法,通过最近的像素值来确定目标图像中的像素值。插值算法的使用场景包括图像分割和增强等。此外，最邻近插值算法还有其独特的使用场景,例如在处理标注图像时需要保证标注像素值的正确性</p>
+<h4 id="最近临插值法"><a href="#最近临插值法" class="headerlink" title="最近临插值法"></a>最近临插值法</h4><p>方法：将两个特征图换成同等大小，根据距离需计算的像素点最近的原像素点来确定该点的值<br>缺点：采样后的图有毛边<br>计算过程<br><img src="/2024/04/02/aid/chazhifa/0f8d7b018b849df344c03d7b8ae5b885.png" alt="0f8d7b018b849df344c03d7b8ae5b885.png"><br><img src="/2024/04/02/aid/chazhifa/1d222281f67ba8f6869cc0d8ddba5cba.png" alt="1d222281f67ba8f6869cc0d8ddba5cba.png"></p>
+<h4 id="双线性插值法"><a href="#双线性插值法" class="headerlink" title="双线性插值法"></a>双线性插值法</h4><p>双线性差值的计算方式，包括角对齐方式和边对齐方式。通过代码实现，详细讲解了目标图像中每个像素点的计算取值过程。同时，还介绍了两种对齐方式下的差异以及计算过程中的权重考虑。对于需要进行上采样处理的图像，可以通过双线性插值的方式实现。<br>方法有两种：角对齐 或者边对齐<br><img src="/2024/04/02/aid/chazhifa/965ccd22942b67dcd885817c6a80cf84.png" alt="965ccd22942b67dcd885817c6a80cf84.png"><br>计算过程<br><img src="/2024/04/02/aid/chazhifa/83957cc48d6ecfdaf4e409d7d3298f63.png" alt="83957cc48d6ecfdaf4e409d7d3298f63.png"></p>
+<h4 id="双三次插值法"><a href="#双三次插值法" class="headerlink" title="双三次插值法"></a>双三次插值法</h4><p>双三次插值算法，该算法在计算目标像素点周围像素权重时使用了一个三次项的公式，相比于双线性插值算法，它对目标像素点的像素取值做了一个平滑处理。通过示意图和公式解释了权重的计算方法，并展示了在不同距离下权重的取值情况。最后，解释了padding的作用。<br>取周围16个点的值<br><img src="/2024/04/02/aid/chazhifa/e9848703a4a02e0b1f0e39fa59073f17.png" alt="e9848703a4a02e0b1f0e39fa59073f17.png"><br><img src="/2024/04/02/aid/chazhifa/be9b059b09acca463291720c594b85af.png" alt="be9b059b09acca463291720c594b85af.png"></p>
+<p>各种插值法取值图例<br><img src="/2024/04/02/aid/chazhifa/438ddab67c1755d06255978de075ac87.png" alt="438ddab67c1755d06255978de075ac87.png"></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>NMS(非极大值抑制)和IOU(交并比)</title>
+    <url>/2024/04/02/aid/iou/</url>
+    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>目标检测任务中常用的后处理方法NMS(非极大值抑制)和IOU(交井比)的概念。NMS的作用是删除冗余的候选框，保留置信度最高的候选框。通过计算BBOX之间的IOU，可以判断哪些候选框需要保留，哪些需要丢弃。在多类别目标检测任务中，需要分别对每个类别进行NMS计算，保留置信度最高的候选框。最后，只有保留的候选框才会被输出。</p>
+<p>目标检测任务中常用的坐标损失计算方式，包括L1损失、L2损失、smoothL1损失、I0U损失、GIOU损失和DIOU损失。其中，smoothL1损失和IOU损失是基础损失和评估指标的组合，存在目标不一致的问题。GIOU损失解决了IOU损失在训练初期模型无法优化的问题，并能更好地评估模型的预测效果。DIOU损失是GIOU损失的一种变换形式，可用于计算目标检测的坐标损失。</p>
+<h4 id="计算损失"><a href="#计算损失" class="headerlink" title="计算损失"></a>计算损失</h4><p>目标检测任务中常用的坐标损失计算方式,包括<strong>L1、L2损失、smooth L1损失</strong>等,并分析了它们的优缺点。<br>L1损失和L2损失:L1损失和L2损失是最基础的损失函数，但存在一些问题。<br><img src="/2024/04/02/aid/iou/69e37af88c8570b1c4a67f61df98c965.png" alt="69e37af88c8570b1c4a67f61df98c965.png"></p>
+<p>为了避免模型学习优化和模型评估的目标不一致，我们最好也使用IOU来计算坐标损失并且，IOU Loss 是将 x，y, w, h这4个值构成的 bbox 看作是一个整体来进行损失计算的</p>
+<p>SmoothL1损失是针对L1损失和L2损失的问题提出的一种损失函数。<br>在实际应用中，SmoothL1损失和L1损失、L2损失一样，都需要计算坐标损失。<br><img src="/2024/04/02/aid/iou/6a3b435a0f1517f8d0edcc250f5ef964.png" alt="6a3b435a0f1517f8d0edcc250f5ef964.png"></p>
+<p>但是IOU不能处理两个框不相交的情况，为了解决这种情况，所以使用GIOU，做一个外接框<br><img src="/2024/04/02/aid/iou/f1aee2a6b93376778efceb7be9b46a9f.png" alt="f1aee2a6b93376778efceb7be9b46a9f.png"></p>
+<p>当预测框与真实框为包含关系时，GIOU loss函数的分子为0，所以就退化为了IOU，所以，模型没办法针对这种情况进行区分，不能明确的知道两个框的位置关系到底是什样的，从而进行快速收敛。</p>
+<p>DIOU和DIOU loss损失的计算方法，以及如何通过调整参数来平衡长宽比和面积一致性。<br>阿尔法参数的调整:介绍了如何通过调整阿尔法参数来平衡不同损失函数之间的权重<br>在计算DIOU时需要考虑距离的占比,以及引入阿尔法项的作用,最终得到了DLOU loss。<br>考虑距离的占比，即D的平方除以C的平方<br>阿尔法的作用，使损失函数更具区分度</p>
+<p><img src="/2024/04/02/aid/iou/ace3e2368aafd2df1c4ce0b166cf770a.png" alt="ace3e2368aafd2df1c4ce0b166cf770a.png"></p>
+<p>CIOU loss的计算公式，包括减去IOU和加上阿尔法乘以v<br><img src="/2024/04/02/aid/iou/1195e45c140017820ccc4744e00e619f.png" alt="1195e45c140017820ccc4744e00e619f.png"></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>目标检测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>图像分割的几种模型</title>
+    <url>/2024/04/02/aid/txfg/</url>
+    <content><![CDATA[<h4 id="图像分割的分类："><a href="#图像分割的分类：" class="headerlink" title="图像分割的分类："></a>图像分割的分类：</h4><p><img src="/2024/04/02/aid/txfg/eb531a75e29bfed9d71079eec9cfb2c2.png" alt="eb531a75e29bfed9d71079eec9cfb2c2.png"></p>
+<h4 id="图像分割的难点"><a href="#图像分割的难点" class="headerlink" title="图像分割的难点"></a>图像分割的难点</h4><p>1）数据问题：分割不像检测等任务，只需要标注边框就可以使用，分割需要精确到<br>像素级标注，包括每一个目标的轮廓等信息；<br>2）计算资源问题：要想得到较高的精度就需要使用更深的网络、进行更精确的计<br>算，对计算资源要求较高。目前业界有一些轻量级网络，但总体精度较低；<br>3）精细分割：目前很多算法对于道路、建筑物等类别分割精度很高，能达到98%，<br>而对于细小的类别，由于其轮廓太小，而无法精确的定位轮廓；<br>4）上下文信息：分割中上下文信息很重要，否则会造成一个目标被分成多个部分，<br>或者不同类别目标分类成相同类别；</p>
+<h4 id="图像分割基本原理"><a href="#图像分割基本原理" class="headerlink" title="图像分割基本原理"></a>图像分割基本原理</h4><ol>
+<li><p>整体实现思路<br>图像分割一般思路如下：<br>1）输入图像，利用深度卷积神经网络提取特征<br>2）对特征图进行上采样，输出每个像素的类别<br>3）利用损失函数，对模型进行优化，将每个像素的分类结果优化到最接近真实值<br><img src="/2024/04/02/aid/txfg/d307294eb80b6711f840583c2b7c73fa.png" alt="d307294eb80b6711f840583c2b7c73fa.png"></p>
+</li>
+<li><p>评价指标<br>1）像素精度（pixel accuracy ）：每一类像素正确分类的个数/ 每一类像素的实际<br>个数；<br>2）平均像素精度（mean pixel accuracy ）：每一类像素的精度的平均值；<br>3）平均交并比（Mean Intersection over Union）：求出每一类的IOU取平均值</p>
+</li>
+</ol>
+<h4 id="常用模型"><a href="#常用模型" class="headerlink" title="常用模型"></a>常用模型</h4><h5 id="1-FCN（2014）Fully-Convolutional-Networks"><a href="#1-FCN（2014）Fully-Convolutional-Networks" class="headerlink" title="1. FCN（2014）Fully Convolutional Networks"></a>1. FCN（2014）Fully Convolutional Networks</h5><p>FCN(Fully Convolutional Networks)的基本概念和核心思想。FCN是首个使用神经网络实现语义分割任务的方法与传统的特征提取算法相比，FCN具有很多优势，如可以适应不同场景变化、无需大量人时间和精力等。视频中还介绍了FCN的全卷积网络结构、使用现有的分类网络进行调整以及跨层结构等关键点。最后，视频提供了官方代码实现的细老<br>图像分割需要对图像进行像素级分类，所以在输出层使用全连接模型并不合适。<br>FCN与CNN的区别在把于CNN最后的全连接层换成卷积层（所以称为“全卷积网<br>络”）。该网络可以分为两部分，第一部分，通过卷积运算提取图像中的特征，形成<br>特征图；第二部分，对特征图进行上采样，将特征图数据恢复为原来的大小，并对<br>每个像素产生一个分类标签，完成像素级分类。</p>
+<p>去掉了全链接层，全部使用卷积网络，可以不再要求输入图片的大小<br>分为32s  16s  8s3中输出<br><img src="/2024/04/02/aid/txfg/88a125da67fcc6b88729e56ad01040cd.png" alt="88a125da67fcc6b88729e56ad01040cd.png"><br><img src="/2024/04/02/aid/txfg/fe6b68d72aedf7d3c1e6d0e3d2dab7d4.png" alt="fe6b68d72aedf7d3c1e6d0e3d2dab7d4.png"><br><img src="/2024/04/02/aid/txfg/cfc88e392fee0a83c0552a29798c16cd.png" alt="cfc88e392fee0a83c0552a29798c16cd.png"><br><img src="/2024/04/02/aid/txfg/a2ac30edca9647a1db5e0ecaa76e3be2.png" alt="a2ac30edca9647a1db5e0ecaa76e3be2.png"></p>
+<p><img src="/2024/04/02/aid/txfg/fee378ad378dc22885dafc223ef2ef77.png" alt="fee378ad378dc22885dafc223ef2ef77.png"></p>
+<h5 id="2-U-Net（2015）"><a href="#2-U-Net（2015）" class="headerlink" title="2. U-Net（2015）"></a>2. U-Net（2015）</h5><p>生物医学分割是图像分割重要的应用领域。U-Net是2015年发表的用于生物医学图<br>像分割的模型，该模型简单、高效、容易理解、容易定制，能在相对较小的数据集<br>上实现学习。该模型在透射光显微镜图像（相衬度和DIC）上获得了2015年ISBI细胞<br>跟踪挑战赛的冠军。该图像分割速度较快，在512x512图像实现分割只需不到一秒<br>钟的时间。<br>U-Net基本实现图像分割基本原理与FCN一致，先对原图进行若干层卷积、池化，得<br>到特征图，再对特征图进行不断上采样，并产生每个像素的类别值。</p>
+<p>1）网络结构<br>U-Net网络体系结构如下图所示，它由收缩路径（左侧）和扩展路径（右侧）组成，<br>共包含23个卷积层。<br>收缩路径遵循卷积网络的典型结构，它包括重复应用两个3x3卷积（未相加的卷<br>积），每个卷积后面都有一个ReLU和一个2x2最大合并操作，步长为2，用于下<br>采样。在每个下采样步骤中，特征通道的数量加倍。<br>扩展路径中的每一步都包括对特征映射进行上采样，然后进行2x2向上卷积<br>（up-convolution ），将特征通道数量减半，与收缩路径中相应裁剪的特征映<br>射进行串联，以及两个3x3卷积，每个卷积后面都有一个ReLU。在最后一层，<br>使用1x1卷积将每个64分量特征向量映射到所需数量的类<br><img src="/2024/04/02/aid/txfg/4b62c535ae33035d523e1361d2ccaef7.png" alt="4b62c535ae33035d523e1361d2ccaef7.png"><br>但是现在很多人使用unet模型会加padding，使得输出图像与输入图像尺寸相等</p>
+<h5 id="3-Mask-R-CNN（2017）"><a href="#3-Mask-R-CNN（2017）" class="headerlink" title="3. Mask R-CNN（2017）"></a>3. Mask R-CNN（2017）</h5><p>Mask R-CNN是一个小巧灵活的通用实例级分割框架，它不仅可对图像中的目标进行<br>检测，还可以对每一个目标给出一个高质量的分割结果。它在Faster R-CNN基础之<br>上进行扩展，并行地在bounding box recognition分支上添加一个用于预测目标掩<br>模（object mask）的新分支。该网络具有良好的扩展性，很容易扩展到其它任务中，比如估计人的姿势。Mask R-CNN结构简单、准确度高、容易理解，是图像实例<br>级分割的优秀模型</p>
+<p>1）主要思想<br>（1）分割原理。Mask R-CNN是在Faster R-CNN基础之上进行了扩展。Faster R<br>CNN是一个优秀的目标检测模型，能较准确地检测图像中的目标物体（检测到实<br>例），其输出数据主要包含两组：一组是图像分类预测，一组是图像边框回归。<br>Mask R-CNN在此基础上增加了FCN来产生对应的像素分类信息（称为Mask），用<br>来描述检测出的目标物体的范围，所以Mask R-CNN可以理解为Faster R-CNN +<br>FCN。整体结构如下图所示<br><img src="/2024/04/02/aid/txfg/3085fc1be2d57247362fb3249f0c909a.png" alt="3085fc1be2d57247362fb3249f0c909a.png"><br><img src="/2024/04/02/aid/txfg/de7af8ee8168caf2deccc5e47d66da5f.png" alt="de7af8ee8168caf2deccc5e47d66da5f.png"></p>
+<h5 id="4-deeplab"><a href="#4-deeplab" class="headerlink" title="4. deeplab"></a>4. deeplab</h5><p><strong>空洞卷积dilated convolution</strong>： 卷积数量不变，参数个数不变，但感受野变大<br><img src="/2024/04/02/aid/txfg/f76094366cdf7fcea2f936f393c3eef0.png" alt="f76094366cdf7fcea2f936f393c3eef0.png"><br>空洞卷积的优势：<br>图像分割任务中(其他场景也适用)需要较大感受野来更好完成任务<br>通过设置dilation rate参数来完成空洞卷积，并没有额外计算<br>可以按照参数扩大任意倍数的感受野，而且没有引入额外的参数<br>应用简单，就是卷积层中多设置一个参数就可以了</p>
+<p>空洞卷积的优势,包括全局感受、可控参数和应用简单等作者解释了为什么在很多网络结构中都使用堆叠3x3的卷积核,而不是直接使用大的卷积核,通过算笔账,说明堆叠小的卷积核可以节省参数,引入更多的非线性函数,从而提高模型效果。视频还介绍了感受野的概念,以及为什么感受野大小在分割任务中很重要。</p>
+<p>v2：<br>spp layer<br><img src="/2024/04/02/aid/txfg/176f7e07358f2d61ef3a2383edb1cde6.png" alt="176f7e07358f2d61ef3a2383edb1cde6.png"><br><img src="/2024/04/02/aid/txfg/31416fc90b45bd6eb6608f9d75809426.png" alt="31416fc90b45bd6eb6608f9d75809426.png"></p>
+<p>aspp 加了空洞卷积的spp 把不同倍率的空洞卷积融合在一起<br><img src="/2024/04/02/aid/txfg/9e5032731b3848d7677bd0087d06407b.png" alt="9e5032731b3848d7677bd0087d06407b.png"></p>
+<p>v3<br>padding=空洞数，就可以保证得到的特征图宽高相等<br>特征融合<br><img src="/2024/04/02/aid/txfg/c4482417331e3eed26d87569cc30d29c.png" alt="c4482417331e3eed26d87569cc30d29c.png"></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>图像分割</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于损失函数的一些曲线图</title>
+    <url>/2024/04/02/aid/loss/</url>
+    <content><![CDATA[<h4 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h4><p>损失函数关于w的曲线：<br><img src="/2024/04/02/aid/loss/4bae5b4dc16dfa85a8a1113dd0ba0387.png" alt="4bae5b4dc16dfa85a8a1113dd0ba0387.png"><br>损失函数关于w和b的三维曲线<br><img src="/2024/04/02/aid/loss/340642ea96d3fe0626029f7972a2c3c0.png" alt="340642ea96d3fe0626029f7972a2c3c0.png"><br>变成二维图会变成等高线的形状，中间的圆点是最小值<br><img src="/2024/04/02/aid/loss/3cbaccc46f83158f56417465808b5387.png" alt="3cbaccc46f83158f56417465808b5387.png"></p>
+<p>梯度下降的直观图<br><img src="/2024/04/02/aid/loss/b49693bead4e9cc60ea8533ce5736b2f.png" alt="b49693bead4e9cc60ea8533ce5736b2f.png"></p>
+<p>三维图的梯度下降<br><img src="/2024/04/02/aid/loss/ae9348c7b7bd8dc6c79406fab3920686.png" alt="ae9348c7b7bd8dc6c79406fab3920686.png"></p>
+<p><strong>学习率关于损失函数的曲线：</strong><br>这是一个好的学习率的曲线，当曲线趋于平稳时，说明损失函数已经几乎不再变化，这时的w和b就是一个合理的参数。如果曲线越来越大，可能学习率选择的不够好。<br><img src="/2024/04/02/aid/loss/38193d8049a2a70b9d5f83a6c22a036d.png" alt="38193d8049a2a70b9d5f83a6c22a036d.png"><br>两种错误的学习率<br><img src="/2024/04/02/aid/loss/014d853ebfa48797e0bec47466cb991f.png" alt="014d853ebfa48797e0bec47466cb991f.png"></p>
+<p>线性回归与逻辑回归的平方差损失函数曲线图如下：<br>所以不推荐逻辑回归使用平方差损失函数，会导致查出区域最低点<br><img src="/2024/04/02/aid/loss/162255c4466525269f7c1907d9107cd4.png" alt="162255c4466525269f7c1907d9107cd4.png"></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
   </entry>
 </search>
