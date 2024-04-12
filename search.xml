@@ -11,7 +11,7 @@
 <p>但是修改之后hexo编译后也是犹豫8.13的问题同步不到github.io上面去,怎么办呢</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">ssh -T git@github.com<span class="comment">//验证key 如果验证失败执行下列命令</span></span><br><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;xxx@qq.com&quot;</span><span class="comment">//一路回车即可</span></span><br><span class="line">ssh -v git@github.com</span><br><span class="line"><span class="comment">//　　最后两句会出现：</span></span><br><span class="line"><span class="comment">//　　No more authentication methods to try.</span></span><br><span class="line"><span class="comment">//　　Permission denied (publickey).</span></span><br><span class="line"><span class="comment">//　　这时候再输入</span></span><br><span class="line">ssh-agent -s</span><br><span class="line"><span class="comment">/*然后会提示类似的信息：　　</span></span><br><span class="line"><span class="comment">SSH_AUTH_SOCK=/tmp/ssh-GTpABX1a05qH/agent.404; export SSH_AUTH_SOCK;  　　</span></span><br><span class="line"><span class="comment">SSH_AGENT_PID=13144; export SSH_AGENT_PID;  　　</span></span><br><span class="line"><span class="comment">echo Agent pid 13144;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">ssh-add ~<span class="regexp">/.ssh/i</span>d_rsa</span><br><span class="line"><span class="comment">/*这时候应该会提示：　　Identity added: ...（这里是一些ssh key文件路径的信息）　　</span></span><br><span class="line"><span class="comment">（注意）如果出现错误提示：　　Could not open a connection to your authentication agent.　　</span></span><br><span class="line"><span class="comment">请执行命令：eval `ssh-agent -s`后继续执行命令 ssh-add ~/.ssh/id_rsa，这时候一般没问题啦。</span></span><br><span class="line"><span class="comment">将里面的内容复制，进入你的github账号，在settings下，SSH and GPG keys下new SSH key，</span></span><br><span class="line"><span class="comment">title随便取一个名字，然后将id_rsa.pub里的内容复制到Key中，完成后Add SSH Key。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">ssh -T git@github.com</span><br><span class="line"><span class="comment">/*提示：Hi xxx! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span></span><br><span class="line"><span class="comment">　　这时候你的问题就解决啦</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>其他</tag>
@@ -124,7 +124,7 @@
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>eventloop</tag>
@@ -215,7 +215,7 @@
 <h4 id="函数式编程总结"><a href="#函数式编程总结" class="headerlink" title="函数式编程总结"></a>函数式编程总结</h4><p>1，可读性强：声明式(Declarative)使得代码即使没有注释也有很高的可读性(这也是 React 的一大卖点)。<br>2，代码量少：项目越大，越节省代码量(大量的函数被复用)。<br>3，代码稳定可靠：纯函数的功劳。<br>4，容易维护性：符合「单一职能原则」，使得代码的维护与迭代更加容易。</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>高阶函数</tag>
@@ -298,7 +298,7 @@
 <p>脚手架的原理虽然并不复杂, 但是他的意义是很大的, 他在项目创建环节大大提高了效率</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>前端工程化</tag>
@@ -497,7 +497,7 @@
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>TypeScript</tag>
@@ -615,7 +615,7 @@
 </ul>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>es6</tag>
@@ -679,7 +679,7 @@
 <p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>规范化</tag>
@@ -816,7 +816,7 @@ git push -->
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>gulp</tag>
@@ -842,7 +842,7 @@ git push -->
 <h5 id="实现一个节流函数"><a href="#实现一个节流函数" class="headerlink" title="实现一个节流函数"></a>实现一个节流函数</h5><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>节流函数实现<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></span><br><span class="line"><span class="css">    <span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">5000px</span>;</span></span><br><span class="line"><span class="css">    &#125;</span></span><br><span class="line"><span class="css">  </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="comment">// 节流：我们这里的节流指的就是在自定义的一段时间内让事件进行触发</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="keyword">function</span> <span class="title">myThrottle</span>(<span class="params">handle, wait</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">if</span> (<span class="keyword">typeof</span> handle !== <span class="string">&#x27;function&#x27;</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;handle must be an function&#x27;</span>)</span></span><br><span class="line"><span class="javascript">      <span class="keyword">if</span> (<span class="keyword">typeof</span> wait === <span class="string">&#x27;undefined&#x27;</span>) wait = <span class="number">400</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> previous = <span class="number">0</span>  <span class="comment">// 定义变量记录上一次执行时的时间 </span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> timer = <span class="literal">null</span>  <span class="comment">// 用它来管理定时器</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">proxy</span>(<span class="params">...args</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">let</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>() <span class="comment">// 定义变量记录当前次执行的时刻时间点</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">let</span> self = <span class="built_in">this</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">let</span> interval = wait - (now - previous)</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">if</span> (interval &lt;= <span class="number">0</span>) &#123;</span></span><br><span class="line"><span class="javascript">          <span class="comment">// 此时就说明是一个非高频次操作，可以执行 handle </span></span></span><br><span class="line"><span class="javascript">          <span class="built_in">clearTimeout</span>(timer)</span></span><br><span class="line"><span class="javascript">          timer = <span class="literal">null</span></span></span><br><span class="line"><span class="javascript">          handle.call(self, ...args)</span></span><br><span class="line"><span class="javascript">          previous = <span class="keyword">new</span> <span class="built_in">Date</span>()</span></span><br><span class="line"><span class="javascript">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!timer) &#123;</span></span><br><span class="line"><span class="javascript">          <span class="comment">// 当我们发现当前系统中有一个定时器了，就意味着我们不需要再开启定时器</span></span></span><br><span class="line"><span class="javascript">          <span class="comment">// 此时就说明这次的操作发生在了我们定义的频次时间范围内，那就不应该执行 handle</span></span></span><br><span class="line"><span class="javascript">          <span class="comment">// 这个时候我们就可以自定义一个定时器，让 handle 在 interval 之后去执行 </span></span></span><br><span class="line"><span class="javascript">          timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">            <span class="built_in">clearTimeout</span>(timer) <span class="comment">// 这个操作只是将系统中的定时器清除了，但是 timer 中的值还在</span></span></span><br><span class="line"><span class="javascript">            timer = <span class="literal">null</span></span></span><br><span class="line"><span class="javascript">            handle.call(self, ...args)</span></span><br><span class="line"><span class="javascript">            previous = <span class="keyword">new</span> <span class="built_in">Date</span>()</span></span><br><span class="line"><span class="javascript">          &#125;, interval)</span></span><br><span class="line"><span class="javascript">        &#125;</span></span><br><span class="line"><span class="javascript">      &#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="comment">// 定义滚动事件监听</span></span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="keyword">function</span> <span class="title">scrollFn</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(<span class="string">&#x27;滚动了&#x27;</span>)</span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="comment">// window.onscroll = scrollFn</span></span></span><br><span class="line"><span class="javascript">    <span class="built_in">window</span>.onscroll = myThrottle(scrollFn, <span class="number">600</span>)</span></span><br><span class="line"><span class="javascript">  </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>性能优化</tag>
@@ -1003,7 +1003,7 @@ git push -->
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>模块化</tag>
@@ -1158,7 +1158,7 @@ git push -->
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>模块化</tag>
@@ -1225,7 +1225,7 @@ git push -->
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>Promise</tag>
@@ -1248,7 +1248,7 @@ git push -->
 
 
 
-<p>npm install <a href="mailto:&#x73;&#110;&#97;&#98;&#98;&#x64;&#111;&#109;&#x40;&#x32;&#x2e;&#49;&#x2e;&#48;">&#x73;&#110;&#97;&#98;&#98;&#x64;&#111;&#109;&#x40;&#x32;&#x2e;&#49;&#x2e;&#48;</a></p>
+<p>npm install <a href="mailto:&#x73;&#110;&#x61;&#x62;&#98;&#x64;&#111;&#x6d;&#x40;&#50;&#x2e;&#x31;&#x2e;&#48;">&#x73;&#110;&#x61;&#x62;&#98;&#x64;&#111;&#x6d;&#x40;&#50;&#x2e;&#x31;&#x2e;&#48;</a></p>
 <p>h(‘!’) //这是 一个空的节点</p>
 <h4 id="snabbdom模块的使用"><a href="#snabbdom模块的使用" class="headerlink" title="snabbdom模块的使用"></a>snabbdom模块的使用</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1. 导入模块</span></span><br><span class="line"><span class="keyword">import</span> &#123; styleModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/style&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; eventListenersModule &#125; <span class="keyword">from</span> <span class="string">&#x27;snabbdom/build/package/modules/eventlisteners&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 注册模块</span></span><br><span class="line"><span class="keyword">const</span> patch = init([</span><br><span class="line">  styleModule,</span><br><span class="line">  eventListenersModule</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 使用h() 函数的第二个参数传入模块中使用的数据（对象）</span></span><br><span class="line"><span class="keyword">let</span> vnode = h(<span class="string">&#x27;div&#x27;</span>, [</span><br><span class="line">  h(<span class="string">&#x27;h1&#x27;</span>, &#123; <span class="attr">style</span>: &#123; <span class="attr">backgroundColor</span>: <span class="string">&#x27;red&#x27;</span> &#125; &#125;, <span class="string">&#x27;Hello World&#x27;</span>),</span><br><span class="line">  h(<span class="string">&#x27;p&#x27;</span>, &#123; <span class="attr">on</span>: &#123; <span class="attr">click</span>: eventHandler &#125; &#125;, <span class="string">&#x27;Hello P&#x27;</span>)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">eventHandler</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;别点我，疼&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> app = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#app&#x27;</span>)</span><br><span class="line"><span class="comment">// 生成虚拟dom 根据diff算法更新dom</span></span><br><span class="line">patch(app, vnode)</span><br></pre></td></tr></table></figure>
 
@@ -1263,7 +1263,7 @@ git push -->
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>snabbdom</tag>
@@ -1321,14 +1321,14 @@ git push -->
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>vue</tag>
       </tags>
   </entry>
   <entry>
-    <title>vue源码复习(首次渲染e)</title>
+    <title>vue源码复习(首次渲染)</title>
     <url>/2022/03/01/vueymfx/vueymfx/</url>
     <content><![CDATA[<h4 id="基础结构"><a href="#基础结构" class="headerlink" title="基础结构"></a>基础结构</h4><p>第一种： 创建实例时，传入el和data选项，vue内部会把data数据传到el所对应的模板中，并把模板渲染到浏览器<br>第二种： render方法接受一个h函数，h函数的作用是创建一个虚拟dom，render函数把h创建的虚拟dom返回。$mount的作用是把虚拟dom转化为真实dom，渲染到浏览器。<br><img src="/2022/03/01/vueymfx/vueymfx/E8F7BCFC-02FA-4B11-A113-16A25255BC33.png" alt="bd52306c3a68ee0dfc0386b158fc99c3"></p>
 <h4 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h4><p>vue生命周期分为8个阶段，即分别是创建前<br>beforeCreate、创建后created、载入前beforeMount、载入后mounted、更新前beforeUpdate、更新后updated、销毁前beforeDestroy、销毁后destroyed。<br><img src="/2022/03/01/vueymfx/vueymfx/4AE06B6F-6BA5-4829-9066-00019FEE3763.png" alt="2765e8b954d15199b8ca4966defe94d2"></p>
@@ -1359,7 +1359,7 @@ git push -->
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>vue</tag>
@@ -1367,27 +1367,27 @@ git push -->
   </entry>
   <entry>
     <title>vue源码复习(数据响应式)</title>
-    <url>/2022/03/07/vueymfx/vueymfx2/</url>
+    <url>/2022/04/07/vueymfx/vueymfx2/</url>
     <content><![CDATA[<h4 id="数据响应式原理"><a href="#数据响应式原理" class="headerlink" title="数据响应式原理"></a>数据响应式原理</h4><p>响应式的意思是，当数据发生改变，视图会跟着改变，无需我们操作dom，响应式处理的入口是instance\init.js</p>
 <p>响应式是从vue实例的_init()方法开始的，在_init()方法中先调用initState()方法初始化vue实例的状态，在其中调用了initData()，这个方法是把data属性注入到vue实例上，并且调用observe()把data对象转换成响应式的对象，observe()就是响应式的入口。</p>
 <p>observe(value)接受一个参数，这个参数就是响应式要处理的对象，observe()在src/core/observer/index.js中，先判断value是否是对象，如果不是对象就直接返回。</p>
-<p>然后判断value对象是否有__ob__属性，,如果有就说明这个对象已经做过响应式处理，也直接返回。如果没有，就为这个对象创建observer对象，然后把这个observer对象返回。<br><img src="/2022/03/07/vueymfx/vueymfx2/1646185395364.jpg" alt="3828aebf462cc43da6dc120bc960e503"></p>
-<p>Observe类会给value对象定义一个不可枚举的__ob__属性，并把当前的observer对象记录到枚举__ob__里面来，然后进行数组和对象的响应式处理。<br><img src="/2022/03/07/vueymfx/vueymfx2/56737F2A-8FF5-475B-AC0F-BFA25015690F.png" alt="3828aebf462cc43da6dc120bc960e503"></p>
+<p>然后判断value对象是否有__ob__属性，,如果有就说明这个对象已经做过响应式处理，也直接返回。如果没有，就为这个对象创建observer对象，然后把这个observer对象返回。<br><img src="/2022/04/07/vueymfx/vueymfx2/1646185395364.jpg" alt="3828aebf462cc43da6dc120bc960e503"></p>
+<p>Observe类会给value对象定义一个不可枚举的__ob__属性，并把当前的observer对象记录到枚举__ob__里面来，然后进行数组和对象的响应式处理。<br><img src="/2022/04/07/vueymfx/vueymfx2/56737F2A-8FF5-475B-AC0F-BFA25015690F.png" alt="3828aebf462cc43da6dc120bc960e503"></p>
 <p>数组的处理就是设置数组那几个特殊的方法，这些方法会改变数组，所以当这些方法被调用的时候，我们要发送通知，找到数组对应的__ob__，也就是observer对象，再找到observer对象中的dep方法调用，调用dep当中的notify方法。处理完这些方法后，遍历成员，对每一个成员调用observe，如果这个成员是对象的话，也会被转换为响应式的对象。 </p>
 <p>对象的处理会调用walk方法，遍历对象所有属性，给每个属性调用defineReactive方法。<br>defineReactive会给每个属性创建dep对象，让dep去收集依赖，如果当前属性的值是对象，就调用observe，要把这个对象变成响应式。</p>
-<p>defineReactive的核心就是定义getter和setter。<br>定义getter为每一个属性收集依赖，包括对象的子对象。<br>定义setter保存新值，如果新值是对象，就调用observe也转换成响应式，发送通知，就是调用dep.notify方法。<br><img src="/2022/03/07/vueymfx/vueymfx2/3A65CD6C-0740-42ED-9185-19234C239D9E.png" alt="266f9d19cdafcf66b22a546c361fd9ae"></p>
-<p>依赖收集：首先执行watcher对象中的get方法，在get中调用pushTarget，在pushTarget中会把watcher对象记录到dep.target属性中。<br>在访问data中的成员的时候收集依赖，在访问值时就会触发defineReactive中的getter收集依赖，把属性对应的watcher添加到dep的subs数组中，也就是为属性收集依赖，如果属性的值是个对象，就创建一个childOb为这个子对象收集依赖，目的是子对象添加和删除成员时发送通知<br><img src="/2022/03/07/vueymfx/vueymfx2/E9D9E42D-6D38-4EDF-AE3B-69D7B782008A.png" alt="2d155fa9c0aa9b61d97d6488e0b84e85"></p>
+<p>defineReactive的核心就是定义getter和setter。<br>定义getter为每一个属性收集依赖，包括对象的子对象。<br>定义setter保存新值，如果新值是对象，就调用observe也转换成响应式，发送通知，就是调用dep.notify方法。<br><img src="/2022/04/07/vueymfx/vueymfx2/3A65CD6C-0740-42ED-9185-19234C239D9E.png" alt="266f9d19cdafcf66b22a546c361fd9ae"></p>
+<p>依赖收集：首先执行watcher对象中的get方法，在get中调用pushTarget，在pushTarget中会把watcher对象记录到dep.target属性中。<br>在访问data中的成员的时候收集依赖，在访问值时就会触发defineReactive中的getter收集依赖，把属性对应的watcher添加到dep的subs数组中，也就是为属性收集依赖，如果属性的值是个对象，就创建一个childOb为这个子对象收集依赖，目的是子对象添加和删除成员时发送通知<br><img src="/2022/04/07/vueymfx/vueymfx2/E9D9E42D-6D38-4EDF-AE3B-69D7B782008A.png" alt="2d155fa9c0aa9b61d97d6488e0b84e85"></p>
 <p>watcher：当数据发生变化的时候通过dep.notify发送通知，他会调用watcher的update方法，在update方法中会调用queueWatcher函数，来判断watcher是否被处理了，如果没有就添加到queue队列，并调用flushSchedulerQueue刷新队列</p>
 <p>flushSchedulerQueue会触发beforeUpdata钩子函数，然后调用watcher.run()函数，在其中调用get()–&gt;getter()–&gt;updateComponent</p>
 <p>调用run方法之后，就可以在页面上看到最新的数据了</p>
-<p>然后就会清空上一次的依赖，重置watcher的状态，然后触发actived钩子函数，然后触发updated钩子函数<br><img src="/2022/03/07/vueymfx/vueymfx2/6733F301-2725-441A-AD21-4C54011B6FE2.png" alt="2b9b14348506a056db1f6d3d2846069e"></p>
+<p>然后就会清空上一次的依赖，重置watcher的状态，然后触发actived钩子函数，然后触发updated钩子函数<br><img src="/2022/04/07/vueymfx/vueymfx2/6733F301-2725-441A-AD21-4C54011B6FE2.png" alt="2b9b14348506a056db1f6d3d2846069e"></p>
 <h5 id="异步更新队列"><a href="#异步更新队列" class="headerlink" title="异步更新队列"></a>异步更新队列</h5><p>nexTick是在dom行程后获取内容，本身是一个微任务，运行环境不支持时降级为宏任务。数据更新到dom上之后，才会去执行nextTick中的回调函数。</p>
 <p>nextTick静态方法是在global-api的index.js中被定义的，实例方法在instance下面的index.js中，在renderMixin()这个函数中，定义了nextTick。nextTick的核心，其实就是timerFunc()的处理。</p>
 <p>在timerFunc()源码中我们可以得知：<br>如果支持 Promise 就用 Promise。如果不支持Promise<br>就用MutationObserver，MutationObserver 它会在指定的DOM发生变化时被调用。<br>如果不支持 MutationObserver 的话就用 setImmediate，但是这个特性只有最新版IE和node支持。<br>如果这些都不支持的话就用setTimeout。</p>
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>vue</tag>
@@ -1395,22 +1395,22 @@ git push -->
   </entry>
   <entry>
     <title>vue源码复习(虚拟DOM)</title>
-    <url>/2022/03/02/vueymfx/vueymfx3/</url>
+    <url>/2022/05/02/vueymfx/vueymfx3/</url>
     <content><![CDATA[<h4 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h4><p>vue中的虚拟dom的实现借鉴了snabdom这个虚拟dom库，如模块机制、钩子函数、diff算法，在此基础上额外添加了指令和组件等。虚拟dom是使用JS对象来描述真实dom，虚拟dom就是js对象。</p>
 <p>为什么要使用虚拟dom：<br>避免直接操作真实dom，提高开发效率。可以作为一个中间层来跨平台。在复杂试图的情况下可以提高渲染性能，简单视图的情况下可能会增加开销。</p>
 <p>在v-for的时候可以给每个节点增加key属性，key只能是原始值，不能是对象。因新老节点对比顺序不同，设置key会比不设置key的dom操作少很多。</p>
 <h5 id="源码部分"><a href="#源码部分" class="headerlink" title="源码部分"></a>源码部分</h5><p><strong>虚拟dom创建的整体过程</strong><br>这个过程是接着vue的首次渲染过程来讲的，在updateComponent()中我们调用了render()函数和_update()函数。</p>
-<p>在render中我们调用了用户传入的render函数或者是模板编译成的render函数，如果是用户传入的render函数的话，就调用vm.$createElement()方法，如果是模板编译成的render的话，调用的是vm._c()方法。不管vm.$createElement()还是vm._c(),他最后都会执行createElement方法。在createElement中处理了参数的差异，最终调用了_createElement()方法。在这个方法中创建了vnode对象，最终返回vnode。<br><img src="/2022/03/02/vueymfx/vueymfx3/D36D403B-B738-4A3A-A620-8EA128A49D54.png" alt="0295fbf3548dfa0579eecb29a23f05b2"></p>
-<p>在update函数是负责把虚拟dom渲染成真实dom，在update里边会调用__patch__方法。如果是首次执行，patch的第一个参数是$el，也就是一个真实dom。如果是数据更新那就传入两个vnode，第一个prevVnode也就是上次保存下来的vnode。<br>patch函数是在runtime下的index.js中初始化的，他是给vue原型上挂载了__patch__这个方法，所有的vue实例都可以访问到，他其实就是runtime下的patch.js模块中导出的patch函数。在这个函数中设置了moudles和nodeOps两个对象，moudles中存储的是一些模块，nodeOps是用来操作dom的。设置好后会把这两个对象传递给createPatchFunction()函数，这个函数最终返回的是我们需要的patch函数。<br><img src="/2022/03/02/vueymfx/vueymfx3/D3317FFA-E67E-47BD-B87B-FB3A7070CF97.png" alt="6cb8377bdd89d8d0cfa09019b227d13f"></p>
-<p>patch是vdom/patch.js中的createPatchFunction()返回的函数，在createPatchFunction中首先做了初始化的事情，她里面有很多的辅助函数，特别定义了cbs对象。在cbs对象中存储了所有模块中定义的那些钩子函数，这些钩子函数是为了处理节点的属性、事件、样式等。<br>在patch中还会判断第一个参数是不是真实dom，如果是真实dom的话说明是首次加载。这时会把真实dom转化为vnode，然后去调用createElm，把newVnode转换为真实dom，挂载到dom树上来。如果是数据更新的时候，就要通过sameVnode函数判断新旧vnode是否是相同的节点。如果不是相同节点的话，就执行其中的patchVnode，也就是diff算法。patch执行结束之后，删除旧节点。<br><img src="/2022/03/02/vueymfx/vueymfx3/96EE883B-C1B1-431A-8A07-163D7BC713E4.png" alt="c193a5cb93662967e61d92f5bd7f38cb"></p>
-<p>createElm函数是用来把虚拟节点转换为真实dom，并挂载到dom树上。他也会把虚拟节点的子节点children，转换为真实节点，挂载到dom树上。<br>patchVnode是用来对比新旧vnode，以及新旧vnode的子节点，然后更新他们的差异。如果新旧vnode都有子节点，并且子节点不同的话，还会调用updateChildren去对比子节点的差异。<br>updateChildren会去处理新旧子节点，在处理的过程中优化了这个操作。他会先去把新旧节点的头和尾取出来进行比较，总共有4种比较方式。在比较的过程中，如果我们的节点是sameVnode，那就会调用patchVnode打补丁。如果这4种比较的方式都不满足的话，就会在老节点的子节点种查找newStartVnode，也就是新的开始节点在老的节点中是否存在，并进行处理。如果新节点比老节点多，会把新增的节点插入到dom中，如果老节点比较多，就把多余的老节点删除。<br><img src="/2022/03/02/vueymfx/vueymfx3/5DA71656-C1C3-4A04-B539-B1287BE68A6B.png" alt="cfa4cb62a5b1b3adb9e1cffdcccf6a08"></p>
+<p>在render中我们调用了用户传入的render函数或者是模板编译成的render函数，如果是用户传入的render函数的话，就调用vm.$createElement()方法，如果是模板编译成的render的话，调用的是vm._c()方法。不管vm.$createElement()还是vm._c(),他最后都会执行createElement方法。在createElement中处理了参数的差异，最终调用了_createElement()方法。在这个方法中创建了vnode对象，最终返回vnode。<br><img src="/2022/05/02/vueymfx/vueymfx3/D36D403B-B738-4A3A-A620-8EA128A49D54.png" alt="0295fbf3548dfa0579eecb29a23f05b2"></p>
+<p>在update函数是负责把虚拟dom渲染成真实dom，在update里边会调用__patch__方法。如果是首次执行，patch的第一个参数是$el，也就是一个真实dom。如果是数据更新那就传入两个vnode，第一个prevVnode也就是上次保存下来的vnode。<br>patch函数是在runtime下的index.js中初始化的，他是给vue原型上挂载了__patch__这个方法，所有的vue实例都可以访问到，他其实就是runtime下的patch.js模块中导出的patch函数。在这个函数中设置了moudles和nodeOps两个对象，moudles中存储的是一些模块，nodeOps是用来操作dom的。设置好后会把这两个对象传递给createPatchFunction()函数，这个函数最终返回的是我们需要的patch函数。<br><img src="/2022/05/02/vueymfx/vueymfx3/D3317FFA-E67E-47BD-B87B-FB3A7070CF97.png" alt="6cb8377bdd89d8d0cfa09019b227d13f"></p>
+<p>patch是vdom/patch.js中的createPatchFunction()返回的函数，在createPatchFunction中首先做了初始化的事情，她里面有很多的辅助函数，特别定义了cbs对象。在cbs对象中存储了所有模块中定义的那些钩子函数，这些钩子函数是为了处理节点的属性、事件、样式等。<br>在patch中还会判断第一个参数是不是真实dom，如果是真实dom的话说明是首次加载。这时会把真实dom转化为vnode，然后去调用createElm，把newVnode转换为真实dom，挂载到dom树上来。如果是数据更新的时候，就要通过sameVnode函数判断新旧vnode是否是相同的节点。如果不是相同节点的话，就执行其中的patchVnode，也就是diff算法。patch执行结束之后，删除旧节点。<br><img src="/2022/05/02/vueymfx/vueymfx3/96EE883B-C1B1-431A-8A07-163D7BC713E4.png" alt="c193a5cb93662967e61d92f5bd7f38cb"></p>
+<p>createElm函数是用来把虚拟节点转换为真实dom，并挂载到dom树上。他也会把虚拟节点的子节点children，转换为真实节点，挂载到dom树上。<br>patchVnode是用来对比新旧vnode，以及新旧vnode的子节点，然后更新他们的差异。如果新旧vnode都有子节点，并且子节点不同的话，还会调用updateChildren去对比子节点的差异。<br>updateChildren会去处理新旧子节点，在处理的过程中优化了这个操作。他会先去把新旧节点的头和尾取出来进行比较，总共有4种比较方式。在比较的过程中，如果我们的节点是sameVnode，那就会调用patchVnode打补丁。如果这4种比较的方式都不满足的话，就会在老节点的子节点种查找newStartVnode，也就是新的开始节点在老的节点中是否存在，并进行处理。如果新节点比老节点多，会把新增的节点插入到dom中，如果老节点比较多，就把多余的老节点删除。<br><img src="/2022/05/02/vueymfx/vueymfx3/5DA71656-C1C3-4A04-B539-B1287BE68A6B.png" alt="cfa4cb62a5b1b3adb9e1cffdcccf6a08"></p>
 <h4 id="模板编译和组件化"><a href="#模板编译和组件化" class="headerlink" title="模板编译和组件化"></a>模板编译和组件化</h4><p>模板编译的作用，就是把模板中的内容（html）转换为渲染函数。.vue文件是webpack通过vue-loader在构建的过程中转换成render函数的。</p>
-<p>compileToFunctions()是模板编译的入口函数，他的内部先从缓存加载编译好的render渲染函数，如果缓存中没有，就调用compile开始编译。<br>在compile中先合并选项（options），然后调用baseCompile编译模板。compile的核心是合并选项，真正的处理是在baseCompile中完成的。<br>把模板和合并好的选项传递给baseCompile，他做了三件事情。一、使用parse函数把template模板转换成AST tree（抽象语法树）。二、使用optimze函数对AST tree进行优化：标记所有AST tree中的sub trees（静态根节点），sub trees不需要每次被重绘，patch的过程会跳过sub trees。三、将优化过的AST tree生成字符串形式的js代码。<br>当compile执行完毕以后，会回到入口函数compileToFunctions中，他继续把字符串形式的代码转换为函数的形式，通过执行createFunction，当render和staticRenderFuns创建完毕，最终他们都会被挂载到vue实例中的options选项对应的属性上。<br>注：<br>模板编译的过程中，会标记静态根节点，对静态根节点进行优化处理，重新渲染的时候不需要渲染静态根节点，因为他们不会发生改变。另外在模板中不要多写无意义的空格和换行，生成AST对象时会保留这些空格和换行，他们都会被存储到内存中。<br><img src="/2022/03/02/vueymfx/vueymfx3/967222E7-DF80-458C-AF98-6F5A4CF032BD.png" alt="a28ffcef5fccd93a5778d8f185793c20"></p>
+<p>compileToFunctions()是模板编译的入口函数，他的内部先从缓存加载编译好的render渲染函数，如果缓存中没有，就调用compile开始编译。<br>在compile中先合并选项（options），然后调用baseCompile编译模板。compile的核心是合并选项，真正的处理是在baseCompile中完成的。<br>把模板和合并好的选项传递给baseCompile，他做了三件事情。一、使用parse函数把template模板转换成AST tree（抽象语法树）。二、使用optimze函数对AST tree进行优化：标记所有AST tree中的sub trees（静态根节点），sub trees不需要每次被重绘，patch的过程会跳过sub trees。三、将优化过的AST tree生成字符串形式的js代码。<br>当compile执行完毕以后，会回到入口函数compileToFunctions中，他继续把字符串形式的代码转换为函数的形式，通过执行createFunction，当render和staticRenderFuns创建完毕，最终他们都会被挂载到vue实例中的options选项对应的属性上。<br>注：<br>模板编译的过程中，会标记静态根节点，对静态根节点进行优化处理，重新渲染的时候不需要渲染静态根节点，因为他们不会发生改变。另外在模板中不要多写无意义的空格和换行，生成AST对象时会保留这些空格和换行，他们都会被存储到内存中。<br><img src="/2022/05/02/vueymfx/vueymfx3/967222E7-DF80-458C-AF98-6F5A4CF032BD.png" alt="a28ffcef5fccd93a5778d8f185793c20"></p>
 <h5 id="组件化"><a href="#组件化" class="headerlink" title="组件化"></a>组件化</h5><p>一个vue组件就是一个拥有预定义选项的一个vue实例。<br>一个组件可以组成页面上一个功能完备的区域，组件可以包含脚本、样式、模板</p>
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>vue</tag>
@@ -1457,7 +1457,7 @@ git push -->
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>vue</tag>
@@ -1604,7 +1604,7 @@ git push -->
 <p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>性能优化</tag>
@@ -1650,7 +1650,7 @@ git push -->
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>性能优化</tag>
@@ -1703,7 +1703,7 @@ git push -->
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>性能优化</tag>
@@ -1741,7 +1741,7 @@ git push -->
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>性能优化</tag>
@@ -1798,7 +1798,7 @@ git push -->
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>vue</tag>
@@ -1949,11 +1949,854 @@ git push -->
 <p>原创博文, 如有错误, 敬请指导!</p>
 ]]></content>
       <categories>
-        <category>前端进阶笔记</category>
+        <category>高级前端笔记</category>
       </categories>
       <tags>
         <tag>Promise</tag>
         <tag>异步编程</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>数学-线性代数</title>
+    <url>/2023/04/02/math/xxds/</url>
+    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>线性代数是代数学的一个分支，主要处理线性关系问题。线性关系意即数学对象之间的关系是以一次形式来表达的。线性代数是一个伟大的学科，这里不做细述，推荐细看B站3blue1brown的视频，解释的非常详细。</p>
+<h5 id="一、基本概念："><a href="#一、基本概念：" class="headerlink" title="一、基本概念："></a>一、基本概念：</h5><p>线性（linear）指量与量之间按比例、成直线的关系，在数学上可以理解为一阶导数为常数的函数<br>非线性（non-linear）则指不按比例、不成直线的关系，一阶导数不为常数。</p>
+<p><strong>一、向量是什么？</strong><br>1、物理学眼中（空间中的箭头）<br>2、计算机学眼中（有序的数字列表）<br>3、数学眼中（只要能玩向量加法和数字乘法就行）<br><strong>二、计算方法</strong><br>1、向量加法（两个向量内部数字对应起来相加即可）<br>2、向量乘法（向量内部数字直接乘外部数字即可）<br><strong>三、线性代数的意义</strong><br>1、为数据分析提供了列表概念化和可视化的方法<br>2、看起来简洁易懂，也会帮助人理解某些特殊运算的意义。<br>3、为物理学家和计算机图形程序员提供了一个更好的描述并操纵空间的形式。</p>
+<p><strong>链式法则适用于复合函数，即一个函数中包含了另一个函数</strong>。假如 y = f (u)是一个u 的可微函数，u = g (x)是一个x 的可微函数，则 y = f (g(x)) 是一个x 的可微函数，则链式法则描述了如何计算y关于x的导数dy/dx。链式法则的一般形式如下：<img src="/2023/04/02/math/xxds/0f851c998b97de73e58d052d32485d19.png" alt="0f851c998b97de73e58d052d32485d19">(即y 对x 的导数，等于y 对u 的导数，乘以u 对x 的导数。)</p>
+<p>这个公式表明，要计算复合函数y=f(g(x))的导数，首先计算f关于中间变量u=g(x)的导数，然后计算u关于自变量x的导数，并将它们相乘。</p>
+<p>当然，复合函数还可以继续复合，组成更复杂的函数。也就是说，复合函数是两套以上的映射法则。一般来讲，f与g 的复合函数，与g 与f 的复合函数，是不一样的复合函数。</p>
+<h4 id="二、示例："><a href="#二、示例：" class="headerlink" title="二、示例："></a>二、示例：</h4><p><img src="/2023/04/02/math/xxds/5b0f965dec10074a1f78dd550d0a5416.png" alt="5b0f965dec10074a1f78dd550d0a5416.png"></p>
+<h4 id="三、应用领域："><a href="#三、应用领域：" class="headerlink" title="三、应用领域："></a>三、应用领域：</h4><p>链式法则在物理学、工程学、计算机科学等领域广泛应用。在机器学习和深度学习中，链式法则是计算梯度（导数）的基本工具，用于训练神经网络和优化模型参数。它也在控制理论、信号处理和优化问题中发挥关键作用。</p>
+<h4 id="四、总结："><a href="#四、总结：" class="headerlink" title="四、总结："></a>四、总结：</h4><p>链式法则是微积分中的一项重要技巧，用于计算复合函数的导数。它允许我们在分析和解决问题时处理包含多个函数的复杂情况，是许多科学和工程领域的基础工具之一。深入理解链式法则有助于更好地理解和应用微积分知识。</p>
+]]></content>
+      <categories>
+        <category>AID学习笔记</category>
+      </categories>
+      <tags>
+        <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数学-链式求导</title>
+    <url>/2023/05/17/math/lsqd/</url>
+    <content><![CDATA[<h4 id="链式求导"><a href="#链式求导" class="headerlink" title="链式求导"></a>链式求导</h4><p><strong>求导链式法则（Chain Rule）是微积分中的一个重要概念，用于计算复合函数(Composite Functions)的导数。<br>拓展知识：</strong></p>
+<p><strong>一、链式法则的基本概念：</strong></p>
+<p><strong>复合函数</strong>: 以另一种方式将两个函数组合起来的函数。正式定义：<br>令f 和g 分别为两个函数，函数(f。g)(x) = f (g(x))称为f 与g 的复合函数。复合函数 f。g 的定义域为所有g 的定义域中使得g(x) 在f 的定义域中的所有x 的集合。即，复合函数的定义域中的自变量，首先必须满足是位于g 的定义域中，同时，这个自变量也必须满足使其函数g 的值位于f 的定义域中，满足这两个限制的所有x 的值，构成复合函数的定义域。</p>
+<p><strong>链式法则适用于复合函数，即一个函数中包含了另一个函数</strong>。假如 y = f (u)是一个u 的可微函数，u = g (x)是一个x 的可微函数，则 y = f (g(x)) 是一个x 的可微函数，则链式法则描述了如何计算y关于x的导数dy/dx。链式法则的一般形式如下：<img src="/2023/05/17/math/lsqd/0f851c998b97de73e58d052d32485d19.png" alt="0f851c998b97de73e58d052d32485d19">(即y 对x 的导数，等于y 对u 的导数，乘以u 对x 的导数。)</p>
+<p>这个公式表明，要计算复合函数y=f(g(x))的导数，首先计算f关于中间变量u=g(x)的导数，然后计算u关于自变量x的导数，并将它们相乘。</p>
+<p>当然，复合函数还可以继续复合，组成更复杂的函数。也就是说，复合函数是两套以上的映射法则。一般来讲，f与g 的复合函数，与g 与f 的复合函数，是不一样的复合函数。</p>
+<h4 id="二、示例："><a href="#二、示例：" class="headerlink" title="二、示例："></a>二、示例：</h4><p><img src="/2023/05/17/math/lsqd/5b0f965dec10074a1f78dd550d0a5416.png" alt="5b0f965dec10074a1f78dd550d0a5416.png"></p>
+<h4 id="三、应用领域："><a href="#三、应用领域：" class="headerlink" title="三、应用领域："></a>三、应用领域：</h4><p>链式法则在物理学、工程学、计算机科学等领域广泛应用。在机器学习和深度学习中，链式法则是计算梯度（导数）的基本工具，用于训练神经网络和优化模型参数。它也在控制理论、信号处理和优化问题中发挥关键作用。</p>
+<h4 id="四、总结："><a href="#四、总结：" class="headerlink" title="四、总结："></a>四、总结：</h4><p>链式法则是微积分中的一项重要技巧，用于计算复合函数的导数。它允许我们在分析和解决问题时处理包含多个函数的复杂情况，是许多科学和工程领域的基础工具之一。深入理解链式法则有助于更好地理解和应用微积分知识。</p>
+]]></content>
+      <categories>
+        <category>AID学习笔记</category>
+      </categories>
+      <tags>
+        <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python入门语法速查手册</title>
+    <url>/2023/03/10/python/python/</url>
+    <content><![CDATA[<hr>
+<h4 id="语法速查手册"><a href="#语法速查手册" class="headerlink" title="语法速查手册"></a>语法速查手册</h4><h5 id="数据基本运算"><a href="#数据基本运算" class="headerlink" title="数据基本运算"></a>数据基本运算</h5><ul>
+<li><p>变量</p>
+<pre><code>  变量名 = 数据
+</code></pre>
+</li>
+<li><p>人机交互</p>
+<pre><code>  变量名 = input(提示信息)
+  print(结果)
+</code></pre>
+</li>
+<li><p>数据类型</p>
+<pre><code>  整数int
+  小数float
+  字符串str
+  转换
+  变量名 = 目标类型(待转数据)
+</code></pre>
+</li>
+<li><p>数学运算</p>
+<ol>
+<li><p>算数运算符</p>
+<pre><code> + - *
+ 幂运算**
+ 小数商/
+ 整数商//
+ 余数%
+</code></pre>
+</li>
+<li><p>增强运算符</p>
+<pre><code> +=  -=  *=
+ 幂运算**=
+ 小数商/=
+ 整数//=
+ 余数%=
+</code></pre>
+</li>
+</ol>
+<ul>
+<li><p>布尔运算</p>
+<pre><code>  * bool类型
+      True条件满足
+      False条件不满足
+  * 比较运算符
+      \&gt; &lt; &gt;= &lt;=
+      等于==
+      不等于!=
+  * 逻辑运算符
+      并且and
+      或者or
+      取反not
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="流程控制语句"><a href="#流程控制语句" class="headerlink" title="流程控制语句"></a>流程控制语句</h5><ul>
+<li><p>选择语句</p>
+<pre><code>  if 条件1:
+      满足条件1执行的代码
+  elif 条件2:
+      不满足条件1,但满足条件2执行的代码
+  else:
+      不满足条件执行的代码
+</code></pre>
+</li>
+<li><p>循环语句</p>
+<pre><code>  while 循环
+  while True:
+        循环体
+        if 退出条件:
+              break
+  计时器 = 开始
+  while 计数器 &lt; 结束值:
+         循环体
+         计时器 += 间隔
+</code></pre>
+</li>
+<li><p>for 计数器 in range(开始,结束,间隔):</p>
+</li>
+<li><p>跳转语句</p>
+<pre><code>  break
+  continue
+</code></pre>
+</li>
+</ul>
+<h5 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h5><ul>
+<li><p>列表list</p>
+<pre><code>  适用性:存储多个有顺序的数据
+</code></pre>
+</li>
+<li><p>基础操作</p>
+<pre><code>  创建
+  列表名 = [数据1,数据2]
+  添加
+  列表名.append(数据)
+  列表名.insert(索引,数据)
+  定位
+  列表名[整数]
+  列表名[开始:结束:间隔]
+  删除
+  del 列表名[整数]
+  del 列表名[开始:结束:间隔]
+  列表名.remove(元素)
+  遍历
+  for item in 列表名:
+  for i in range(len(列表名)):
+</code></pre>
+</li>
+<li><p>深浅拷贝</p>
+<pre><code>  深拷贝:复制所有层
+  import copy
+  新列表 = copy.deepcopy(旧列表)
+  浅拷贝:只复制一层,共享深层
+  新列表 = 旧列表[:]
+</code></pre>
+</li>
+<li><p>列表推导式</p>
+<pre><code>  新列表 = []
+  for item in 可迭代对象:
+        if 条件:
+              新列表.append(item)
+  新列表 = [item for item in 可迭代对象 if 条件]
+</code></pre>
+</li>
+<li><p>元组tuple</p>
+<pre><code>  适用性:存储无需改变的有序数据,比列表节省内存空间
+  基础操作
+  创建
+  元组名 = (数据1,数据2)
+  元组名 = 数据1,数据2
+  元组名 = (数据1,)
+  定位
+  元组名[整数]
+  元组名[开始:结束:间隔]
+  遍历
+  for item in 元组名:
+</code></pre>
+</li>
+<li><p>字符串str</p>
+<pre><code>  转义符:换行\n  \&quot;  \&#39;    \\
+  格式化字符串
+  语法:&quot;格式&quot;%(变量)
+  占位符
+  %s原样输出
+  %.2f四舍五入
+  %.2d整数位数
+</code></pre>
+</li>
+<li><p>字典dict</p>
+<pre><code>  适用性:存储有多个维度的数据
+  基础操作
+  创建
+  字典名 = &#123;键1:值,键2:值&#125;
+  添加
+  字典名[键] = 值
+  定位
+  字典名[键]
+  删除
+  del 字典名[键]
+  遍历
+  for key in 字典名:
+  for value in 字典名.values():
+  for key,value in 字典名.items():
+  
+  字典推导式
+  
+  新字典= &#123;&#125;
+  for 变量 in 可迭代对象:
+        if 条件:
+              新字典[键] = 值
+  新字典 = &#123;键:值 for 变量 in 可迭代对象 if 条件&#125;
+</code></pre>
+</li>
+<li><p>容器嵌套</p>
+<pre><code>  列表内嵌字典
+  列表名 = [
+        &#123;键1:值,键2:值&#125;,
+        &#123;键1:值,键2:值&#125;,
+  ]
+  列表名[索引][键]
+  列表内嵌列表
+  列表名 = [
+        [元素1,元素2],
+        [元素1,元素2],
+  ]
+  列表名[索引][索引]]
+</code></pre>
+</li>
+</ul>
+<h5 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h5><ul>
+<li><p>作用:将功能的做法与用法分离</p>
+</li>
+<li><p>语法</p>
+<pre><code>  def 函数名(参数):
+        某个功能的做法
+        return 结果
+  变量名 = 函数名(数据)
+</code></pre>
+</li>
+<li><p>函数将结果存储在传入的可变对象中</p>
+<pre><code>  而不使用返回值return
+  def 函数名(参数):
+       参数[0] = 结果
+  可变对象 = []
+  函数名(可变对象)
+  print(可变对象[0])
+</code></pre>
+</li>
+<li><p>作用域</p>
+<pre><code>  局部变量:函数内部创建,只能函数内部使用
+  def 函数名(参数):
+        局部变量名 = 数据
+  全局变量:在文件中创建,整个文件都可使用
+  全局变量名1 = 数据
+  def 函数名():
+        print(全局变量名1)
+        global 全局变量名2
+        全局变量名2 = 新数据
+  全局变量名2 = 数据
+</code></pre>
+</li>
+<li><p>参数</p>
+<pre><code>  形式参数:限制实参
+  def 函数名(参数1,参数2)
+  def 函数名(参数1=数据,参数2=数据)
+  def 函数名(*args):
+  def 函数名(**kwargs):
+  def 函数名(*args,参数):
+  def 函数名(*,参数):
+  实际参数:如何与形参进行对应
+  函数名(数据1,数据2)
+  函数名(参数2=数据2)
+  函数名(*序列)
+  函数名(**字典)
+</code></pre>
+</li>
+</ul>
+<h5 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h5><ul>
+<li><p>类和对象</p>
+<pre><code>  类:由变量和函数组成的新数据类型
+  class 类名:
+       def __init__(self,参数):
+             self.实例变量 = 参数
+       def 函数名(self,参数):
+             语句组
+  对象名 = 类名(数据)
+  对象名.实例变量
+  对象名.函数名(数据)
+  跨类调用
+  class A:
+       def a(self):
+           变量名 = B()
+           变量名.b()
+
+  class B:
+       def b(self):
+            pass
+  class A:
+       def __init__(self):
+            self.变量名 = B()
+       def a(self):
+           self.变量名.b()
+
+  class B:
+       def b(self):
+            pass
+  class A:
+       def a(self,参数):
+           参数.b()
+
+  class B:
+       def b(self):
+            pass
+  变量 = A()
+  变量.a(B())
+  继承
+  class 爸爸:
+       def __init__(self,爸爸参数):
+              self.爸爸的实例变量 = 爸爸参数
+       def 爸爸的函数(self):
+  class 儿子(爸爸):
+       def __init__(self,爸爸参数,儿子参数):
+              super().__init__(爸爸参数)
+              self.儿子的实例变量 =  儿子参数
+       def 儿子的函数(self):
+           self.爸爸的函数()
+  多态
+  class Model:
+       # print时自动调用
+       def __str__():
+       # remove时自动调用
+       def __eq__():
+       # sort时自动调用
+       def __gt__():
+</code></pre>
+</li>
+</ul>
+<h5 id="高级语法"><a href="#高级语法" class="headerlink" title="高级语法"></a>高级语法</h5><ul>
+<li><p>导入模块</p>
+<pre><code>  import 包.模块名
+  包.模块名.成员
+  from 包.模块名 import 成员名
+  直接使用成员名
+</code></pre>
+</li>
+<li><p>time模块</p>
+<pre><code>  时间
+  时间戳 = time.time()
+  时间元组 = time.localtime()
+  转换
+  时间元组 = time.localtime(时间戳)
+  时间戳 = time.mktime(时间元组)
+  格式化
+  字符串 = time.strftime(格式, 时间元组)
+  时间元组 = time.strptime(字符串,格式)
+</code></pre>
+</li>
+<li><p>异常处理</p>
+<pre><code>  处理
+  try:
+      可能出错的语句
+  except 异常类型:
+      处理逻辑
+  except Exception:
+      处理逻辑
+  finally:
+      一定执行的逻辑
+  发送
+  raise 异常类型()
+</code></pre>
+</li>
+<li><p>生成器</p>
+<pre><code>  函数
+  定义
+  def 函数名():
+       函数体
+       yield 数据
+  调用
+  生成器对象 = 函数名()    # 调用函数不执行  
+  for item in 生成器对象:
+  生成器对象 =函数名()
+  容器类型(生成器对象)
+  内置生成器
+  for i,item in enumerate(容器):
+  for item in zip(容器1,容器2)
+  表达式
+  生成器对象 = (变量 for 变量 in 可迭代对象)
+</code></pre>
+</li>
+<li><p>函数式编程</p>
+<pre><code>  函数作为参数
+  高阶函数
+  def 通用函数(容器,条件):
+       for item in 容器:
+           if 条件(item):
+               return item
+  lambda 表达式
+  结果 = 通用函数(容器,lambda 参数:函数体)
+  函数作为返回值
+  装饰器
+  def 装饰器名称(func):
+      def wrapper(*args,**kwargs):
+          新功能&quot;
+          result = func(*args,**kwargs)
+          return result
+      return wrapper
+  @装饰器名称
+  def 旧功能():
+</code></pre>
+</li>
+</ul>
+<h5 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h5><ul>
+<li><p>文件管理</p>
+<pre><code>  创建路径
+  对象名 = Path(目录1,目录2)
+  对象名 = Path.cwd().joinpath(&quot;目录1&quot;,&quot;目录2&quot;)
+  路径信息
+  对象名.absolute()  # 绝对路径(路径类型)
+  对象名.name  # 带后缀的完整文件名(str类型)
+  对象名.stem  # 文件名不带后缀(str类型)
+  对象名.suffix # 文件后缀(str类型)
+  对象名.parent  # 上一级路径(路径类型)
+  对象名.parts  # 分割路径(tuple类型)
+  对象名.exists()  # 路径是否存在(bool类型)
+  对象名.is_file()  # 是否文件(bool类型)
+  对象名.is_dir()  # 是否目录(bool类型)
+  对象名.is_absolute() # 是否绝对路径(bool类型)
+  对象名.stat().st_ctime  # 创建时间(时间戳)
+  对象名.stat().st_atime  # 访问时间(时间戳)
+  对象名.stat().st_mtime  # 修改的时间(时间戳)
+  对象名.stat().st_size  # 文件大小(字节Bete)
+  搜索目录
+  # 搜索当前目录所有路径(一层)
+  生成器 = 对象名.iterdir():
+  # 根据通配符搜索当前目录所有路径(一层)
+  生成器 = path.glob(&quot;通配符&quot;):
+  # 根据通配符递归搜索当前目录所有路径(多层)
+  生成器 = 对象名.rglob(&quot;通配符&quot;)
+  新建路径
+  # 新建文件
+  对象名.touch()
+  # 新建目录
+  对象名.mkdir()
+  # 忽略目录存在时的报错
+  对象名.mkdir(exist_ok=True)
+  重命名
+  对象名.rename(新路径对象)
+  删除路径
+  # 删除文件(永久删除，回收站不存在)
+  对象名.unlink()
+  # 删除目录(目录必须为空)
+  对象名.rmdir()
+</code></pre>
+</li>
+<li><p>文件读写</p>
+<pre><code>  文本文件
+  打开
+  with open(文件路径,&quot;操作模式&quot;,encoding=&quot;编码方式&quot;) as 对象名:
+      通过对象名操作文件
+  操作
+  # 读取指定数量字符
+  字符串 = 对象名.read(字符数)
+  列表 = 对象名.readlines()
+  # 读取文件每行字符
+  for 行 in 对象名:
+  # 将字符串写入到文件
+  字符数 = 对象名.write(字符串)
+  二进制文件
+  打开
+  with open(文件路径,&quot;操作模式&quot;) as 对象名:
+      通过对象名操作文件
+  操作
+  # 读取文件中指定数量字节
+  字节串 = 对象名.read(字节数)
+  # 将字节串写入到文件
+  字节数 = 对象名.write(字节串)
+</code></pre>
+</li>
+</ul>
+<h5 id="数据库基础操作"><a href="#数据库基础操作" class="headerlink" title="数据库基础操作"></a>数据库基础操作</h5><ul>
+<li><p>DDL</p>
+<pre><code>  create database 数据库名称;
+  use 数据库名称;
+  create table 表名 (
+      列名 数据类型 约束 comment &#39;注释&#39;,
+      列名 数据类型 约束 comment &#39;注释&#39;
+  ) comment=&#39;注释&#39;;
+  数据类型
+  int
+  float
+  char(字符数)
+  varchar(字符数)
+  约束
+  primay key
+  auto_increment
+  not null
+  check(条件)
+  default(默认值)
+</code></pre>
+</li>
+<li><p>DML</p>
+<pre><code>  insert into 表名(列名) values(数据);
+  update 表名 set 列名 = 值,列名 = 值 where 条件;
+  delete from 表名 where 条件;
+</code></pre>
+</li>
+<li><p>DQL(单条语句)</p>
+<pre><code>  select 列名1,列名2 from 表名;
+  select 列名1,列名2 from 表名 where 条件;
+  select 聚合函数(列名) from 表名 where 条件;
+  select 聚合函数(列名) from 表名 where 条件 group by 列名;
+  select
+  case
+        when 条件 then 结果
+        else 结果
+  end
+  from 表名;
+  select
+  聚合函数(列名),
+  case
+        when 条件 then 结果
+        else 结果
+  end as 别名
+  from 表名
+  group by 别名;
+  select 聚合函数(列名) from 表名 where 条件 group by 列名
+  having 对聚合结果处理的条件;
+  select 列名 from 表名 where 条件 group by 列名
+  having 对聚合结果处理的条件
+  order by 列名 desc;
+  select 列名 from 表名 where 条件
+  group by 列名 having 对聚合结果处理的条件
+  order by 列名 desc
+  limit 查询的行数 offset 跳过的行数;
+  select 列名 from 表名 ...
+  union all
+  select 列名 from 表名 ...
+</code></pre>
+</li>
+<li><p>多表查询</p>
+<pre><code>  连接查询
+  select 列名 from 表1 join 表2 on 表1.共同列 = 表2.共同列...;
+  select 列名 from 表1 left join 表2 on 表1.共同列 = 表2.共同列...;
+  select 列名 from 表1 right join 表2 on 表1.共同列 = 表2.共同列...;
+  子查询
+  # 第一步:
+  select ....
+  # 第二步:
+  select ....
+  # 第三步:
+  select .... (
+      select ....
+  )
+</code></pre>
+</li>
+<li><p>数据库优化</p>
+<ol>
+<li><p>数据库设计三大范式</p>
+<pre><code>     第一范式:表中每列数据，不可再被拆分，不允许多个数据存储在一列中
+     第二范式:每行必须可以被唯一区分，所有列依赖于主键列
+     第三范式:非主键列不能依赖其他非主键列
+</code></pre>
+</li>
+<li><p>索引</p>
+<pre><code>     定义:加快数据库查询速度的一种数据结构
+</code></pre>
+</li>
+<li><p>B+树</p>
+</li>
+<li><p>分类</p>
+<pre><code>     create index 索引名 on 表名(列名);
+     create unique index 索引名 on 表名(列名);
+     create index 索引名 on 表名(列名1,列名2);
+     create unique index 索引名 on 表名(列名1,列名2);
+</code></pre>
+</li>
+<li><p>SQL语句优化</p>
+<pre><code>     何时用索引
+     1.为经常用于查询的列创建索引
+     2.尽量选择区分度高的列作为索引，区分度越高索引效率越高
+     3. 尽量避免使用select *，用具体列名代替*，可减少回表查询
+     4. 建立外键会自动建立索引，在关联查询时建议使用外键作为关联条件
+     会导致索引失效的操作
+     1.在索引列上使用like模糊匹配，如果以通配符开头，会导致索引失效
+     2. 在索引列上进行运算操作，会导致索引失效
+     3.or两边的列有一个没索引，就会导致另一个索引失效
+     联合索引注意事项
+     1. 联合索引要遵守最左前缀法则，即查询从索引的最左列开始
+     2. 联合索引,范围查询时（&gt; &lt; !=），右侧引索列失效
+     按效率：count(*) ≈ count(1) &gt; count(主键) &gt; count(列名)
+</code></pre>
+</li>
+<li><p>事务四大特征</p>
+<pre><code>     原子性 + 一致性
+     原理
+     - 回滚日志undolog：
+       - 记录数据被修改前的信息，供回滚到事务开始前
+     - 每行的2个隐藏列：
+       - 事务ID：最近操作当前行的事务编号
+       - 回滚指针：指向undolog中该行修改前的信息
+     隔离性
+     持久性
+     原理
+     重做日志redolog：
+     - 记录对数据的修改，供系统故障后能够恢复
+</code></pre>
+</li>
+<li><p>隔离级别</p>
+<pre><code>     可重复读repeatable read
+     原理：第一次select时获取一个视图快照，在事务执行期间，其他事务对数据的修改不影响当前事务的视图快照，保持了事务开始时的一致性。
+     串行化serializable
+     多个事务排队执行，每个事务在执行完之前，下一个事务无法执行
+     读已提交read committed
+     能够读取其他事务已提交的数据，不读取未提交的数据
+     读未提交read uncommitted
+     可以读取其他事务未提交的数据
+</code></pre>
+</li>
+</ol>
+</li>
+</ul>
+<h5 id="pymysql"><a href="#pymysql" class="headerlink" title="pymysql"></a>pymysql</h5><ol>
+<li><p>原生写法</p>
+<pre><code> 导入
+ from pymysql import Connection
+ 创建连接
+ conn = Connection(
+             host=地址, port=端口号,
+             user=用户名, password=密码,
+             database=数据库名, autocommit=True
+         )
+ 执行增删改
+ try:
+         with conn.cursor() as cursor:
+                 cursor.execute(sql语句, 参数)
+                 return cursor.lastrowid
+ except Exception as e:
+     print(f&quot;发生错误: &#123;e&#125;&quot;)
+     return -1
+ 查询
+ try:
+       with conn.cursor() as cursor:
+                 cursor.execute(sql, params)
+                 return cursor.fetchall() # 或者 fetchone()
+ except Exception as e:
+             print(f&quot;发生错误: &#123;e&#125;&quot;)
+ 事务
+ try:
+             conn.begin()
+             with conn.cursor() as cursor:
+                 count = 0
+                 for sql, params in sql_params:
+                     count += cursor.execute(sql, params)
+                 conn.commit()
+                 return count
+ except Exception as e:
+             conn.rollback()
+             print(f&quot;发生错误: &#123;e&#125;&quot;)
+             return -1
+ 关闭
+ conn.close()
+</code></pre>
+</li>
+</ol>
+<ul>
+<li><p>自定义MySqlHelper</p>
+<pre><code>  导入
+  from common.sql_tools import MySqlHelper
+  创建对象
+  helper = MySqlHelper(数据库名)
+  执行增删改
+  结果 = helper.execute(SQL语句,参数)
+  执行查询
+  结果 = helper.fetch_one(SQL语句,参数)
+  结果 = helper.fetch_all(SQL语句,参数)
+  执行事务
+  结果 = helper.execute_transaction(
+        (SQL语句,元组类型的参数),
+        (SQL语句,元组类型的参数)
+  )
+  关闭
+  helper.close()
+</code></pre>
+</li>
+<li><p>存储过程</p>
+<pre><code>  创建
+  delimiter $$
+  create procedure 存储过程名(参数名 数据类型)
+  begin
+      语句组
+      select 结果;
+  end$$
+  调用
+  call 存储过程名(参数);
+</code></pre>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>AID学习笔记</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>语言学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机器学习概述</title>
+    <url>/2023/10/16/aid/aid1jqxxgs/</url>
+    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>关于人工智能我想学蛮久了的，各种各样的原因加持下 ，我终于还是来赶了晚班车。我始终相信，人工智能是人类的未来。这里借用吴恩达的一句话：“我认为AGI被过度炒作了，我们离这个目标还有很长的路要走，他可能花费50年、500年，甚至更久”。但我愿意等，并为之付出。</p>
+<h4 id="机器学习概述"><a href="#机器学习概述" class="headerlink" title="机器学习概述"></a>机器学习概述</h4><blockquote>
+<p>监督学习</p>
+</blockquote>
+<p>在已知数据输出（经过标注的）的情况下对模型进行训练，根据输出进行调整、优化的学习方式称为有监督学习.</p>
+<blockquote>
+<p>无监督学习</p>
+</blockquote>
+<p>没有已知输出的情况下，仅仅根据输入信息的相关性，进行类别的划分. </p>
+<blockquote>
+<p>半监督学习</p>
+</blockquote>
+<p>先通过无监督学习划分类别，再人工标记通过有监督学习方式来预测输出.例如先对相似的水果进行聚类，再识别是哪个类别. </p>
+<h4 id="脚手架工具"><a href="#脚手架工具" class="headerlink" title="脚手架工具"></a>脚手架工具</h4><p>脚手架工具是帮我们自动创建基础文件的工具<br>脚手架的本质作用就是创建项目基础结构、提供项目规范和约定, 相同的组织结构, 相同的开发范式, 相同的模块依赖, 相同的工具配置, 相同的基础代码都应该被自动化创建</p>
+<p><strong>内容概要:</strong></p>
+<ul>
+<li>脚手架的作用</li>
+<li>常用的脚手架工具</li>
+<li>通用脚手架工具剖析</li>
+<li>开发一款脚手架</li>
+</ul>
+<p><strong>常用的脚手架工具</strong><br>根据信息创建对应的项目基础结构有create-react-app, vue-cli, angular-cli等<br>例如创建一个组件/模块所需要的文件就可以用到plop</p>
+<h5 id="Yeoman"><a href="#Yeoman" class="headerlink" title="Yeoman"></a>Yeoman</h5><p>The web’s scaffolding tool for modern webapps<br>可以搭配不同的generator去创建任何类型项目, 可以使用其搭建自己的脚手架<br>缺点是过于通用, 不够专注</p>
+<p><strong>基本使用</strong><br>先安装基础模块: node, npm 或 yarn, 以下举例中我们使用yarn</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">yarn <span class="built_in">global</span> add yo <span class="comment">//全局安装Yeoman</span></span><br><span class="line">yarn <span class="built_in">global</span> add generator-node <span class="comment">// 一个node模块</span></span><br><span class="line">mkdir my-<span class="built_in">module</span></span><br><span class="line">cd my-<span class="built_in">module</span></span><br><span class="line">yo node <span class="comment">//input something...</span></span><br></pre></td></tr></table></figure>
+
+<p>执行yo node后的命令行如下(做个例子)</p>
+]]></content>
+      <categories>
+        <category>AID学习笔记</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>批量归一化 Batch Normalization</title>
+    <url>/2024/04/02/aid/bn/</url>
+    <content><![CDATA[<p>神经网络中的批量归一化方法,通过对一批样本进行归一化处理,使得每一层网络的输入分布相似,从而避免了分布差异过大导致网络无法收敛的问题。</p>
+<p>为了让网络可以正常训练，Batch Normalization 批量归一化方法可以加速神经网络的收敛。使训练过程中对学习率和参数初始化更加鲁棒</p>
+<p>但它也有一些缺陷,如对循环神经网络等序列形式数据性能较差,以及在分布式训练中额外的数据同步会影响并行效率等。</p>
+<p>神经网络中的批量归一化方法，通过对样本进行归一化处理，使网络能够正常训练。</p>
+<p>需要注意批量归一化方法中额外引入的两个参数，需要反向传播更新</p>
+<p>仅在Batch中包含样本数量较多时有效。对循环网络(RNN)或序列数据(Sequence)性能较差分布式运算时影响效率。</p>
+<p>BN算法仅在BH中包含样本，对于循环神经网络等数据性能较差</p>
+<p>后续提出了类似于layer normalization等改进方法</p>
+<p><img src="/2024/04/02/aid/bn/93968aee8b1f72101a7f5ff44788f110.png" alt="93968aee8b1f72101a7f5ff44788f110.png"></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>三种插值法</title>
+    <url>/2024/04/02/aid/chazhifa/</url>
+    <content><![CDATA[<p>插值算法的应用,其中包括<strong>最邻近插值和双线性插值</strong>。插值算法一般被用于图像的上采样或下采样。最邻近插值是最简单的插值算法,通过最近的像素值来确定目标图像中的像素值。插值算法的使用场景包括图像分割和增强等。此外，最邻近插值算法还有其独特的使用场景,例如在处理标注图像时需要保证标注像素值的正确性</p>
+<h4 id="最近临插值法"><a href="#最近临插值法" class="headerlink" title="最近临插值法"></a>最近临插值法</h4><p>方法：将两个特征图换成同等大小，根据距离需计算的像素点最近的原像素点来确定该点的值<br>缺点：采样后的图有毛边<br>计算过程<br><img src="/2024/04/02/aid/chazhifa/0f8d7b018b849df344c03d7b8ae5b885.png" alt="0f8d7b018b849df344c03d7b8ae5b885.png"><br><img src="/2024/04/02/aid/chazhifa/1d222281f67ba8f6869cc0d8ddba5cba.png" alt="1d222281f67ba8f6869cc0d8ddba5cba.png"></p>
+<h4 id="双线性插值法"><a href="#双线性插值法" class="headerlink" title="双线性插值法"></a>双线性插值法</h4><p>双线性差值的计算方式，包括角对齐方式和边对齐方式。通过代码实现，详细讲解了目标图像中每个像素点的计算取值过程。同时，还介绍了两种对齐方式下的差异以及计算过程中的权重考虑。对于需要进行上采样处理的图像，可以通过双线性插值的方式实现。<br>方法有两种：角对齐 或者边对齐<br><img src="/2024/04/02/aid/chazhifa/965ccd22942b67dcd885817c6a80cf84.png" alt="965ccd22942b67dcd885817c6a80cf84.png"><br>计算过程<br><img src="/2024/04/02/aid/chazhifa/83957cc48d6ecfdaf4e409d7d3298f63.png" alt="83957cc48d6ecfdaf4e409d7d3298f63.png"></p>
+<h4 id="双三次插值法"><a href="#双三次插值法" class="headerlink" title="双三次插值法"></a>双三次插值法</h4><p>双三次插值算法，该算法在计算目标像素点周围像素权重时使用了一个三次项的公式，相比于双线性插值算法，它对目标像素点的像素取值做了一个平滑处理。通过示意图和公式解释了权重的计算方法，并展示了在不同距离下权重的取值情况。最后，解释了padding的作用。<br>取周围16个点的值<br><img src="/2024/04/02/aid/chazhifa/e9848703a4a02e0b1f0e39fa59073f17.png" alt="e9848703a4a02e0b1f0e39fa59073f17.png"><br><img src="/2024/04/02/aid/chazhifa/be9b059b09acca463291720c594b85af.png" alt="be9b059b09acca463291720c594b85af.png"></p>
+<p>各种插值法取值图例<br><img src="/2024/04/02/aid/chazhifa/438ddab67c1755d06255978de075ac87.png" alt="438ddab67c1755d06255978de075ac87.png"></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>NMS(非极大值抑制)和IOU(交并比)</title>
+    <url>/2024/04/02/aid/iou/</url>
+    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>目标检测任务中常用的后处理方法NMS(非极大值抑制)和IOU(交井比)的概念。NMS的作用是删除冗余的候选框，保留置信度最高的候选框。通过计算BBOX之间的IOU，可以判断哪些候选框需要保留，哪些需要丢弃。在多类别目标检测任务中，需要分别对每个类别进行NMS计算，保留置信度最高的候选框。最后，只有保留的候选框才会被输出。</p>
+<p>目标检测任务中常用的坐标损失计算方式，包括L1损失、L2损失、smoothL1损失、I0U损失、GIOU损失和DIOU损失。其中，smoothL1损失和IOU损失是基础损失和评估指标的组合，存在目标不一致的问题。GIOU损失解决了IOU损失在训练初期模型无法优化的问题，并能更好地评估模型的预测效果。DIOU损失是GIOU损失的一种变换形式，可用于计算目标检测的坐标损失。</p>
+<h4 id="计算损失"><a href="#计算损失" class="headerlink" title="计算损失"></a>计算损失</h4><p>目标检测任务中常用的坐标损失计算方式,包括<strong>L1、L2损失、smooth L1损失</strong>等,并分析了它们的优缺点。<br>L1损失和L2损失:L1损失和L2损失是最基础的损失函数，但存在一些问题。<br><img src="/2024/04/02/aid/iou/69e37af88c8570b1c4a67f61df98c965.png" alt="69e37af88c8570b1c4a67f61df98c965.png"></p>
+<p>为了避免模型学习优化和模型评估的目标不一致，我们最好也使用IOU来计算坐标损失并且，IOU Loss 是将 x，y, w, h这4个值构成的 bbox 看作是一个整体来进行损失计算的</p>
+<p>SmoothL1损失是针对L1损失和L2损失的问题提出的一种损失函数。<br>在实际应用中，SmoothL1损失和L1损失、L2损失一样，都需要计算坐标损失。<br><img src="/2024/04/02/aid/iou/6a3b435a0f1517f8d0edcc250f5ef964.png" alt="6a3b435a0f1517f8d0edcc250f5ef964.png"></p>
+<p>但是IOU不能处理两个框不相交的情况，为了解决这种情况，所以使用GIOU，做一个外接框<br><img src="/2024/04/02/aid/iou/f1aee2a6b93376778efceb7be9b46a9f.png" alt="f1aee2a6b93376778efceb7be9b46a9f.png"></p>
+<p>当预测框与真实框为包含关系时，GIOU loss函数的分子为0，所以就退化为了IOU，所以，模型没办法针对这种情况进行区分，不能明确的知道两个框的位置关系到底是什样的，从而进行快速收敛。</p>
+<p>DIOU和DIOU loss损失的计算方法，以及如何通过调整参数来平衡长宽比和面积一致性。<br>阿尔法参数的调整:介绍了如何通过调整阿尔法参数来平衡不同损失函数之间的权重<br>在计算DIOU时需要考虑距离的占比,以及引入阿尔法项的作用,最终得到了DLOU loss。<br>考虑距离的占比，即D的平方除以C的平方<br>阿尔法的作用，使损失函数更具区分度</p>
+<p><img src="/2024/04/02/aid/iou/ace3e2368aafd2df1c4ce0b166cf770a.png" alt="ace3e2368aafd2df1c4ce0b166cf770a.png"></p>
+<p>CIOU loss的计算公式，包括减去IOU和加上阿尔法乘以v<br><img src="/2024/04/02/aid/iou/1195e45c140017820ccc4744e00e619f.png" alt="1195e45c140017820ccc4744e00e619f.png"></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>目标检测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>图像分割的几种模型</title>
+    <url>/2024/04/02/aid/txfg/</url>
+    <content><![CDATA[<h4 id="图像分割的分类："><a href="#图像分割的分类：" class="headerlink" title="图像分割的分类："></a>图像分割的分类：</h4><p><img src="/2024/04/02/aid/txfg/eb531a75e29bfed9d71079eec9cfb2c2.png" alt="eb531a75e29bfed9d71079eec9cfb2c2.png"></p>
+<h4 id="图像分割的难点"><a href="#图像分割的难点" class="headerlink" title="图像分割的难点"></a>图像分割的难点</h4><p>1）数据问题：分割不像检测等任务，只需要标注边框就可以使用，分割需要精确到<br>像素级标注，包括每一个目标的轮廓等信息；<br>2）计算资源问题：要想得到较高的精度就需要使用更深的网络、进行更精确的计<br>算，对计算资源要求较高。目前业界有一些轻量级网络，但总体精度较低；<br>3）精细分割：目前很多算法对于道路、建筑物等类别分割精度很高，能达到98%，<br>而对于细小的类别，由于其轮廓太小，而无法精确的定位轮廓；<br>4）上下文信息：分割中上下文信息很重要，否则会造成一个目标被分成多个部分，<br>或者不同类别目标分类成相同类别；</p>
+<h4 id="图像分割基本原理"><a href="#图像分割基本原理" class="headerlink" title="图像分割基本原理"></a>图像分割基本原理</h4><ol>
+<li><p>整体实现思路<br>图像分割一般思路如下：<br>1）输入图像，利用深度卷积神经网络提取特征<br>2）对特征图进行上采样，输出每个像素的类别<br>3）利用损失函数，对模型进行优化，将每个像素的分类结果优化到最接近真实值<br><img src="/2024/04/02/aid/txfg/d307294eb80b6711f840583c2b7c73fa.png" alt="d307294eb80b6711f840583c2b7c73fa.png"></p>
+</li>
+<li><p>评价指标<br>1）像素精度（pixel accuracy ）：每一类像素正确分类的个数/ 每一类像素的实际<br>个数；<br>2）平均像素精度（mean pixel accuracy ）：每一类像素的精度的平均值；<br>3）平均交并比（Mean Intersection over Union）：求出每一类的IOU取平均值</p>
+</li>
+</ol>
+<h4 id="常用模型"><a href="#常用模型" class="headerlink" title="常用模型"></a>常用模型</h4><h5 id="1-FCN（2014）Fully-Convolutional-Networks"><a href="#1-FCN（2014）Fully-Convolutional-Networks" class="headerlink" title="1. FCN（2014）Fully Convolutional Networks"></a>1. FCN（2014）Fully Convolutional Networks</h5><p>FCN(Fully Convolutional Networks)的基本概念和核心思想。FCN是首个使用神经网络实现语义分割任务的方法与传统的特征提取算法相比，FCN具有很多优势，如可以适应不同场景变化、无需大量人时间和精力等。视频中还介绍了FCN的全卷积网络结构、使用现有的分类网络进行调整以及跨层结构等关键点。最后，视频提供了官方代码实现的细老<br>图像分割需要对图像进行像素级分类，所以在输出层使用全连接模型并不合适。<br>FCN与CNN的区别在把于CNN最后的全连接层换成卷积层（所以称为“全卷积网<br>络”）。该网络可以分为两部分，第一部分，通过卷积运算提取图像中的特征，形成<br>特征图；第二部分，对特征图进行上采样，将特征图数据恢复为原来的大小，并对<br>每个像素产生一个分类标签，完成像素级分类。</p>
+<p>去掉了全链接层，全部使用卷积网络，可以不再要求输入图片的大小<br>分为32s  16s  8s3中输出<br><img src="/2024/04/02/aid/txfg/88a125da67fcc6b88729e56ad01040cd.png" alt="88a125da67fcc6b88729e56ad01040cd.png"><br><img src="/2024/04/02/aid/txfg/fe6b68d72aedf7d3c1e6d0e3d2dab7d4.png" alt="fe6b68d72aedf7d3c1e6d0e3d2dab7d4.png"><br><img src="/2024/04/02/aid/txfg/cfc88e392fee0a83c0552a29798c16cd.png" alt="cfc88e392fee0a83c0552a29798c16cd.png"><br><img src="/2024/04/02/aid/txfg/a2ac30edca9647a1db5e0ecaa76e3be2.png" alt="a2ac30edca9647a1db5e0ecaa76e3be2.png"></p>
+<p><img src="/2024/04/02/aid/txfg/fee378ad378dc22885dafc223ef2ef77.png" alt="fee378ad378dc22885dafc223ef2ef77.png"></p>
+<h5 id="2-U-Net（2015）"><a href="#2-U-Net（2015）" class="headerlink" title="2. U-Net（2015）"></a>2. U-Net（2015）</h5><p>生物医学分割是图像分割重要的应用领域。U-Net是2015年发表的用于生物医学图<br>像分割的模型，该模型简单、高效、容易理解、容易定制，能在相对较小的数据集<br>上实现学习。该模型在透射光显微镜图像（相衬度和DIC）上获得了2015年ISBI细胞<br>跟踪挑战赛的冠军。该图像分割速度较快，在512x512图像实现分割只需不到一秒<br>钟的时间。<br>U-Net基本实现图像分割基本原理与FCN一致，先对原图进行若干层卷积、池化，得<br>到特征图，再对特征图进行不断上采样，并产生每个像素的类别值。</p>
+<p>1）网络结构<br>U-Net网络体系结构如下图所示，它由收缩路径（左侧）和扩展路径（右侧）组成，<br>共包含23个卷积层。<br>收缩路径遵循卷积网络的典型结构，它包括重复应用两个3x3卷积（未相加的卷<br>积），每个卷积后面都有一个ReLU和一个2x2最大合并操作，步长为2，用于下<br>采样。在每个下采样步骤中，特征通道的数量加倍。<br>扩展路径中的每一步都包括对特征映射进行上采样，然后进行2x2向上卷积<br>（up-convolution ），将特征通道数量减半，与收缩路径中相应裁剪的特征映<br>射进行串联，以及两个3x3卷积，每个卷积后面都有一个ReLU。在最后一层，<br>使用1x1卷积将每个64分量特征向量映射到所需数量的类<br><img src="/2024/04/02/aid/txfg/4b62c535ae33035d523e1361d2ccaef7.png" alt="4b62c535ae33035d523e1361d2ccaef7.png"><br>但是现在很多人使用unet模型会加padding，使得输出图像与输入图像尺寸相等</p>
+<h5 id="3-Mask-R-CNN（2017）"><a href="#3-Mask-R-CNN（2017）" class="headerlink" title="3. Mask R-CNN（2017）"></a>3. Mask R-CNN（2017）</h5><p>Mask R-CNN是一个小巧灵活的通用实例级分割框架，它不仅可对图像中的目标进行<br>检测，还可以对每一个目标给出一个高质量的分割结果。它在Faster R-CNN基础之<br>上进行扩展，并行地在bounding box recognition分支上添加一个用于预测目标掩<br>模（object mask）的新分支。该网络具有良好的扩展性，很容易扩展到其它任务中，比如估计人的姿势。Mask R-CNN结构简单、准确度高、容易理解，是图像实例<br>级分割的优秀模型</p>
+<p>1）主要思想<br>（1）分割原理。Mask R-CNN是在Faster R-CNN基础之上进行了扩展。Faster R<br>CNN是一个优秀的目标检测模型，能较准确地检测图像中的目标物体（检测到实<br>例），其输出数据主要包含两组：一组是图像分类预测，一组是图像边框回归。<br>Mask R-CNN在此基础上增加了FCN来产生对应的像素分类信息（称为Mask），用<br>来描述检测出的目标物体的范围，所以Mask R-CNN可以理解为Faster R-CNN +<br>FCN。整体结构如下图所示<br><img src="/2024/04/02/aid/txfg/3085fc1be2d57247362fb3249f0c909a.png" alt="3085fc1be2d57247362fb3249f0c909a.png"><br><img src="/2024/04/02/aid/txfg/de7af8ee8168caf2deccc5e47d66da5f.png" alt="de7af8ee8168caf2deccc5e47d66da5f.png"></p>
+<h5 id="4-deeplab"><a href="#4-deeplab" class="headerlink" title="4. deeplab"></a>4. deeplab</h5><p><strong>空洞卷积dilated convolution</strong>： 卷积数量不变，参数个数不变，但感受野变大<br><img src="/2024/04/02/aid/txfg/f76094366cdf7fcea2f936f393c3eef0.png" alt="f76094366cdf7fcea2f936f393c3eef0.png"><br>空洞卷积的优势：<br>图像分割任务中(其他场景也适用)需要较大感受野来更好完成任务<br>通过设置dilation rate参数来完成空洞卷积，并没有额外计算<br>可以按照参数扩大任意倍数的感受野，而且没有引入额外的参数<br>应用简单，就是卷积层中多设置一个参数就可以了</p>
+<p>空洞卷积的优势,包括全局感受、可控参数和应用简单等作者解释了为什么在很多网络结构中都使用堆叠3x3的卷积核,而不是直接使用大的卷积核,通过算笔账,说明堆叠小的卷积核可以节省参数,引入更多的非线性函数,从而提高模型效果。视频还介绍了感受野的概念,以及为什么感受野大小在分割任务中很重要。</p>
+<p>v2：<br>spp layer<br><img src="/2024/04/02/aid/txfg/176f7e07358f2d61ef3a2383edb1cde6.png" alt="176f7e07358f2d61ef3a2383edb1cde6.png"><br><img src="/2024/04/02/aid/txfg/31416fc90b45bd6eb6608f9d75809426.png" alt="31416fc90b45bd6eb6608f9d75809426.png"></p>
+<p>aspp 加了空洞卷积的spp 把不同倍率的空洞卷积融合在一起<br><img src="/2024/04/02/aid/txfg/9e5032731b3848d7677bd0087d06407b.png" alt="9e5032731b3848d7677bd0087d06407b.png"></p>
+<p>v3<br>padding=空洞数，就可以保证得到的特征图宽高相等<br>特征融合<br><img src="/2024/04/02/aid/txfg/c4482417331e3eed26d87569cc30d29c.png" alt="c4482417331e3eed26d87569cc30d29c.png"></p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>图像分割</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于损失函数的一些曲线图</title>
+    <url>/2024/04/02/aid/loss/</url>
+    <content><![CDATA[<h4 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h4><p>损失函数关于w的曲线：<br><img src="/2024/04/02/aid/loss/4bae5b4dc16dfa85a8a1113dd0ba0387.png" alt="4bae5b4dc16dfa85a8a1113dd0ba0387.png"><br>损失函数关于w和b的三维曲线<br><img src="/2024/04/02/aid/loss/340642ea96d3fe0626029f7972a2c3c0.png" alt="340642ea96d3fe0626029f7972a2c3c0.png"><br>变成二维图会变成等高线的形状，中间的圆点是最小值<br><img src="/2024/04/02/aid/loss/3cbaccc46f83158f56417465808b5387.png" alt="3cbaccc46f83158f56417465808b5387.png"></p>
+<p>梯度下降的直观图<br><img src="/2024/04/02/aid/loss/b49693bead4e9cc60ea8533ce5736b2f.png" alt="b49693bead4e9cc60ea8533ce5736b2f.png"></p>
+<p>三维图的梯度下降<br><img src="/2024/04/02/aid/loss/ae9348c7b7bd8dc6c79406fab3920686.png" alt="ae9348c7b7bd8dc6c79406fab3920686.png"></p>
+<p><strong>学习率关于损失函数的曲线：</strong><br>这是一个好的学习率的曲线，当曲线趋于平稳时，说明损失函数已经几乎不再变化，这时的w和b就是一个合理的参数。如果曲线越来越大，可能学习率选择的不够好。<br><img src="/2024/04/02/aid/loss/38193d8049a2a70b9d5f83a6c22a036d.png" alt="38193d8049a2a70b9d5f83a6c22a036d.png"><br>两种错误的学习率<br><img src="/2024/04/02/aid/loss/014d853ebfa48797e0bec47466cb991f.png" alt="014d853ebfa48797e0bec47466cb991f.png"></p>
+<p>线性回归与逻辑回归的平方差损失函数曲线图如下：<br>所以不推荐逻辑回归使用平方差损失函数，会导致查出区域最低点<br><img src="/2024/04/02/aid/loss/162255c4466525269f7c1907d9107cd4.png" alt="162255c4466525269f7c1907d9107cd4.png"></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
   </entry>
 </search>
