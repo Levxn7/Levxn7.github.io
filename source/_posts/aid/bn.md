@@ -1,6 +1,6 @@
 ---
 title: 批量归一化 Batch Normalization
-date: 2024-04-02 10:31:18
+date: 2023-10-11 10:31:18
 categories: 
 - 机器学习
 ---
