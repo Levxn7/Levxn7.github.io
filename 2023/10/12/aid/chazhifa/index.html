@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>图像分割的几种模型 |  就花荫</title>
+      <title>三种插值法 |  就花荫</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -44,7 +44,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-aid/txfg"
+  id="post-aid/chazhifa"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -55,7 +55,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  图像分割的几种模型
+  三种插值法
 </h1>
  
 
@@ -63,11 +63,11 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2024/04/02/aid/txfg/" class="article-date">
-  <time datetime="2024-04-02T02:31:18.000Z" itemprop="datePublished">2024-04-02</time>
+      <a href="/2023/10/12/aid/chazhifa/" class="article-date">
+  <time datetime="2023-10-12T02:31:18.000Z" itemprop="datePublished">2023-10-12</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+    <a class="article-category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
   </div>
   
 <div class="word_count">
@@ -75,7 +75,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">1.8k</span>
+            <span class="post-count">458</span>
         </span>
     </span>
 
@@ -84,7 +84,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">6 分钟</span>
+            <span class="post-count">1 分钟</span>
         </span>
     </span>
 </div>
@@ -99,26 +99,11 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h4 id="图像分割的分类："><a href="#图像分割的分类：" class="headerlink" title="图像分割的分类："></a>图像分割的分类：</h4><p><img src="/2024/04/02/aid/txfg/eb531a75e29bfed9d71079eec9cfb2c2.png" alt="eb531a75e29bfed9d71079eec9cfb2c2.png"></p>
-<h4 id="图像分割的难点"><a href="#图像分割的难点" class="headerlink" title="图像分割的难点"></a>图像分割的难点</h4><p>1）数据问题：分割不像检测等任务，只需要标注边框就可以使用，分割需要精确到<br>像素级标注，包括每一个目标的轮廓等信息；<br>2）计算资源问题：要想得到较高的精度就需要使用更深的网络、进行更精确的计<br>算，对计算资源要求较高。目前业界有一些轻量级网络，但总体精度较低；<br>3）精细分割：目前很多算法对于道路、建筑物等类别分割精度很高，能达到98%，<br>而对于细小的类别，由于其轮廓太小，而无法精确的定位轮廓；<br>4）上下文信息：分割中上下文信息很重要，否则会造成一个目标被分成多个部分，<br>或者不同类别目标分类成相同类别；</p>
-<h4 id="图像分割基本原理"><a href="#图像分割基本原理" class="headerlink" title="图像分割基本原理"></a>图像分割基本原理</h4><ol>
-<li><p>整体实现思路<br>图像分割一般思路如下：<br>1）输入图像，利用深度卷积神经网络提取特征<br>2）对特征图进行上采样，输出每个像素的类别<br>3）利用损失函数，对模型进行优化，将每个像素的分类结果优化到最接近真实值<br><img src="/2024/04/02/aid/txfg/d307294eb80b6711f840583c2b7c73fa.png" alt="d307294eb80b6711f840583c2b7c73fa.png"></p>
-</li>
-<li><p>评价指标<br>1）像素精度（pixel accuracy ）：每一类像素正确分类的个数/ 每一类像素的实际<br>个数；<br>2）平均像素精度（mean pixel accuracy ）：每一类像素的精度的平均值；<br>3）平均交并比（Mean Intersection over Union）：求出每一类的IOU取平均值</p>
-</li>
-</ol>
-<h4 id="常用模型"><a href="#常用模型" class="headerlink" title="常用模型"></a>常用模型</h4><h5 id="1-FCN（2014）Fully-Convolutional-Networks"><a href="#1-FCN（2014）Fully-Convolutional-Networks" class="headerlink" title="1. FCN（2014）Fully Convolutional Networks"></a>1. FCN（2014）Fully Convolutional Networks</h5><p>FCN(Fully Convolutional Networks)的基本概念和核心思想。FCN是首个使用神经网络实现语义分割任务的方法与传统的特征提取算法相比，FCN具有很多优势，如可以适应不同场景变化、无需大量人时间和精力等。视频中还介绍了FCN的全卷积网络结构、使用现有的分类网络进行调整以及跨层结构等关键点。最后，视频提供了官方代码实现的细老<br>图像分割需要对图像进行像素级分类，所以在输出层使用全连接模型并不合适。<br>FCN与CNN的区别在把于CNN最后的全连接层换成卷积层（所以称为“全卷积网<br>络”）。该网络可以分为两部分，第一部分，通过卷积运算提取图像中的特征，形成<br>特征图；第二部分，对特征图进行上采样，将特征图数据恢复为原来的大小，并对<br>每个像素产生一个分类标签，完成像素级分类。</p>
-<p>去掉了全链接层，全部使用卷积网络，可以不再要求输入图片的大小<br>分为32s  16s  8s3中输出<br><img src="/2024/04/02/aid/txfg/88a125da67fcc6b88729e56ad01040cd.png" alt="88a125da67fcc6b88729e56ad01040cd.png"><br><img src="/2024/04/02/aid/txfg/fe6b68d72aedf7d3c1e6d0e3d2dab7d4.png" alt="fe6b68d72aedf7d3c1e6d0e3d2dab7d4.png"><br><img src="/2024/04/02/aid/txfg/cfc88e392fee0a83c0552a29798c16cd.png" alt="cfc88e392fee0a83c0552a29798c16cd.png"><br><img src="/2024/04/02/aid/txfg/a2ac30edca9647a1db5e0ecaa76e3be2.png" alt="a2ac30edca9647a1db5e0ecaa76e3be2.png"></p>
-<p><img src="/2024/04/02/aid/txfg/fee378ad378dc22885dafc223ef2ef77.png" alt="fee378ad378dc22885dafc223ef2ef77.png"></p>
-<h5 id="2-U-Net（2015）"><a href="#2-U-Net（2015）" class="headerlink" title="2. U-Net（2015）"></a>2. U-Net（2015）</h5><p>生物医学分割是图像分割重要的应用领域。U-Net是2015年发表的用于生物医学图<br>像分割的模型，该模型简单、高效、容易理解、容易定制，能在相对较小的数据集<br>上实现学习。该模型在透射光显微镜图像（相衬度和DIC）上获得了2015年ISBI细胞<br>跟踪挑战赛的冠军。该图像分割速度较快，在512x512图像实现分割只需不到一秒<br>钟的时间。<br>U-Net基本实现图像分割基本原理与FCN一致，先对原图进行若干层卷积、池化，得<br>到特征图，再对特征图进行不断上采样，并产生每个像素的类别值。</p>
-<p>1）网络结构<br>U-Net网络体系结构如下图所示，它由收缩路径（左侧）和扩展路径（右侧）组成，<br>共包含23个卷积层。<br>收缩路径遵循卷积网络的典型结构，它包括重复应用两个3x3卷积（未相加的卷<br>积），每个卷积后面都有一个ReLU和一个2x2最大合并操作，步长为2，用于下<br>采样。在每个下采样步骤中，特征通道的数量加倍。<br>扩展路径中的每一步都包括对特征映射进行上采样，然后进行2x2向上卷积<br>（up-convolution ），将特征通道数量减半，与收缩路径中相应裁剪的特征映<br>射进行串联，以及两个3x3卷积，每个卷积后面都有一个ReLU。在最后一层，<br>使用1x1卷积将每个64分量特征向量映射到所需数量的类<br><img src="/2024/04/02/aid/txfg/4b62c535ae33035d523e1361d2ccaef7.png" alt="4b62c535ae33035d523e1361d2ccaef7.png"><br>但是现在很多人使用unet模型会加padding，使得输出图像与输入图像尺寸相等</p>
-<h5 id="3-Mask-R-CNN（2017）"><a href="#3-Mask-R-CNN（2017）" class="headerlink" title="3. Mask R-CNN（2017）"></a>3. Mask R-CNN（2017）</h5><p>Mask R-CNN是一个小巧灵活的通用实例级分割框架，它不仅可对图像中的目标进行<br>检测，还可以对每一个目标给出一个高质量的分割结果。它在Faster R-CNN基础之<br>上进行扩展，并行地在bounding box recognition分支上添加一个用于预测目标掩<br>模（object mask）的新分支。该网络具有良好的扩展性，很容易扩展到其它任务中，比如估计人的姿势。Mask R-CNN结构简单、准确度高、容易理解，是图像实例<br>级分割的优秀模型</p>
-<p>1）主要思想<br>（1）分割原理。Mask R-CNN是在Faster R-CNN基础之上进行了扩展。Faster R<br>CNN是一个优秀的目标检测模型，能较准确地检测图像中的目标物体（检测到实<br>例），其输出数据主要包含两组：一组是图像分类预测，一组是图像边框回归。<br>Mask R-CNN在此基础上增加了FCN来产生对应的像素分类信息（称为Mask），用<br>来描述检测出的目标物体的范围，所以Mask R-CNN可以理解为Faster R-CNN +<br>FCN。整体结构如下图所示<br><img src="/2024/04/02/aid/txfg/3085fc1be2d57247362fb3249f0c909a.png" alt="3085fc1be2d57247362fb3249f0c909a.png"><br><img src="/2024/04/02/aid/txfg/de7af8ee8168caf2deccc5e47d66da5f.png" alt="de7af8ee8168caf2deccc5e47d66da5f.png"></p>
-<h5 id="4-deeplab"><a href="#4-deeplab" class="headerlink" title="4. deeplab"></a>4. deeplab</h5><p><strong>空洞卷积dilated convolution</strong>： 卷积数量不变，参数个数不变，但感受野变大<br><img src="/2024/04/02/aid/txfg/f76094366cdf7fcea2f936f393c3eef0.png" alt="f76094366cdf7fcea2f936f393c3eef0.png"><br>空洞卷积的优势：<br>图像分割任务中(其他场景也适用)需要较大感受野来更好完成任务<br>通过设置dilation rate参数来完成空洞卷积，并没有额外计算<br>可以按照参数扩大任意倍数的感受野，而且没有引入额外的参数<br>应用简单，就是卷积层中多设置一个参数就可以了</p>
-<p>空洞卷积的优势,包括全局感受、可控参数和应用简单等作者解释了为什么在很多网络结构中都使用堆叠3x3的卷积核,而不是直接使用大的卷积核,通过算笔账,说明堆叠小的卷积核可以节省参数,引入更多的非线性函数,从而提高模型效果。视频还介绍了感受野的概念,以及为什么感受野大小在分割任务中很重要。</p>
-<p>v2：<br>spp layer<br><img src="/2024/04/02/aid/txfg/176f7e07358f2d61ef3a2383edb1cde6.png" alt="176f7e07358f2d61ef3a2383edb1cde6.png"><br><img src="/2024/04/02/aid/txfg/31416fc90b45bd6eb6608f9d75809426.png" alt="31416fc90b45bd6eb6608f9d75809426.png"></p>
-<p>aspp 加了空洞卷积的spp 把不同倍率的空洞卷积融合在一起<br><img src="/2024/04/02/aid/txfg/9e5032731b3848d7677bd0087d06407b.png" alt="9e5032731b3848d7677bd0087d06407b.png"></p>
-<p>v3<br>padding=空洞数，就可以保证得到的特征图宽高相等<br>特征融合<br><img src="/2024/04/02/aid/txfg/c4482417331e3eed26d87569cc30d29c.png" alt="c4482417331e3eed26d87569cc30d29c.png"></p>
+  <p>插值算法的应用,其中包括<strong>最邻近插值和双线性插值</strong>。插值算法一般被用于图像的上采样或下采样。最邻近插值是最简单的插值算法,通过最近的像素值来确定目标图像中的像素值。插值算法的使用场景包括图像分割和增强等。此外，最邻近插值算法还有其独特的使用场景,例如在处理标注图像时需要保证标注像素值的正确性</p>
+<h4 id="最近临插值法"><a href="#最近临插值法" class="headerlink" title="最近临插值法"></a>最近临插值法</h4><p>方法：将两个特征图换成同等大小，根据距离需计算的像素点最近的原像素点来确定该点的值<br>缺点：采样后的图有毛边<br>计算过程<br><img src="/2023/10/12/aid/chazhifa/0f8d7b018b849df344c03d7b8ae5b885.png" alt="0f8d7b018b849df344c03d7b8ae5b885.png"><br><img src="/2023/10/12/aid/chazhifa/1d222281f67ba8f6869cc0d8ddba5cba.png" alt="1d222281f67ba8f6869cc0d8ddba5cba.png"></p>
+<h4 id="双线性插值法"><a href="#双线性插值法" class="headerlink" title="双线性插值法"></a>双线性插值法</h4><p>双线性差值的计算方式，包括角对齐方式和边对齐方式。通过代码实现，详细讲解了目标图像中每个像素点的计算取值过程。同时，还介绍了两种对齐方式下的差异以及计算过程中的权重考虑。对于需要进行上采样处理的图像，可以通过双线性插值的方式实现。<br>方法有两种：角对齐 或者边对齐<br><img src="/2023/10/12/aid/chazhifa/965ccd22942b67dcd885817c6a80cf84.png" alt="965ccd22942b67dcd885817c6a80cf84.png"><br>计算过程<br><img src="/2023/10/12/aid/chazhifa/83957cc48d6ecfdaf4e409d7d3298f63.png" alt="83957cc48d6ecfdaf4e409d7d3298f63.png"></p>
+<h4 id="双三次插值法"><a href="#双三次插值法" class="headerlink" title="双三次插值法"></a>双三次插值法</h4><p>双三次插值算法，该算法在计算目标像素点周围像素权重时使用了一个三次项的公式，相比于双线性插值算法，它对目标像素点的像素取值做了一个平滑处理。通过示意图和公式解释了权重的计算方法，并展示了在不同距离下权重的取值情况。最后，解释了padding的作用。<br>取周围16个点的值<br><img src="/2023/10/12/aid/chazhifa/e9848703a4a02e0b1f0e39fa59073f17.png" alt="e9848703a4a02e0b1f0e39fa59073f17.png"><br><img src="/2023/10/12/aid/chazhifa/be9b059b09acca463291720c594b85af.png" alt="be9b059b09acca463291720c594b85af.png"></p>
+<p>各种插值法取值图例<br><img src="/2023/10/12/aid/chazhifa/438ddab67c1755d06255978de075ac87.png" alt="438ddab67c1755d06255978de075ac87.png"></p>
  
       <!-- reward -->
       
@@ -183,32 +168,30 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://levxn7.github.io/2024/04/02/aid/txfg/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://levxn7.github.io/2023/10/12/aid/chazhifa/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" rel="tag">图像分割</a></li></ul>
-
     </footer>
   </div>
 
    
   <nav class="article-nav">
     
-      <a href="/2024/04/02/aid/iou/" class="article-nav-link">
+      <a href="/2023/10/21/aid/loss/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            NMS(非极大值抑制)和IOU(交并比)
+            关于损失函数的一些曲线图
           
         </div>
       </a>
     
     
-      <a href="/2024/04/02/aid/loss/" class="article-nav-link">
+      <a href="/2023/10/11/aid/bn/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">关于损失函数的一些曲线图</div>
+        <div class="article-nav-title">批量归一化 Batch Normalization</div>
       </a>
     
   </nav>

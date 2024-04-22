@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>NMS(非极大值抑制)和IOU(交并比) |  就花荫</title>
+      <title>批量归一化 Batch Normalization |  就花荫</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -44,7 +44,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-aid/iou"
+  id="post-aid/bn"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -55,7 +55,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  NMS(非极大值抑制)和IOU(交并比)
+  批量归一化 Batch Normalization
 </h1>
  
 
@@ -63,11 +63,11 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2024/04/02/aid/iou/" class="article-date">
-  <time datetime="2024-04-02T02:31:18.000Z" itemprop="datePublished">2024-04-02</time>
+      <a href="/2023/10/11/aid/bn/" class="article-date">
+  <time datetime="2023-10-11T02:31:18.000Z" itemprop="datePublished">2023-10-11</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+    <a class="article-category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
   </div>
   
 <div class="word_count">
@@ -75,7 +75,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">718</span>
+            <span class="post-count">309</span>
         </span>
     </span>
 
@@ -84,31 +84,28 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">2 分钟</span>
+            <span class="post-count">1 分钟</span>
         </span>
     </span>
 </div>
  
     </div>
       
-    <div class="tocbot"></div>
-
 
 
 
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>目标检测任务中常用的后处理方法NMS(非极大值抑制)和IOU(交井比)的概念。NMS的作用是删除冗余的候选框，保留置信度最高的候选框。通过计算BBOX之间的IOU，可以判断哪些候选框需要保留，哪些需要丢弃。在多类别目标检测任务中，需要分别对每个类别进行NMS计算，保留置信度最高的候选框。最后，只有保留的候选框才会被输出。</p>
-<p>目标检测任务中常用的坐标损失计算方式，包括L1损失、L2损失、smoothL1损失、I0U损失、GIOU损失和DIOU损失。其中，smoothL1损失和IOU损失是基础损失和评估指标的组合，存在目标不一致的问题。GIOU损失解决了IOU损失在训练初期模型无法优化的问题，并能更好地评估模型的预测效果。DIOU损失是GIOU损失的一种变换形式，可用于计算目标检测的坐标损失。</p>
-<h4 id="计算损失"><a href="#计算损失" class="headerlink" title="计算损失"></a>计算损失</h4><p>目标检测任务中常用的坐标损失计算方式,包括<strong>L1、L2损失、smooth L1损失</strong>等,并分析了它们的优缺点。<br>L1损失和L2损失:L1损失和L2损失是最基础的损失函数，但存在一些问题。<br><img src="/2024/04/02/aid/iou/69e37af88c8570b1c4a67f61df98c965.png" alt="69e37af88c8570b1c4a67f61df98c965.png"></p>
-<p>为了避免模型学习优化和模型评估的目标不一致，我们最好也使用IOU来计算坐标损失并且，IOU Loss 是将 x，y, w, h这4个值构成的 bbox 看作是一个整体来进行损失计算的</p>
-<p>SmoothL1损失是针对L1损失和L2损失的问题提出的一种损失函数。<br>在实际应用中，SmoothL1损失和L1损失、L2损失一样，都需要计算坐标损失。<br><img src="/2024/04/02/aid/iou/6a3b435a0f1517f8d0edcc250f5ef964.png" alt="6a3b435a0f1517f8d0edcc250f5ef964.png"></p>
-<p>但是IOU不能处理两个框不相交的情况，为了解决这种情况，所以使用GIOU，做一个外接框<br><img src="/2024/04/02/aid/iou/f1aee2a6b93376778efceb7be9b46a9f.png" alt="f1aee2a6b93376778efceb7be9b46a9f.png"></p>
-<p>当预测框与真实框为包含关系时，GIOU loss函数的分子为0，所以就退化为了IOU，所以，模型没办法针对这种情况进行区分，不能明确的知道两个框的位置关系到底是什样的，从而进行快速收敛。</p>
-<p>DIOU和DIOU loss损失的计算方法，以及如何通过调整参数来平衡长宽比和面积一致性。<br>阿尔法参数的调整:介绍了如何通过调整阿尔法参数来平衡不同损失函数之间的权重<br>在计算DIOU时需要考虑距离的占比,以及引入阿尔法项的作用,最终得到了DLOU loss。<br>考虑距离的占比，即D的平方除以C的平方<br>阿尔法的作用，使损失函数更具区分度</p>
-<p><img src="/2024/04/02/aid/iou/ace3e2368aafd2df1c4ce0b166cf770a.png" alt="ace3e2368aafd2df1c4ce0b166cf770a.png"></p>
-<p>CIOU loss的计算公式，包括减去IOU和加上阿尔法乘以v<br><img src="/2024/04/02/aid/iou/1195e45c140017820ccc4744e00e619f.png" alt="1195e45c140017820ccc4744e00e619f.png"></p>
+  <p>神经网络中的批量归一化方法,通过对一批样本进行归一化处理,使得每一层网络的输入分布相似,从而避免了分布差异过大导致网络无法收敛的问题。</p>
+<p>为了让网络可以正常训练，Batch Normalization 批量归一化方法可以加速神经网络的收敛。使训练过程中对学习率和参数初始化更加鲁棒</p>
+<p>但它也有一些缺陷,如对循环神经网络等序列形式数据性能较差,以及在分布式训练中额外的数据同步会影响并行效率等。</p>
+<p>神经网络中的批量归一化方法，通过对样本进行归一化处理，使网络能够正常训练。</p>
+<p>需要注意批量归一化方法中额外引入的两个参数，需要反向传播更新</p>
+<p>仅在Batch中包含样本数量较多时有效。对循环网络(RNN)或序列数据(Sequence)性能较差分布式运算时影响效率。</p>
+<p>BN算法仅在BH中包含样本，对于循环神经网络等数据性能较差</p>
+<p>后续提出了类似于layer normalization等改进方法</p>
+<p><img src="/2023/10/11/aid/bn/93968aee8b1f72101a7f5ff44788f110.png" alt="93968aee8b1f72101a7f5ff44788f110.png"></p>
  
       <!-- reward -->
       
@@ -173,20 +170,18 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://levxn7.github.io/2024/04/02/aid/iou/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://levxn7.github.io/2023/10/11/aid/bn/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" rel="tag">目标检测</a></li></ul>
-
     </footer>
   </div>
 
    
   <nav class="article-nav">
     
-      <a href="/2024/04/02/aid/chazhifa/" class="article-nav-link">
+      <a href="/2023/10/12/aid/chazhifa/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
@@ -196,9 +191,9 @@
       </a>
     
     
-      <a href="/2024/04/02/aid/txfg/" class="article-nav-link">
+      <a href="/2023/09/02/aid/deepbasic/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">图像分割的几种模型</div>
+        <div class="article-nav-title">深度学习基础xmind</div>
       </a>
     
   </nav>
